@@ -1,6 +1,7 @@
-ProyectoEDA
-===========
+Gestión de sentencias
+=====================
 
 ## Daniel Franco, Iván Matellanes, Asier Mujika ##
 
-Prática de Estructuras de Datos y Algoritmos
+Proyecto de programación para Estructuras de Datos y Algoritmos. 
+Septiembre-Diciembre de 2012. 
