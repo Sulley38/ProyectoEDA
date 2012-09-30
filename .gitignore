@@ -2,7 +2,9 @@
 *.jar
 *.war
 *.ear
+*.tmp
 /.project
 /.classpath
 /.settings
+/~$emoria.doc
 /bin

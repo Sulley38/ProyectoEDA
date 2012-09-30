@@ -1,4 +1,0 @@
-ALMACÉN:
-	Grafo dirigido ponderado -> Matriz de adyacencia (Nodos = Sujetos/Objetos, Aristas = Propiedades).
-	Biyección entre índices numéricos y entidades (cadenas de texto).
-	Una vez llenos con todas las entidades de los ficheros, pasarlos a arrays estáticos (preferiblemente ya ordenados) para mejor acceso.

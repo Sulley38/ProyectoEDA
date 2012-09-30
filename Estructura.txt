@@ -1,0 +1,3 @@
+ALMACÉN:
+	Grafo dirigido ponderado -> Matriz de adyacencia (Nodos = Sujetos/Objetos, Aristas = Propiedades).
+	Biyección entre índices numéricos y entidades (cadenas de texto). Discutiremos si hacerlo con hash tables u otra estructura.
