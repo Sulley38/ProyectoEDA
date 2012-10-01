@@ -20,11 +20,16 @@ public class Trie {
 	}
 	
 	//devuelve el siguiente nodo (correspondiente a la letra)
-	int obtenerValor(String s){
+	public int obtenerValor(String s){
 		return 0;
 	}
 	
-	void insertar(String s){
+	//devuelve true si s ya está en el árbol
+	public boolean existe(String s) {
+		return false;
+	}
+	
+	public void insertar(String s){
 		
 	}
 	

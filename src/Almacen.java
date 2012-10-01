@@ -14,12 +14,8 @@ public class Almacen {
 	private int[][] relaciones;
 	// Número de nodos (sujetos+objetos) y de aristas (propiedades)
 	private int sujetos, objetos, propiedades;
-	// Relaciones biyectivas entre índices y entidades correspondientes
-	/***
-	 * TODO: Implementar una estructura de datos que permita encontrar
-	 *	de forma eficiente el índice dado un string (tabla hash?)
-	 **/
-	
+	// Relaciones biyectivas entre entidad (string) e índice correspondiente
+	private Trie entidades;
 	
 	/**
 	 * CONSTRUCTORA
@@ -27,14 +23,17 @@ public class Almacen {
 	 */
 	public Almacen( String Ruta ) {
 		sujetos = objetos = propiedades = 0;
-		// Lee las sentencias desde el fichero
+		entidades = new Trie();
+		// Lee las sentencias desde el fichero y las añade al trie
 		try {
 			Fichero.abrir(Ruta, false);
 			String sentencia;
 			StringTokenizer tokenizador;
 			while( (sentencia = Fichero.leerSentencia()) != null ) {
 				tokenizador = new StringTokenizer(sentencia);
-				// TODO: Añadir las entidades a la estructura que las relaciona con un índice
+				entidades.insertar( tokenizador.nextToken() );
+				entidades.insertar( tokenizador.nextToken() );
+				entidades.insertar( tokenizador.nextToken() );
 			}
 			Fichero.cerrar();
 		} catch (IOException e) {
