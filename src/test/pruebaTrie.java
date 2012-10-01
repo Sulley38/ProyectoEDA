@@ -4,8 +4,6 @@ package test;
 public class pruebaTrie {
 
 	
-	
-	
 	/**
 	 * @param args
 	 */

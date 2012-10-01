@@ -1,3 +1,4 @@
+package gestionDeSentencias;
 
 public class Trie {	
 

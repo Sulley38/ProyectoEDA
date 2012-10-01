@@ -3,6 +3,7 @@
  * Contiene todas las sentencias de un fichero y las operaciones definidas para trabajar sobre ellas
  * @author Daniel, Iván, Asier
  */
+package gestionDeSentencias;
 import java.io.*;
 import java.util.*;
 

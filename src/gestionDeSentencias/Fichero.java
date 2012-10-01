@@ -3,6 +3,7 @@
  * Proporciona métodos estáticos para leer y escribir sentencias usando ficheros de texto
  * @author Daniel, Iván, Asier
  */
+package gestionDeSentencias;
 import java.io.*;
 
 public class Fichero {
