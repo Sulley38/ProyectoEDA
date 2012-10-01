@@ -1,6 +1,9 @@
 
-public class pruebaArbolString {
+public class pruebaTrie {
 
+	
+	
+	
 	/**
 	 * @param args
 	 */
