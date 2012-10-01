@@ -17,7 +17,7 @@ public class Fichero {
 	/**
 	 * Constructora
 	 */
-	public Fichero() {}
+	private Fichero() {}
 	
 	
 	/**
