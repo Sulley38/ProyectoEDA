@@ -32,14 +32,19 @@ public class Almacen {
 			StringTokenizer tokenizador;
 			while( (sentencia = Fichero.leerSentencia()) != null ) {
 				tokenizador = new StringTokenizer(sentencia);
-				entidades.insertar( tokenizador.nextToken() );
-				entidades.insertar( tokenizador.nextToken() );
-				entidades.insertar( tokenizador.nextToken() );
+				sujetos += entidades.insertar( tokenizador.nextToken() );
+				propiedades += entidades.insertar( tokenizador.nextToken() );
+				objetos += entidades.insertar( tokenizador.nextToken() );
 			}
 			Fichero.cerrar();
 		} catch (IOException e) {
 			System.err.println("Error: Imposible acceder al fichero especificado.");
 		}
+		// Crea la matriz de adyacencia con el espacio necesario y la inicializa a -1
+		relaciones = new int[sujetos+objetos][sujetos+objetos];
+		for( int i = 0; i < sujetos+objetos; ++i )
+			for( int j = 0; j < sujetos+objetos; ++j )
+				relaciones[i][j] = -1;
 	}
 	
 	
