@@ -58,10 +58,9 @@ public class Trie {
 	}
 	
 	//devuelve 1 si ha insertado s, 0 si ya estaba en el árbol
-	public int insertar(String s, int posicion){
-		int insertado = 0;
-		int l=s.length();		//para no recalcular EFICIENCIA!!!!!
-		int indiceRamas;		//para no recalcular EFICIENCIA!!!!!
+	public boolean insertar(String s, int posicion){
+		boolean insertado = false;
+		int l=s.length(), indiceRamas;		//para no recalcular EFICIENCIA!!!!!
 		NodoTrie puntero = inicio;
 		
 		for(int i=0;i<l;i++){
@@ -69,15 +68,15 @@ public class Trie {
 			if (puntero.ramas[indiceRamas]==null){		//si no existe el nodo, la palabra no existe y se van insertando los nodos necesarios
 				puntero.ramas[indiceRamas] = new NodoTrie(-1);
 				puntero = puntero.ramas[indiceRamas];
-				insertado=1;
+				insertado = true;
 			}
 			else{
 				puntero = puntero.ramas[indiceRamas];	//existe ese prefijo, se avanza un caracter
 			}			
 		}
-		if (insertado==1){
+		if (insertado)
 			puntero.valor=posicion;
-		}		
+
 		return insertado;
 	}
 	

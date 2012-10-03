@@ -1,6 +1,7 @@
 package gestionDeSentencias;
 import java.io.*;
 import java.util.*;
+import estructurasEnlazadas.FirstLastList;
 
 /**
  * Almacén de sentencias:
@@ -9,44 +10,97 @@ import java.util.*;
  */
 public class Almacen {
 
-	// Matriz de adyacencia
-	// Puede que haga falta cambiar el tipo de dato contenido, de int a 'Lista de enteros'
-	// i -> Sujeto, j -> Objeto, dato -> Propiedad
-	private int[][] relaciones;
-	// Número de nodos (sujetos+objetos) y de aristas (propiedades)
+	private class Relacion {
+		private int nodoObjetivo, arista, repeticiones;
+		public Relacion(int Objeto, int Propiedad) {
+			nodoObjetivo = Objeto;
+			arista = Propiedad;
+			repeticiones = 0;
+		}
+		public void repeticion() {
+			repeticiones++;
+		}
+	}
+	// Arrays de listas de adyacencia con Relaciones como datos. Sería equivalente a FirstLastList<Relacion>[] en términos de eficiencia.
+	private Relacion[][] nodosEntrantes, nodosSalientes; // nodosEntrantes[i][j] devuelve la j-ésima relación del nodo i, cuyos valores son nodosEntrantes[i][j].nodoObjetivo, etc. 
+	// Número de nodos (sujetos+objetos) y de aristas (propiedades); la suma de los tres es el número de entidades
 	private int sujetos, objetos, propiedades;
-	// Relaciones biyectivas entre entidad (string) e índice correspondiente
-	private Trie entidades;
+	// Relaciones entre entidad e índice correspondiente (Trie), y viceversa (array)
+	private Trie arbolSujetosObjetos, arbolPropiedades;
+	private String[] listaSujetosObjetos, listaPropiedades;
 	
 	/**
 	 * CONSTRUCTORA
-	 * @param Fichero de texto desde el que leer las entidades
+	 * Carga las sentencias en el almacén desde el fichero especificado.
+	 * @param nombreDeArchivo de texto desde el que leer las entidades
 	 */
-	public Almacen( String Ruta ) {
+	public Almacen( String nombreDeArchivo ) {
 		sujetos = objetos = propiedades = 0;
-		entidades = new Trie();
-		// Lee las sentencias desde el fichero y las añade al trie
+		arbolSujetosObjetos = new Trie();
+		arbolPropiedades = new Trie();
+		// Listas enlazadas temporales antes de conocer el tamaño de los arrays definitivos
+		FirstLastList<String> tempSujetosObjetos = new FirstLastList<String>();
+		FirstLastList<String> tempPropiedades = new FirstLastList<String>();
+		FirstLastList< FirstLastList<Relacion> > tempNodosEntrantes = new FirstLastList< FirstLastList<Relacion> >();
+		FirstLastList< FirstLastList<Relacion> > tempNodosSalientes = new FirstLastList< FirstLastList<Relacion> >();
+		// Lee las sentencias desde el fichero y las añade al trie y a la lista de nodos del grafo
 		try {
-			Fichero.abrir(Ruta, false);
-			String sentencia;
+			Fichero.abrir(nombreDeArchivo, false);
+			String sentencia, sujeto, propiedad, objeto;
+			int idSujeto, idPropiedad, idObjeto;
 			StringTokenizer tokenizador;
 			while( (sentencia = Fichero.leerSentencia()) != null ) {
 				tokenizador = new StringTokenizer(sentencia);
-				sujetos += entidades.insertar( tokenizador.nextToken() );
-				propiedades += entidades.insertar( tokenizador.nextToken() );
-				objetos += entidades.insertar( tokenizador.nextToken() );
+				sujeto = tokenizador.nextToken();
+				propiedad = tokenizador.nextToken();
+				objeto = tokenizador.nextToken();
+				// MONTAR EL GRAFO: Necesita revisión
+				if( arbolSujetosObjetos.insertar(sujeto, sujetos+objetos) ) {
+					tempSujetosObjetos.insertLast(sujeto);
+					// Añadir su hueco en la lista de nodos entrantes y salientes
+					tempNodosEntrantes.insertLast( new FirstLastList<Relacion>() );
+					tempNodosSalientes.insertLast( new FirstLastList<Relacion>() );
+					// Incrementar contador
+					idSujeto = sujetos+objetos;
+					sujetos++;
+				} else {
+					idSujeto = arbolSujetosObjetos.obtenerValor(sujeto); // Esto se puede mejorar si haces que insertar() devuelva el valor de la ya insertada en lugar de true/false
+				}
+				if( arbolPropiedades.insertar(propiedad, propiedades) ) {
+					tempPropiedades.insertLast(propiedad);
+					// Incrementar contador
+					idPropiedad = propiedades;
+					propiedades++;
+				} else {
+					idPropiedad = arbolPropiedades.obtenerValor(propiedad);
+				}
+				if( arbolSujetosObjetos.insertar(objeto, sujetos+objetos) ) {
+					tempSujetosObjetos.insertLast(objeto);
+					// Añadir su hueco en la lista de nodos entrantes y salientes
+					tempNodosEntrantes.insertLast( new FirstLastList<Relacion>() );
+					tempNodosSalientes.insertLast( new FirstLastList<Relacion>() );
+					// Incrementar contador
+					idObjeto = sujetos+objetos;
+					objetos++;
+				} else {
+					idObjeto = arbolSujetosObjetos.obtenerValor(objeto);
+				}
+				
+				// Insertar la relación en sus sitios
+				// Ir al nodo en tempNodosEntrantes, buscar en la lista si existe una relación con el otro nodo
+				// Si existe, aumentar repeticiones. Si no existe, añadirla al final de la lista: insertLast( new Relacion(foo,bar) );
+				// Lo mismo con tempNodosSalientes
+				// Salgo de trabajar a las 22.00, antes de irme a dormir puede que me de tiempo a echarle un vistazo por encima
+				
 			}
 			Fichero.cerrar();
 		} catch (IOException e) {
 			System.err.println("Error: Imposible acceder al fichero especificado.");
+			return;
 		}
-		// Crea la matriz de adyacencia con el espacio necesario y la inicializa a -1
-		relaciones = new int[sujetos+objetos][sujetos+objetos];
-		for( int i = 0; i < sujetos+objetos; ++i )
-			for( int j = 0; j < sujetos+objetos; ++j )
-				relaciones[i][j] = -1;
+		
+		// TODO: Pasar las listas enlazadas a arrays estáticos
 	}
-	
 	
 	/**
 	 * 1) Colección de sentencias del almacén que tienen un sujeto determinado
