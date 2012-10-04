@@ -1,4 +1,4 @@
-package gestionDeSentencias;
+package estructurasDeDatos;
 
 public class Trie {	
 

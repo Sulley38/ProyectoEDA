@@ -1,14 +1,11 @@
 package test;
+import estructurasDeDatos.Trie;
 
-import gestionDeSentencias.Trie;
-
-
+/**
+ * Fichero de prueba de la estructura Trie
+ */
 public class pruebaTrie {
 
-	
-	/**
-	 * @param args
-	 */
 	public static void main(String[] args) {
 		Trie prueba = new Trie();
 		prueba.insertar("hola",0);

@@ -1,7 +1,7 @@
 package gestionDeSentencias;
 import java.io.*;
 import java.util.*;
-import estructurasEnlazadas.FirstLastList;
+import estructurasDeDatos.*;
 
 /**
  * Almacén de sentencias:
@@ -10,24 +10,28 @@ import estructurasEnlazadas.FirstLastList;
  */
 public class Almacen {
 
-	private class Relacion {
-		private int nodoObjetivo, arista, repeticiones;
-		public Relacion(int Objeto, int Propiedad) {
-			nodoObjetivo = Objeto;
+	/**
+	 * Estructura de arista del grafo.
+	 * Indica el vértice de destino, su peso (la propiedad) y el número de veces que aparece repetida
+	 */
+	private class Arista {
+		private int verticeObjetivo, arista, repeticiones;
+		public Arista(int Objeto, int Propiedad) {
+			verticeObjetivo = Objeto;
 			arista = Propiedad;
 			repeticiones = 0;
 		}
-		public void repeticion() {
-			repeticiones++;
-		}
 	}
-	// Arrays de listas de adyacencia con Relaciones como datos. Sería equivalente a FirstLastList<Relacion>[] en términos de eficiencia.
-	private Relacion[][] nodosEntrantes, nodosSalientes; // nodosEntrantes[i][j] devuelve la j-ésima relación del nodo i, cuyos valores son nodosEntrantes[i][j].nodoObjetivo, etc. 
+	
+	/// ATRIBUTOS DE LA CLASE
+	// Dos listas de adyacencia para representar el grafo.
+	private ListaEnlazada<Arista> nodosEntrantes[], nodosSalientes[]; // nodosEntrantes[i][j] devuelve la j-ésima relación del nodo i, cuyos valores son nodosEntrantes[i][j].nodoObjetivo, etc. 
 	// Número de nodos (sujetos+objetos) y de aristas (propiedades); la suma de los tres es el número de entidades
 	private int sujetos, objetos, propiedades;
 	// Relaciones entre entidad e índice correspondiente (Trie), y viceversa (array)
 	private Trie arbolSujetosObjetos, arbolPropiedades;
-	private String[] listaSujetosObjetos, listaPropiedades;
+	private String listaSujetosObjetos[], listaPropiedades[];
+	
 	
 	/**
 	 * CONSTRUCTORA
@@ -39,10 +43,10 @@ public class Almacen {
 		arbolSujetosObjetos = new Trie();
 		arbolPropiedades = new Trie();
 		// Listas enlazadas temporales antes de conocer el tamaño de los arrays definitivos
-		FirstLastList<String> tempSujetosObjetos = new FirstLastList<String>();
-		FirstLastList<String> tempPropiedades = new FirstLastList<String>();
-		FirstLastList< FirstLastList<Relacion> > tempNodosEntrantes = new FirstLastList< FirstLastList<Relacion> >();
-		FirstLastList< FirstLastList<Relacion> > tempNodosSalientes = new FirstLastList< FirstLastList<Relacion> >();
+		ListaEnlazada<String> tempSujetosObjetos = new ListaEnlazada<String>();
+		ListaEnlazada<String> tempPropiedades = new ListaEnlazada<String>();
+		ListaEnlazada< ListaEnlazada<Arista> > tempNodosEntrantes = new ListaEnlazada< ListaEnlazada<Arista> >();
+		ListaEnlazada< ListaEnlazada<Arista> > tempNodosSalientes = new ListaEnlazada< ListaEnlazada<Arista> >();
 		// Lee las sentencias desde el fichero y las añade al trie y a la lista de nodos del grafo
 		try {
 			Fichero.abrir(nombreDeArchivo, false);
@@ -58,8 +62,8 @@ public class Almacen {
 				if( arbolSujetosObjetos.insertar(sujeto, sujetos+objetos) ) {
 					tempSujetosObjetos.insertLast(sujeto);
 					// Añadir su hueco en la lista de nodos entrantes y salientes
-					tempNodosEntrantes.insertLast( new FirstLastList<Relacion>() );
-					tempNodosSalientes.insertLast( new FirstLastList<Relacion>() );
+					tempNodosEntrantes.insertLast( new ListaEnlazada<Arista>() );
+					tempNodosSalientes.insertLast( new ListaEnlazada<Arista>() );
 					// Incrementar contador
 					idSujeto = sujetos+objetos;
 					sujetos++;
@@ -77,8 +81,8 @@ public class Almacen {
 				if( arbolSujetosObjetos.insertar(objeto, sujetos+objetos) ) {
 					tempSujetosObjetos.insertLast(objeto);
 					// Añadir su hueco en la lista de nodos entrantes y salientes
-					tempNodosEntrantes.insertLast( new FirstLastList<Relacion>() );
-					tempNodosSalientes.insertLast( new FirstLastList<Relacion>() );
+					tempNodosEntrantes.insertLast( new ListaEnlazada<Arista>() );
+					tempNodosSalientes.insertLast( new ListaEnlazada<Arista>() );
 					// Incrementar contador
 					idObjeto = sujetos+objetos;
 					objetos++;
