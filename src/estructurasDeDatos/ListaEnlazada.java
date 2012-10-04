@@ -25,7 +25,7 @@ public class ListaEnlazada<T> {
 		}
 	}
 
-	private class Iterador implements Iterator<T> {
+	public class Iterador implements Iterator<T> {
 		private NodoLista actual;
 		public Iterador() {
 			actual = first;
@@ -48,14 +48,20 @@ public class ListaEnlazada<T> {
 
 	private NodoLista first;
 	private NodoLista last;
+	private int numNodos;
 	// -------------------------------------------------------------
 	public ListaEnlazada() {
 		first = null;                 
 		last = null;
+		numNodos = 0;
 	}
 	// -------------------------------------------------------------
 	public boolean isEmpty() {
 		return (first == null);
+	}
+	// -------------------------------------------------------------
+	public int size() {
+		return numNodos;
 	}
 	// -------------------------------------------------------------
 	public void insertFirst(T elemento) {
@@ -65,6 +71,7 @@ public class ListaEnlazada<T> {
 			last = newLink;
 		newLink.setNext( first );
 		first = newLink;
+		numNodos++;
 	}
 	// -------------------------------------------------------------
 	public void insertLast(T elemento) {
@@ -73,7 +80,8 @@ public class ListaEnlazada<T> {
 			first = newLink;
 		else
 			last.setNext( newLink );
-		last = newLink; 
+		last = newLink;
+		numNodos++;
 	}
 	// -------------------------------------------------------------
 	public T deleteFirst() {                              // (assumes non-empty list)
@@ -81,6 +89,7 @@ public class ListaEnlazada<T> {
 		if(first.getNext() == null)
 			last = null;
 		first = first.getNext();
+		numNodos--;
 		return temp;
 	}
 	// -------------------------------------------------------------
@@ -92,7 +101,14 @@ public class ListaEnlazada<T> {
 		return last.getData();
 	}
 	// -------------------------------------------------------------
-
+	public T getElementByPosition(int posicion) {
+		NodoLista current = first;
+		for( int i = 0; i < posicion; ++i )
+			if( current != null ) current.getNext();
+		if( current == null ) return null;
+		return current.getData();
+	}
+	
 }
 
 

@@ -21,6 +21,12 @@ public class Almacen {
 			arista = Propiedad;
 			repeticiones = 0;
 		}
+		public int obtenerVertice() {
+			return verticeObjetivo;
+		}
+		public void addRepeticion() {
+			repeticiones++;
+		}
 	}
 	
 	/// ATRIBUTOS DE LA CLASE
@@ -47,6 +53,7 @@ public class Almacen {
 		ListaEnlazada<String> tempPropiedades = new ListaEnlazada<String>();
 		ListaEnlazada< ListaEnlazada<Arista> > tempNodosEntrantes = new ListaEnlazada< ListaEnlazada<Arista> >();
 		ListaEnlazada< ListaEnlazada<Arista> > tempNodosSalientes = new ListaEnlazada< ListaEnlazada<Arista> >();
+		ListaEnlazada<Arista> tempLista = new ListaEnlazada<Arista>();
 		// Lee las sentencias desde el fichero y las añade al trie y a la lista de nodos del grafo
 		try {
 			Fichero.abrir(nombreDeArchivo, false);
@@ -91,11 +98,12 @@ public class Almacen {
 				}
 				
 				// Insertar la relación en sus sitios
-				// Ir al nodo en tempNodosEntrantes, buscar en la lista si existe una relación con el otro nodo
-				// Si existe, aumentar repeticiones. Si no existe, añadirla al final de la lista: insertLast( new Relacion(foo,bar) );
+				tempLista = tempNodosEntrantes.getElementByPosition(idObjeto);
+				// TODO: Buscar en tempLista si existe un nodo que cumpla arista.obtenerVertice() == idSujeto
+				// Si existe, addRepeticion(). Si no existe, añadirla al final de la lista: tempLista.insertLast( new Arista(idSujeto,idPropiedad) );
+				
 				// Lo mismo con tempNodosSalientes
-				
-				
+				tempLista = tempNodosSalientes.getElementByPosition(idSujeto);
 			}
 			Fichero.cerrar();
 		} catch (IOException e) {
