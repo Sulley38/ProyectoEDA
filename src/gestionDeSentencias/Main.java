@@ -9,13 +9,12 @@ public class Main {
 		long t=System.currentTimeMillis();
 		m=new Almacen("data/A3.txt");
 		System.out.println(System.currentTimeMillis()-t);
-		System.out.print("aaa");
 		FileWriter fstream = new FileWriter("data/out.txt");
 		BufferedWriter out = new BufferedWriter(fstream);
-		m.sentenciasPorSujeto("<http://swat.cse.lehigh.edu/onto/univ-bench.owl#Article>",out);
+		t=System.currentTimeMillis();
+		m.entidadesSujetoObjeto(out);
+		System.out.println(System.currentTimeMillis()-t);
 		out.close();
-		System.out.println("Este programa ya hace mucho.");
-		System.out.println("Disfrutalo...");
 	}
 	
 }

@@ -32,12 +32,12 @@ public class Almacen {
 	
 	/// ATRIBUTOS DE LA CLASE
 	// Dos listas de adyacencia para representar el grafo.
-	private ListaEnlazada<Arista> nodosEntrantes[], nodosSalientes[]; // nodosEntrantes[i][j] devuelve la j-ésima relación del nodo i, cuyos valores son nodosEntrantes[i][j].nodoObjetivo, etc. 
+	private ListaArray< ListaEnlazada<Arista>> nodosEntrantes, nodosSalientes; // nodosEntrantes[i][j] devuelve la j-ésima relación del nodo i, cuyos valores son nodosEntrantes[i][j].nodoObjetivo, etc. 
 	// Número de nodos (sujetos+objetos) y de aristas (propiedades); la suma de los tres es el número de entidades
 	private int sujetos, objetos, propiedades;
 	// Relaciones entre entidad e índice correspondiente (Trie), y viceversa (array)
 	private Trie arbolSujetosObjetos, arbolPropiedades;
-	private String listaSujetosObjetos[], listaPropiedades[];
+	private ListaArray<String>listaSujetosObjetos, listaPropiedades;
 	
 	
 	
@@ -51,15 +51,12 @@ public class Almacen {
 		arbolSujetosObjetos = new Trie();
 		arbolPropiedades = new Trie();
 		//Listas enlazadas temporales antes de conocer el tamaño de los arrays definitivos
-		ListaEnlazada<String> tempSujetosObjetos = new ListaEnlazada<String>();
-		ListaEnlazada<String> tempPropiedades = new ListaEnlazada<String>();
-		ListaEnlazada< ListaEnlazada<Arista> > tempNodosEntrantes = new ListaEnlazada< ListaEnlazada<Arista> >();
-		ListaEnlazada< ListaEnlazada<Arista> > tempNodosSalientes = new ListaEnlazada< ListaEnlazada<Arista> >();
+		ListaArray<String> tempSujetosObjetos = new ListaArray<String>(250000);
+		ListaArray<String> tempPropiedades = new ListaArray<String>(100);
+		ListaArray< ListaEnlazada<Arista> > tempNodosEntrantes = new ListaArray< ListaEnlazada<Arista> >(250000);
+		ListaArray< ListaEnlazada<Arista> > tempNodosSalientes = new ListaArray< ListaEnlazada<Arista> >(250000);
 		ListaEnlazada<Arista> tempLista;
-		Iterator<Arista> tempIterador;
 		Arista tempArista;
-		long milis=0;
-		long t;
 		boolean encontrado;
 		// Lee las sentencias desde el fichero y las añade al trie y a la lista de nodos del grafo
 		try {
@@ -103,13 +100,11 @@ public class Almacen {
 				} else {
 					idObjeto = arbolSujetosObjetos.obtenerValor(objeto);
 				}
-				t=System.currentTimeMillis();
 				// Insertar la relación en sus sitios
 				encontrado = false;
 				tempLista = tempNodosSalientes.getElementByPosition(idSujeto);
-				tempIterador = tempLista.iterator();
-				while(tempIterador.hasNext()){					
-					tempArista=tempIterador.next();
+				while(tempLista.hasNext()){					
+					tempArista=tempLista.next();
 					if(tempArista.verticeObjetivo==idObjeto && tempArista.arista==idPropiedad){
 						tempArista.addRepeticion();
 						encontrado=true;
@@ -123,10 +118,9 @@ public class Almacen {
 				
 				// Lo mismo con tempNodosSalientes
 				encontrado = false;
-				tempLista = tempNodosEntrantes.getElementByPosition(idObjeto);milis += System.currentTimeMillis()-t;
-				tempIterador = tempLista.iterator();
-				while(tempIterador.hasNext()){					
-					tempArista=tempIterador.next();
+				tempLista = tempNodosEntrantes.getElementByPosition(idObjeto);				
+				while(tempLista.hasNext()){					
+					tempArista=tempLista.next();
 					if(tempArista.verticeObjetivo==idSujeto && tempArista.arista==idPropiedad){
 						tempArista.addRepeticion();
 						encontrado=true;
@@ -136,19 +130,13 @@ public class Almacen {
 				//si no lo ha encontrado crea la arista
 				if (!encontrado){					
 					tempLista.insertLast(new Arista(idSujeto,idPropiedad));
-				}
-				
+				}				
 			}
-			System.out.println(milis);
 			//Convertir las estructuras enlazadas en Arrays
-			nodosEntrantes = new ListaEnlazada[tempNodosEntrantes.size()];
-			nodosEntrantes = tempNodosEntrantes.toArray(nodosEntrantes);
-			nodosSalientes = new ListaEnlazada[tempNodosSalientes.size()];
-			nodosSalientes = tempNodosSalientes.toArray(nodosSalientes);
-			listaSujetosObjetos = new String[tempSujetosObjetos.size()];
-			listaSujetosObjetos = tempSujetosObjetos.toArray(listaSujetosObjetos);
-			listaPropiedades = new String[tempPropiedades.size()];
-			listaPropiedades = tempPropiedades.toArray(listaPropiedades);
+			nodosEntrantes = tempNodosEntrantes;
+			nodosSalientes = tempNodosSalientes;
+			listaSujetosObjetos = tempSujetosObjetos;
+			listaPropiedades = tempPropiedades;
 			
 			Fichero.cerrar();
 		} catch (IOException e) {
@@ -168,10 +156,12 @@ public class Almacen {
 	public String[] sentenciasPorSujeto( String Sujeto, BufferedWriter out ) throws IOException {
 		int index = arbolSujetosObjetos.obtenerValor(Sujeto);
 		Arista prov;
-		Iterator<Arista> it= nodosSalientes[index].iterator();
+		Iterator<Arista> it= nodosSalientes.getElementByPosition(index).iterator();
 		while (it.hasNext()){
 			prov= it.next();
-			out.write( listaSujetosObjetos[index]+" "+ listaPropiedades[prov.arista]+" "+listaSujetosObjetos[prov.verticeObjetivo]+" .\n");
+			for(int i=0;i<prov.repeticiones;i++){
+				out.write( listaSujetosObjetos.getElementByPosition(index)+" "+ listaPropiedades.getElementByPosition(prov.arista)+" "+listaSujetosObjetos.getElementByPosition(prov.verticeObjetivo)+" .\n");
+			}
 		}
 		return null;
 	}
@@ -181,8 +171,14 @@ public class Almacen {
 	 * @param Sujeto
 	 * @return
 	 */
-	public String[] sentenciasDistintasPorSujeto( String Sujeto ) {
-		// TODO: Implementar
+	public String[] sentenciasDistintasPorSujeto( String Sujeto, BufferedWriter out ) throws IOException {
+		int index = arbolSujetosObjetos.obtenerValor(Sujeto);
+		Arista prov;
+		Iterator<Arista> it= nodosSalientes.getElementByPosition(index).iterator();
+		while (it.hasNext()){
+			prov= it.next();
+			out.write( listaSujetosObjetos.getElementByPosition(index)+" "+ listaPropiedades.getElementByPosition(prov.arista)+" "+listaSujetosObjetos.getElementByPosition(prov.verticeObjetivo)+" .\n");
+		}
 		return null;
 	}
 	
@@ -190,8 +186,10 @@ public class Almacen {
 	 * 3) Colección de propiedades distintas que aparecen en las sentencias del almacén
 	 * @return
 	 */
-	public String[] propiedadesDistintas() {
-		// TODO: Implementar
+	public String[] propiedadesDistintas(BufferedWriter out) throws IOException {
+		for(int i=0;i<listaPropiedades.size();i++){
+			out.write(listaPropiedades.getElementByPosition(i)+"\n");
+		}
 		return null;
 	}
 	
@@ -199,9 +197,14 @@ public class Almacen {
 	 * 4) Colección de entidades distintas que son sujeto de alguna sentencia y también
 	 * son objeto de alguna sentencia de ese almacén
 	 * @return
+	 * @throws IOException 
 	 */
-	public String[] entidadesSujetoObjeto() {
-		// TODO: Implementar
+	public String[] entidadesSujetoObjeto(BufferedWriter out) throws IOException {
+		for(int i = 0; i<nodosSalientes.size();i++){
+			if(!nodosSalientes.getElementByPosition(i).isEmpty() && !nodosEntrantes.getElementByPosition(i).isEmpty()){
+				out.write(listaSujetosObjetos.getElementByPosition(i)+"\n");
+			}
+		}
 		return null;
 	}
 	

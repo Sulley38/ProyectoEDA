@@ -48,6 +48,7 @@ public class ListaEnlazada<T> {
 
 	private NodoLista first;
 	private NodoLista last;
+	private NodoLista puntero;
 	private int numNodos;
 	// -------------------------------------------------------------
 	public ListaEnlazada() {
@@ -120,6 +121,20 @@ public class ListaEnlazada<T> {
 			provisional=provisional.siguiente;
 		}
 		return array;
+	}
+	//---------Para iterar sin llamar a iterartor(LENTO)-----
+	public boolean hasNext() {
+		return (puntero != null);
+	}
+	public T next() {
+		if( !hasNext() ) 
+			return null;
+		T result = puntero.getData();
+		puntero = puntero.getNext();
+		return result;
+	}
+	public void reset(){
+		puntero=first;
 	}
 }
 
