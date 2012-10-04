@@ -2,6 +2,7 @@ package gestionDeSentencias;
 import java.io.*;
 import java.util.*;
 import estructurasDeDatos.*;
+import estructurasDeDatos.ListaEnlazada.Iterador;
 
 /**
  * Almacén de sentencias:
@@ -39,6 +40,7 @@ public class Almacen {
 	private String listaSujetosObjetos[], listaPropiedades[];
 	
 	
+	
 	/**
 	 * CONSTRUCTORA
 	 * Carga las sentencias en el almacén desde el fichero especificado.
@@ -48,12 +50,17 @@ public class Almacen {
 		sujetos = objetos = propiedades = 0;
 		arbolSujetosObjetos = new Trie();
 		arbolPropiedades = new Trie();
-		// Listas enlazadas temporales antes de conocer el tamaño de los arrays definitivos
+		//Listas enlazadas temporales antes de conocer el tamaño de los arrays definitivos
 		ListaEnlazada<String> tempSujetosObjetos = new ListaEnlazada<String>();
 		ListaEnlazada<String> tempPropiedades = new ListaEnlazada<String>();
 		ListaEnlazada< ListaEnlazada<Arista> > tempNodosEntrantes = new ListaEnlazada< ListaEnlazada<Arista> >();
 		ListaEnlazada< ListaEnlazada<Arista> > tempNodosSalientes = new ListaEnlazada< ListaEnlazada<Arista> >();
-		ListaEnlazada<Arista> tempLista = new ListaEnlazada<Arista>();
+		ListaEnlazada<Arista> tempLista;
+		Iterator<Arista> tempIterador;
+		Arista tempArista;
+		long milis=0;
+		long t;
+		boolean encontrado;
 		// Lee las sentencias desde el fichero y las añade al trie y a la lista de nodos del grafo
 		try {
 			Fichero.abrir(nombreDeArchivo, false);
@@ -67,7 +74,7 @@ public class Almacen {
 				objeto = tokenizador.nextToken();
 				// MONTAR EL GRAFO: Necesita revisión
 				if( arbolSujetosObjetos.insertar(sujeto, sujetos+objetos) ) {
-					tempSujetosObjetos.insertLast(sujeto);
+					tempSujetosObjetos.insertLast(sujeto);					
 					// Añadir su hueco en la lista de nodos entrantes y salientes
 					tempNodosEntrantes.insertLast( new ListaEnlazada<Arista>() );
 					tempNodosSalientes.insertLast( new ListaEnlazada<Arista>() );
@@ -96,15 +103,53 @@ public class Almacen {
 				} else {
 					idObjeto = arbolSujetosObjetos.obtenerValor(objeto);
 				}
-				
+				t=System.currentTimeMillis();
 				// Insertar la relación en sus sitios
-				tempLista = tempNodosEntrantes.getElementByPosition(idObjeto);
-				// TODO: Buscar en tempLista si existe un nodo que cumpla arista.obtenerVertice() == idSujeto
-				// Si existe, addRepeticion(). Si no existe, añadirla al final de la lista: tempLista.insertLast( new Arista(idSujeto,idPropiedad) );
+				encontrado = false;
+				tempLista = tempNodosSalientes.getElementByPosition(idSujeto);
+				tempIterador = tempLista.iterator();
+				while(tempIterador.hasNext()){					
+					tempArista=tempIterador.next();
+					if(tempArista.verticeObjetivo==idObjeto && tempArista.arista==idPropiedad){
+						tempArista.addRepeticion();
+						encontrado=true;
+						break;
+					}
+				}				
+				//si no lo ha encontrado crea la arista
+				if (!encontrado){					
+					tempLista.insertLast(new Arista(idObjeto,idPropiedad));
+				}				
 				
 				// Lo mismo con tempNodosSalientes
-				tempLista = tempNodosSalientes.getElementByPosition(idSujeto);
+				encontrado = false;
+				tempLista = tempNodosEntrantes.getElementByPosition(idObjeto);milis += System.currentTimeMillis()-t;
+				tempIterador = tempLista.iterator();
+				while(tempIterador.hasNext()){					
+					tempArista=tempIterador.next();
+					if(tempArista.verticeObjetivo==idSujeto && tempArista.arista==idPropiedad){
+						tempArista.addRepeticion();
+						encontrado=true;
+						break;
+					}
+				}				
+				//si no lo ha encontrado crea la arista
+				if (!encontrado){					
+					tempLista.insertLast(new Arista(idSujeto,idPropiedad));
+				}
+				
 			}
+			System.out.println(milis);
+			//Convertir las estructuras enlazadas en Arrays
+			nodosEntrantes = new ListaEnlazada[tempNodosEntrantes.size()];
+			nodosEntrantes = tempNodosEntrantes.toArray(nodosEntrantes);
+			nodosSalientes = new ListaEnlazada[tempNodosSalientes.size()];
+			nodosSalientes = tempNodosSalientes.toArray(nodosSalientes);
+			listaSujetosObjetos = new String[tempSujetosObjetos.size()];
+			listaSujetosObjetos = tempSujetosObjetos.toArray(listaSujetosObjetos);
+			listaPropiedades = new String[tempPropiedades.size()];
+			listaPropiedades = tempPropiedades.toArray(listaPropiedades);
+			
 			Fichero.cerrar();
 		} catch (IOException e) {
 			System.err.println("Error: Imposible acceder al fichero especificado.");
@@ -118,9 +163,16 @@ public class Almacen {
 	 * 1) Colección de sentencias del almacén que tienen un sujeto determinado
 	 * @param Sujeto
 	 * @return
+	 * @throws IOException 
 	 */
-	public String[] sentenciasPorSujeto( String Sujeto ) {
-		// TODO: Implementar
+	public String[] sentenciasPorSujeto( String Sujeto, BufferedWriter out ) throws IOException {
+		int index = arbolSujetosObjetos.obtenerValor(Sujeto);
+		Arista prov;
+		Iterator<Arista> it= nodosSalientes[index].iterator();
+		while (it.hasNext()){
+			prov= it.next();
+			out.write( listaSujetosObjetos[index]+" "+ listaPropiedades[prov.arista]+" "+listaSujetosObjetos[prov.verticeObjetivo]+" .\n");
+		}
 		return null;
 	}
 	

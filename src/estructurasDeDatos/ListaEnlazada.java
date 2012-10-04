@@ -104,11 +104,23 @@ public class ListaEnlazada<T> {
 	public T getElementByPosition(int posicion) {
 		NodoLista current = first;
 		for( int i = 0; i < posicion; ++i )
-			if( current != null ) current.getNext();
+			if( current != null ) current=current.getNext();
 		if( current == null ) return null;
 		return current.getData();
 	}
-	
+	// -------------------------------------------------------------
+	public Iterator<T> iterator(){
+        return new Iterador();  
+    }
+	// -------------------------------------------------------------
+	public T[] toArray(T[] array){
+		NodoLista provisional=first;
+		for(int i=0;i<numNodos;i++){
+			array[i]=provisional.Dato;
+			provisional=provisional.siguiente;
+		}
+		return array;
+	}
 }
 
 
