@@ -16,8 +16,8 @@ public class Almacen {
 	 */
 	private class Arista {
 		private int verticeObjetivo, arista, repeticiones;
-		public Arista(int Objeto, int Propiedad) {
-			verticeObjetivo = Objeto;
+		public Arista(int Objetivo, int Propiedad) {
+			verticeObjetivo = Objetivo;
 			arista = Propiedad;
 			repeticiones = 0;
 		}
@@ -94,7 +94,7 @@ public class Almacen {
 				// Ir al nodo en tempNodosEntrantes, buscar en la lista si existe una relación con el otro nodo
 				// Si existe, aumentar repeticiones. Si no existe, añadirla al final de la lista: insertLast( new Relacion(foo,bar) );
 				// Lo mismo con tempNodosSalientes
-				// Salgo de trabajar a las 22.00, antes de irme a dormir puede que me de tiempo a echarle un vistazo por encima
+				
 				
 			}
 			Fichero.cerrar();
