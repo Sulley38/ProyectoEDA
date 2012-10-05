@@ -25,6 +25,12 @@ public class Almacen {
 		public int obtenerVertice() {
 			return verticeObjetivo;
 		}
+		public int obtenerArista() {
+			return arista;
+		}
+		public int obtenerRepeticiones() {
+			return repeticiones;
+		}
 		public void addRepeticion() {
 			repeticiones++;
 		}
@@ -103,9 +109,10 @@ public class Almacen {
 				// Insertar la relación en sus sitios
 				encontrado = false;
 				tempLista = tempNodosSalientes.getElementByPosition(idSujeto);
+				tempLista.reset();
 				while(tempLista.hasNext()){					
 					tempArista=tempLista.next();
-					if(tempArista.verticeObjetivo==idObjeto && tempArista.arista==idPropiedad){
+					if(tempArista.obtenerVertice()==idObjeto && tempArista.obtenerArista()==idPropiedad){
 						tempArista.addRepeticion();
 						encontrado=true;
 						break;
@@ -118,10 +125,11 @@ public class Almacen {
 				
 				// Lo mismo con tempNodosSalientes
 				encontrado = false;
-				tempLista = tempNodosEntrantes.getElementByPosition(idObjeto);				
+				tempLista = tempNodosEntrantes.getElementByPosition(idObjeto);
+				tempLista.reset();
 				while(tempLista.hasNext()){					
 					tempArista=tempLista.next();
-					if(tempArista.verticeObjetivo==idSujeto && tempArista.arista==idPropiedad){
+					if(tempArista.obtenerVertice()==idSujeto && tempArista.obtenerArista()==idPropiedad){
 						tempArista.addRepeticion();
 						encontrado=true;
 						break;
@@ -159,7 +167,7 @@ public class Almacen {
 		Iterator<Arista> it= nodosSalientes.getElementByPosition(index).iterator();
 		while (it.hasNext()){
 			prov= it.next();
-			for(int i=0;i<prov.repeticiones;i++){
+			for(int i=0;i<prov.obtenerRepeticiones();i++){
 				out.write( listaSujetosObjetos.getElementByPosition(index)+" "+ listaPropiedades.getElementByPosition(prov.arista)+" "+listaSujetosObjetos.getElementByPosition(prov.verticeObjetivo)+" .\n");
 			}
 		}
