@@ -5,7 +5,7 @@ public class Main {
 
 	public static void main (String[] args) throws IOException {	
 		Almacen m;
-		String file = "data/A1.txt";
+		String file = "data/A0.txt";
 		// Cargar el almacén
 		System.out.println("Cargando el fichero \"" + file + "\"");
 		long t=System.currentTimeMillis();
@@ -14,12 +14,13 @@ public class Main {
 		System.out.print(System.currentTimeMillis()-t);
 		System.out.println(" ms");
 		
+		String sujeto = "<http://swat.cse.lehigh.edu/onto/univ-bench.owl#AdministrativeStaff>";
 		
 		// Prueba 1
 		BufferedWriter out = new BufferedWriter(new FileWriter("data/out1.txt"));
-		System.out.println("Escribiendo sentencias que tienen el sujeto \"<http://swat.cse.lehigh.edu/onto/univ-bench.owl#AssistantProfessor>\"");
+		System.out.println("Escribiendo sentencias que tienen el sujeto "+sujeto);
 		t=System.currentTimeMillis();
-		m.sentenciasPorSujeto("<http://swat.cse.lehigh.edu/onto/univ-bench.owl#AssistantProfessor>", out);
+		m.sentenciasPorSujeto(sujeto, out);
 		System.out.print("Escrito en ");
 		System.out.print(System.currentTimeMillis()-t);
 		System.out.println(" ms");
@@ -27,9 +28,9 @@ public class Main {
 		
 		// Prueba 2
 		out = new BufferedWriter(new FileWriter("data/out2.txt"));
-		System.out.println("Escribiendo sentencias distintas que tienen el sujeto \"<http://swat.cse.lehigh.edu/onto/univ-bench.owl#AssistantProfessor>\"");
+		System.out.println("Escribiendo sentencias distintas que tienen el sujeto "+sujeto);
 		t=System.currentTimeMillis();
-		m.sentenciasDistintasPorSujeto("<http://swat.cse.lehigh.edu/onto/univ-bench.owl#AssistantProfessor>", out);
+		m.sentenciasDistintasPorSujeto(sujeto, out);
 		System.out.print("Escrito en ");
 		System.out.print(System.currentTimeMillis()-t);
 		System.out.println(" ms");

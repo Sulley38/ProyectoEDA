@@ -20,7 +20,7 @@ public class Almacen {
 		public Arista(int Objetivo, int Propiedad) {
 			verticeObjetivo = Objetivo;
 			arista = Propiedad;
-			repeticiones = 0;
+			repeticiones = 1;
 		}
 		public int obtenerVertice() {
 			return verticeObjetivo;
