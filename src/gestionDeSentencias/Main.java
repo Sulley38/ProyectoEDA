@@ -5,7 +5,7 @@ public class Main {
 
 	public static void main (String[] args) throws IOException {	
 		Almacen m;
-		String file = "data/A0.txt";
+		String file = "data/A5.txt";
 		// Cargar el almacén
 		System.out.println("Cargando el fichero \"" + file + "\"");
 		long t=System.currentTimeMillis();
