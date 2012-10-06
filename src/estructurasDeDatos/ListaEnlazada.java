@@ -1,5 +1,6 @@
 package estructurasDeDatos;
 
+import java.lang.reflect.Array;
 import java.util.Iterator;
 
 /**
@@ -158,8 +159,8 @@ public class ListaEnlazada<T> {
 	 * @return un array cuyos elementos son los valores de la lista
 	 */
 	@SuppressWarnings("unchecked")
-	public T[] toArray() {
-		T[] array = (T[]) new Object[numNodos];
+	public T[] toArray(Class<T> c) {
+		T[] array = (T[]) Array.newInstance(c, numNodos);
 		NodoLista<T> current = first;
 		for( int i = 0; i < numNodos; ++i ) {
 			array[i] = current.dato;

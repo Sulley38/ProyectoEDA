@@ -39,6 +39,13 @@ public class pruebaListaEnlazada {
 		System.out.println("Cuarto elemento: " + lista.getElementByPosition(3));
 		System.out.println(); 
 		
+		// Convertir en array
+		System.out.print("Lista en forma de array: ");
+		Integer[] array = lista.toArray(Integer.class);
+		for( int i = 0; i < array.length; ++i )
+			System.out.print(array[i] + " ");
+		System.out.println(); System.out.println();
+		
 		// Eliminar un elemento
 		System.out.println("Tamaño de la lista: " + lista.size());
 		System.out.println("Se elimina el primer elemento.");
