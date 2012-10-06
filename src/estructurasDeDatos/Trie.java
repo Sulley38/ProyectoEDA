@@ -1,83 +1,102 @@
 package estructurasDeDatos;
 
+/**
+ * Estructura de árbol de prefijos:
+ * Operaciones para codificar/descodificar Strings con enteros.
+ */
 public class Trie {	
 
+	/**
+	 * Clase interna: nodo del árbol, contiene un valor númerico y un array de punteros a nodos hijos.
+	 */
 	private class NodoTrie {
-		int valor;
-		NodoTrie[] ramas;
-		
+		// Atributos
+		private int valor;
+		private NodoTrie[] ramas;
+		// Constructora
 		public NodoTrie(int valorInicial) {
 			valor = valorInicial;
 			ramas = new NodoTrie[128];
 		}
-		
 	}
-		
-	private NodoTrie inicio;
-	private int numNodos;
 	
-	//Crea un nuevo árbol
+	// ATRIBUTOS DE LA CLASE
+	private NodoTrie inicio;
+	private int numElementos;
+	
+	
+	/**
+	 * Constructora
+	 */
 	public Trie() {
 		inicio = new NodoTrie(-1);
-		numNodos = 0;
+		numElementos = 0;
 	}
 	
-	//devuelve el número de nodos en el árbol
+	/**
+	 * Devuelve el número de nodos del árbol que contienen un valor distinto a -1.
+	 * @return el número de elementos insertados
+	 */
 	public int size() {
-		return numNodos;
+		return numElementos;
 	}
 	
-	//devuelve el siguiente nodo (correspondiente a la letra)
-	public int obtenerValor(String s){
-		int l=s.length();
-		int indiceRamas;
+	/**
+	 * Devuelve el valor numérico correspondiente a un String, o -1 si el String no existe en el trie.
+	 * @param s - String a codificar
+	 * @return el entero asignado al string s
+	 */
+	public int obtenerValor( String s ) {
 		NodoTrie puntero = inicio;
-		
-		for(int i=0;i<l;i++){
-			indiceRamas = (int)s.charAt(i);
-			puntero = puntero.ramas[indiceRamas];		
+		for( int i = 0; i < s.length(); i++ ) {
+			if( puntero == null )
+				return -1;
+			else
+				puntero = puntero.ramas[((int)s.charAt(i))];
 		}
-		
+		if( puntero == null ) return -1;
 		return puntero.valor;
 	}
 	
-	//devuelve true si s ya está en el árbol
-	public boolean existe(String s) {
-		int l=s.length();
-		int indiceRamas;
+	/**
+	 * Comprueba si s está en el árbol.
+	 * @param s - String a buscar
+	 * @return true si s está en el árbol, false en caso contrario
+	 */
+	// NO SE USA NI HACE FALTA
+	/*public boolean existe( String s ) {
 		NodoTrie puntero = inicio;
-		
-		for(int i=0;i<l;i++){
-			indiceRamas = (int)s.charAt(i);
-			if (puntero.ramas[indiceRamas]==null){
+		for( int i = 0; i < s.length(); i++ ) {
+			if( puntero.ramas[((int)s.charAt(i))] == null )
 				return false;
-			}
-			puntero = puntero.ramas[indiceRamas];		
+			puntero = puntero.ramas[((int)s.charAt(i))];		
 		}
 		return true;
-	}
+	}*/
 	
-	//devuelve 1 si ha insertado s, 0 si ya estaba en el árbol
-	public boolean insertar(String s, int posicion){
+	/**
+	 * Inserta el String s en el árbol, asignándole el entero valor.
+	 * Si ya se encontraba en el árbol, devuelve su entero correspondiente sin modificarlo.
+	 * @param s - String a insertar
+	 * @param valor - Entero que se le asignará 
+	 * @return el valor correspondiente al String s
+	 */
+	public int insertar( String s, int valor ) {
 		boolean insertado = false;
-		int l=s.length(), indiceRamas;		//para no recalcular EFICIENCIA!!!!!
 		NodoTrie puntero = inicio;
-		
-		for(int i=0;i<l;i++){
-			indiceRamas = (int)s.charAt(i);
-			if (puntero.ramas[indiceRamas]==null){		//si no existe el nodo, la palabra no existe y se van insertando los nodos necesarios
-				puntero.ramas[indiceRamas] = new NodoTrie(-1);
-				puntero = puntero.ramas[indiceRamas];
+		for( int i = 0; i < s.length(); i++ ) {
+			if( puntero.ramas[((int)s.charAt(i))] == null ) {
+				// Si el nodo no existe, la palabra no existe y se inserta el nodo hijo necesario
+				puntero.ramas[((int)s.charAt(i))] = new NodoTrie(-1);
 				insertado = true;
 			}
-			else{
-				puntero = puntero.ramas[indiceRamas];	//existe ese prefijo, se avanza un caracter
-			}			
+			puntero = puntero.ramas[((int)s.charAt(i))];
 		}
-		if (insertado)
-			puntero.valor=posicion;
-
-		return insertado;
+		if( insertado ) {
+			puntero.valor = valor;
+			numElementos++;
+		}
+		return puntero.valor;
 	}
 	
 }

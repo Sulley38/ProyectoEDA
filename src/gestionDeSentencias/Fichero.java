@@ -1,9 +1,10 @@
 package gestionDeSentencias;
+
 import java.io.*;
 
 /**
  * Gestión de ficheros:
- * Proporciona métodos estáticos para leer y escribir sentencias usando ficheros de texto
+ * Proporciona métodos estáticos para leer y escribir sentencias usando ficheros de texto.
  * @author Daniel, Iván, Asier
  */
 public class Fichero {
