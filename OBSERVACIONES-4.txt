@@ -1,0 +1,23 @@
+
+
+
+Después de la entrevista del viernes 5 de octubre, estas son algunas observaciones 
+que debeis tener en cuenta:
+
+1- Podeis mejorar la redacción de la memoria. El trabajo que estais haciendo lo merece. 
+   - Habría que explicar la estructura de trie, que no es nada trivial. 
+   - Explicar las partes importantes de la implementación. Qué hacen esos métodos.
+   - Presentar los análisis de complejidad.
+   - Presentar las tablas de tiempos.
+   - ... etc, seguro que lo hareis bien si os poneis a ello.
+
+2- Conviene que la memoria se actualice, al menos, cada semana para que yo pueda ver 
+el progreso de vuestro trabajo. 
+
+
+EL TRABAJO QUE ESTAIS HACIENDO ES FENOMENAL. LA CALIFICACIÓN QUE LE CORRESPONDE ES DE 
+SOBRESALIENTE (PERO FALTA QUE PRESENTEIS MEJOR LA MEMORIA). 
+
+(DANIEL: NO QUIERO PONERME PESADO, PERO ME IMAGINO QUE ERES CONSCIENTE DE QUE PARA 
+CALIFICARTE CON SOBRESALIENTE NECESITO VER MÁS TRABAJO TÉCNICO DE TU PARTE. 
+APROVECHA QUE TIENES ESE PAR DE COMPAÑEROS Y SÁCALES TODO EL JUGO QUE PUEDAS)
