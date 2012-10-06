@@ -1,10 +1,9 @@
 package test;
 
-import java.util.Iterator;
 import estructurasDeDatos.ListaEnlazada;
 
 /**
- * Casos de prueba para la estructura de lista entrelazada
+ * Casos de prueba para la estructura de lista enlazada
  */
 public class pruebaListaEnlazada {
 
@@ -12,7 +11,7 @@ public class pruebaListaEnlazada {
 		System.out.println("Prueba de la lista enlazada con enteros.");
 		System.out.println("----------------------------------------");
 		ListaEnlazada<Integer> lista = new ListaEnlazada<Integer>();
-		Iterator<Integer> it;
+		ListaEnlazada.Iterador<Integer> it = new ListaEnlazada.Iterador<Integer>();
 
 		// Inserción por delante
 		System.out.println("Insertar elementos al principio: 1, 5, 17");
@@ -20,7 +19,7 @@ public class pruebaListaEnlazada {
 		lista.insertFirst(5);
 		lista.insertFirst(17);
 		System.out.print("La lista queda así: ");
-		it = lista.getIterator();
+		it.load(lista);
 		while( it.hasNext() ) System.out.print(it.next() + " ");
 		System.out.println(); System.out.println();
 		
@@ -30,7 +29,7 @@ public class pruebaListaEnlazada {
 		lista.insertLast(9);
 		lista.insertLast(6);
 		System.out.print("La lista queda así: ");
-		lista.resetIterator(it);
+		it.load(lista);
 		while( it.hasNext() ) System.out.print(it.next() + " ");
 		System.out.println(); System.out.println();
 
@@ -45,7 +44,7 @@ public class pruebaListaEnlazada {
 		System.out.println("Se elimina el primer elemento.");
 		lista.deleteFirst();
 		System.out.print("La lista queda así: ");
-		lista.resetIterator(it);
+		it.load(lista);
 		while( it.hasNext() ) System.out.print(it.next() + " ");
 		System.out.println();
 		System.out.println("¿La lista es vacía? " + lista.isEmpty());
@@ -56,7 +55,7 @@ public class pruebaListaEnlazada {
 		System.out.println("Se eliminan todos los elementos.");
 		lista.deleteAll();
 		System.out.print("La lista queda así: ");
-		lista.resetIterator(it);
+		it.load(lista);
 		while( it.hasNext() ) System.out.print(it.next() + " ");
 		System.out.println();
 		System.out.println("¿La lista es vacía? " + lista.isEmpty());

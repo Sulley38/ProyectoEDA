@@ -51,9 +51,9 @@ public class Almacen {
 		ListaArray<String> tempPropiedades = new ListaArray<String>(100);
 		ListaArray< ListaEnlazada<Arista> > tempNodosEntrantes = new ListaArray< ListaEnlazada<Arista> >(250000);
 		ListaArray< ListaEnlazada<Arista> > tempNodosSalientes = new ListaArray< ListaEnlazada<Arista> >(250000);
+		ListaEnlazada.Iterador<Arista> iterador = new ListaEnlazada.Iterador<Arista>();
 		ListaEnlazada<Arista> tempLista;
 		Arista tempArista;
-		Iterator<Arista> iterador;
 		boolean encontrado;
 		// Lee las sentencias desde el fichero y las añade al trie y a la lista de nodos del grafo
 		try {
@@ -98,10 +98,10 @@ public class Almacen {
 					objetos++;
 				}
 				
-				// Añadir las relaciones a las listas de adyacencia
+				// Añadir la relación a la lista de adyacencia
 				encontrado = false;
 				tempLista = tempNodosSalientes.getElementByPosition(idSujeto);
-				iterador = tempLista.getIterator();
+				iterador.load(tempLista);
 				while( iterador.hasNext() ) {
 					tempArista = iterador.next();
 					if( tempArista.verticeObjetivo == idObjeto && tempArista.arista == idPropiedad ) {
@@ -114,10 +114,10 @@ public class Almacen {
 				if( !encontrado )
 					tempLista.insertLast(new Arista(idObjeto,idPropiedad));
 				
-				// Lo mismo con tempNodosSalientes
+				// Lo mismo con la otra lista de adyacencia
 				encontrado = false;
 				tempLista = tempNodosEntrantes.getElementByPosition(idObjeto);
-				iterador = tempLista.getIterator();
+				iterador.load(tempLista);
 				while( iterador.hasNext() ) {
 					tempArista = iterador.next();
 					if( tempArista.verticeObjetivo == idSujeto && tempArista.arista == idPropiedad ) {
@@ -152,7 +152,8 @@ public class Almacen {
 	public String[] sentenciasPorSujeto( String Sujeto, BufferedWriter out ) throws IOException {
 		int index = arbolSujetosObjetos.obtenerValor(Sujeto);
 		Arista prov;
-		Iterator<Arista> it= nodosSalientes.getElementByPosition(index).getIterator();
+		ListaEnlazada.Iterador<Arista> it = new ListaEnlazada.Iterador<Arista>();
+		it.load(nodosSalientes.getElementByPosition(index));
 		while (it.hasNext()){
 			prov= it.next();
 			for(int i=0;i<prov.repeticiones;i++){
@@ -170,7 +171,8 @@ public class Almacen {
 	public String[] sentenciasDistintasPorSujeto( String Sujeto, BufferedWriter out ) throws IOException {
 		int index = arbolSujetosObjetos.obtenerValor(Sujeto);
 		Arista prov;
-		Iterator<Arista> it= nodosSalientes.getElementByPosition(index).getIterator();
+		ListaEnlazada.Iterador<Arista> it = new ListaEnlazada.Iterador<Arista>();
+		it.load(nodosSalientes.getElementByPosition(index));
 		while (it.hasNext()){
 			prov= it.next();
 			out.write( listaSujetosObjetos.getElementByPosition(index)+" "+ listaPropiedades.getElementByPosition(prov.arista)+" "+listaSujetosObjetos.getElementByPosition(prov.verticeObjetivo)+" .\n");

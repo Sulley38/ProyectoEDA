@@ -11,10 +11,10 @@ public class ListaEnlazada<T> {
 	/**
 	 * Clase interna: nodo de la lista, con dato del tipo T y puntero al elemento siguiente.
 	 */
-	private class NodoLista {
+	private static class NodoLista<T> {
 		// Atributos
 		private final T dato;
-		private NodoLista siguiente;
+		private NodoLista<T> siguiente;
 		// Constructora
 		public NodoLista(T elemento)
 			{ dato = elemento; siguiente = null; }
@@ -24,13 +24,14 @@ public class ListaEnlazada<T> {
 	 * Clase interna: iterador de la lista, se construye apuntando al primer elemento y avanza
 	 * devolviendo el siguiente elemento.
 	 */
-	private class Iterador implements Iterator<T> {
+	public static class Iterador<T> implements Iterator<T> {
 		// Atributos
-		private NodoLista actual;
+		private NodoLista<T> actual;
 		// Constructora
-		public Iterador()
-			{ actual = first; }
+		public Iterador() {}
 		// Métodos
+		public void load( ListaEnlazada<T> list )
+			{ actual = list.first; }
 		public boolean hasNext()
 			{ return (actual != null); }
 		public T next() {
@@ -44,8 +45,8 @@ public class ListaEnlazada<T> {
 	}
 
 	// ATRIBUTOS DE LA CLASE
-	private NodoLista first;
-	private NodoLista last;
+	private NodoLista<T> first;
+	private NodoLista<T> last;
 	private int numNodos;
 	
 	
@@ -79,7 +80,7 @@ public class ListaEnlazada<T> {
 	 * @param elemento a insertar
 	 */
 	public void insertFirst(T elemento) {
-		NodoLista newLink = new NodoLista(elemento);
+		NodoLista<T> newLink = new NodoLista<T>(elemento);
 		if( isEmpty() )
 			last = newLink;
 		else
@@ -93,7 +94,7 @@ public class ListaEnlazada<T> {
 	 * @param elemento a insertar
 	 */
 	public void insertLast(T elemento) {
-		NodoLista newLink = new NodoLista(elemento);
+		NodoLista<T> newLink = new NodoLista<T>(elemento);
 		if( isEmpty() )
 			first = newLink;
 		else
@@ -122,7 +123,7 @@ public class ListaEnlazada<T> {
 		last = null;
 		numNodos = 0;
 	}
-	
+
 	/**
 	 * Devuelve el valor del primer elemento de la lista.
 	 * @return primer valor de la lista
@@ -145,7 +146,7 @@ public class ListaEnlazada<T> {
 	 * @return el valor del elemento en la posición index
 	 */
 	public T getElementByPosition(int index) {
-		NodoLista current = first;
+		NodoLista<T> current = first;
 		for( int i = 0; i < index; ++i )
 			if( current != null ) current = current.siguiente;
 		if( current == null ) return null;
@@ -159,30 +160,14 @@ public class ListaEnlazada<T> {
 	@SuppressWarnings("unchecked")
 	public T[] toArray() {
 		T[] array = (T[]) new Object[numNodos];
-		NodoLista current = first;
+		NodoLista<T> current = first;
 		for( int i = 0; i < numNodos; ++i ) {
 			array[i] = current.dato;
 			current = current.siguiente;
 		}
 		return array;
 	}
-	
-	/**
-	 * Devuelve un iterador de la lista.
-	 * @return un iterador del tipo Iterator<T>
-	 */
-	public Iterator<T> getIterator() {
-        return new Iterador();
-    }
-	
-	/**
-	 * Vuelve el iterador a su posición inicial
-	 * @param it - iterador de la lista enlazada a resetear
-	 */
-	public void resetIterator( Iterator<T> it ) {
-		((Iterador)it).actual = first;
-	}
-	
+
 }
 
 
