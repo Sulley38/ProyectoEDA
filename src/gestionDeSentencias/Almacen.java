@@ -28,7 +28,7 @@ public class Almacen {
 	
 	/// ATRIBUTOS DE LA CLASE
 	// Dos listas de adyacencia para representar el grafo.
-	private ListaArray< ListaEnlazada<Arista>> nodosEntrantes, nodosSalientes;
+	private ListaArray<ListaEnlazada<Arista>> nodosEntrantes, nodosSalientes;
 	// Número de nodos (sujetos+objetos) y de aristas (propiedades); la suma de los tres es el número de entidades
 	private int sujetos, objetos, propiedades;
 	// Relaciones entre entidad e índice correspondiente (Trie), y viceversa (array)
@@ -144,74 +144,67 @@ public class Almacen {
 	}
 	
 	/**
-	 * 1) Colección de sentencias del almacén que tienen un sujeto determinado
-	 * @param Sujeto
-	 * @return
-	 * @throws IOException 
+	 * 1) Colección de sentencias del almacén que tienen un sujeto determinado.
+	 * @param Sujeto - sujeto cuyas sentencias han de devolverse
+	 * @return Un array de sentencias que tienen Sujeto como sujeto
 	 */
-	public String[] sentenciasPorSujeto( String Sujeto ) throws IOException {		
-		String[] coleccionSentencias= new String[200000];
+	public String[] sentenciasPorSujeto( String Sujeto ) {		
+		String[] coleccionSentencias = new String[200000];
 		int index = arbolSujetosObjetos.obtenerValor(Sujeto);
 		Arista prov;
 		ListaEnlazada.Iterador<Arista> it = new ListaEnlazada.Iterador<Arista>();
-		it.load(nodosSalientes.getElementByPosition(index));
-		while (it.hasNext()){
+		it.load( nodosSalientes.getElementByPosition(index) );
+		while( it.hasNext() ) {
 			prov = it.next();
-			for(int i=0;i<prov.repeticiones;i++){
-				coleccionSentencias[i] = listaSujetosObjetos.getElementByPosition(index) +" "+  listaPropiedades.getElementByPosition(prov.arista) +" "+ listaSujetosObjetos.getElementByPosition(prov.verticeObjetivo)+ "  .\n";				
-			}
+			for( int i = 0; i < prov.repeticiones; i++ )
+				coleccionSentencias[i] = listaSujetosObjetos.getElementByPosition(index) + " " +  listaPropiedades.getElementByPosition(prov.arista) + " " + listaSujetosObjetos.getElementByPosition(prov.verticeObjetivo) + " .";				
 		}
 		return coleccionSentencias;
 	}
 	
 	/**
-	 * 2) Colección de sentencias distintas del almacén que tienen un sujeto determinado
-	 * @param Sujeto
-	 * @return
+	 * 2) Colección de sentencias distintas del almacén que tienen un sujeto determinado.
+	 * @param Sujeto - sujeto cuyas sentencias han de devolverse
+	 * @return Un array de sentencias sin repeticiones que tienen Sujeto como sujeto
 	 */
-	public String[] sentenciasDistintasPorSujeto( String Sujeto ) throws IOException {
-		String[] coleccionSentencias= new String[200000];
-		int i=0;
-		int index = arbolSujetosObjetos.obtenerValor(Sujeto);
+	public String[] sentenciasDistintasPorSujeto( String Sujeto ) {
+		String[] coleccionSentencias = new String[200000];
+		int i = 0, index = arbolSujetosObjetos.obtenerValor(Sujeto);
 		Arista prov;
 		ListaEnlazada.Iterador<Arista> it = new ListaEnlazada.Iterador<Arista>();
-		it.load(nodosSalientes.getElementByPosition(index));
-		while (it.hasNext()){
-			prov= it.next();
-			coleccionSentencias[i] = listaSujetosObjetos.getElementByPosition(index) +" "+  listaPropiedades.getElementByPosition(prov.arista) +" "+ listaSujetosObjetos.getElementByPosition(prov.verticeObjetivo)+ "  .\n";
-			
+		it.load( nodosSalientes.getElementByPosition(index) );
+		while( it.hasNext() ) {
+			prov = it.next();
+			coleccionSentencias[i] = listaSujetosObjetos.getElementByPosition(index) + " " +  listaPropiedades.getElementByPosition(prov.arista) + " " + listaSujetosObjetos.getElementByPosition(prov.verticeObjetivo) + " .";
 			i++;
 		}
 		return coleccionSentencias;
 	}
 	
 	/**
-	 * 3) Colección de propiedades distintas que aparecen en las sentencias del almacén
-	 * @return
+	 * 3) Colección de propiedades distintas que aparecen en las sentencias del almacén.
+	 * @return Un array de las propiedades sin repeticiones que aparecen en el almacén
 	 */
-	public String[] propiedadesDistintas() throws IOException {
-		String[] coleccionSentencias= new String[200000];
-		for(int i=0;i<listaPropiedades.size();i++){
-			coleccionSentencias[i] = listaPropiedades.getElementByPosition(i)+"\n";
-		}
-		return coleccionSentencias;
+	public String[] propiedadesDistintas() {
+		String[] coleccionPropiedades = new String[200000];
+		for( int i = 0; i < listaPropiedades.size(); i++ )
+			coleccionPropiedades[i] = listaPropiedades.getElementByPosition(i);
+
+		return coleccionPropiedades;
 	}
 	
 	/**
 	 * 4) Colección de entidades distintas que son sujeto de alguna sentencia y también
-	 * son objeto de alguna sentencia de ese almacén
-	 * @return
-	 * @throws IOException 
+	 * 	  son objeto de alguna sentencia de ese almacén.
+	 * @return Un array de strings sin repeticiones que son sujeto y a la vez objeto en el almacén
 	 */
-	public String[] entidadesSujetoObjeto() throws IOException {
-		String[] coleccionSentencias= new String[200000];
-		for(int i = 0; i<nodosSalientes.size();i++){
-			if(!nodosSalientes.getElementByPosition(i).isEmpty() && !nodosEntrantes.getElementByPosition(i).isEmpty()){
-				coleccionSentencias[i] = listaSujetosObjetos.getElementByPosition(i)+"\n";
-				
-			}
-		}
-		return coleccionSentencias;
+	public String[] entidadesSujetoObjeto() {
+		String[] coleccionEntidades = new String[200000];
+		for( int i = 0; i < nodosSalientes.size(); i++ )
+			if( !nodosSalientes.getElementByPosition(i).isEmpty() && !nodosEntrantes.getElementByPosition(i).isEmpty() )
+				coleccionEntidades[i] = listaSujetosObjetos.getElementByPosition(i);
+		
+		return coleccionEntidades;
 	}
 	
 }

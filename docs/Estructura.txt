@@ -1,3 +1,0 @@
-ALMACÉN:
-	Grafo dirigido ponderado -> Matriz de adyacencia (Nodos = Sujetos/Objetos, Aristas = Propiedades).
-	Árbol de prefijos para relacionar las entidades con sus índices en la matriz de adyacencia.

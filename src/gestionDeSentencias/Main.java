@@ -1,12 +1,11 @@
 package gestionDeSentencias;
 
-import java.io.*;
-
 public class Main {
 
-	public static void main (String[] args) throws IOException {	
+	public static void main (String[] args) {	
 		Almacen m;
 		String file = "data/A5.txt", sujeto = "<http://swat.cse.lehigh.edu/onto/univ-bench.owl#AdministrativeStaff>";
+		
 		// Cargar el almacén
 		System.out.println("Cargando el fichero \"" + file + "\"");
 		long t=System.currentTimeMillis();
@@ -34,7 +33,6 @@ public class Main {
 		
 		
 		// Prueba 3
-		
 		System.out.println("Escribiendo propiedades distintas que aparecen en el almacén");
 		t=System.currentTimeMillis();
 		m.propiedadesDistintas();
@@ -44,14 +42,12 @@ public class Main {
 		
 		
 		// Prueba 4
-		
 		System.out.println("Escribiendo entidades distintas que son sujeto y también objeto de alguna sentencia");
 		t=System.currentTimeMillis();
 		m.entidadesSujetoObjeto();
 		System.out.print("Escrito en ");
 		System.out.print(System.currentTimeMillis()-t);
 		System.out.println(" ms");
-		
 		
 	}
 	
