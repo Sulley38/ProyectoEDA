@@ -149,7 +149,7 @@ public class Almacen {
 	 * @return
 	 * @throws IOException 
 	 */
-	public String[] sentenciasPorSujeto( String Sujeto, BufferedWriter out ) throws IOException {		
+	public String[] sentenciasPorSujeto( String Sujeto ) throws IOException {		
 		String[] coleccionSentencias= new String[200000];
 		int index = arbolSujetosObjetos.obtenerValor(Sujeto);
 		Arista prov;
@@ -169,7 +169,7 @@ public class Almacen {
 	 * @param Sujeto
 	 * @return
 	 */
-	public String[] sentenciasDistintasPorSujeto( String Sujeto, BufferedWriter out ) throws IOException {
+	public String[] sentenciasDistintasPorSujeto( String Sujeto ) throws IOException {
 		String[] coleccionSentencias= new String[200000];
 		int i=0;
 		int index = arbolSujetosObjetos.obtenerValor(Sujeto);
@@ -189,7 +189,7 @@ public class Almacen {
 	 * 3) Colección de propiedades distintas que aparecen en las sentencias del almacén
 	 * @return
 	 */
-	public String[] propiedadesDistintas(BufferedWriter out) throws IOException {
+	public String[] propiedadesDistintas() throws IOException {
 		String[] coleccionSentencias= new String[200000];
 		for(int i=0;i<listaPropiedades.size();i++){
 			coleccionSentencias[i] = listaPropiedades.getElementByPosition(i)+"\n";
@@ -203,7 +203,7 @@ public class Almacen {
 	 * @return
 	 * @throws IOException 
 	 */
-	public String[] entidadesSujetoObjeto(BufferedWriter out) throws IOException {
+	public String[] entidadesSujetoObjeto() throws IOException {
 		String[] coleccionSentencias= new String[200000];
 		for(int i = 0; i<nodosSalientes.size();i++){
 			if(!nodosSalientes.getElementByPosition(i).isEmpty() && !nodosEntrantes.getElementByPosition(i).isEmpty()){
