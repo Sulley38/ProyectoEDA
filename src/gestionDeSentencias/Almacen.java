@@ -149,18 +149,19 @@ public class Almacen {
 	 * @return
 	 * @throws IOException 
 	 */
-	public String[] sentenciasPorSujeto( String Sujeto, BufferedWriter out ) throws IOException {
+	public String[] sentenciasPorSujeto( String Sujeto, BufferedWriter out ) throws IOException {		
+		String[] coleccionSentencias= new String[200000];
 		int index = arbolSujetosObjetos.obtenerValor(Sujeto);
 		Arista prov;
 		ListaEnlazada.Iterador<Arista> it = new ListaEnlazada.Iterador<Arista>();
 		it.load(nodosSalientes.getElementByPosition(index));
 		while (it.hasNext()){
-			prov= it.next();
+			prov = it.next();
 			for(int i=0;i<prov.repeticiones;i++){
-				out.write( listaSujetosObjetos.getElementByPosition(index)+" "+ listaPropiedades.getElementByPosition(prov.arista)+" "+listaSujetosObjetos.getElementByPosition(prov.verticeObjetivo)+" .\n");
+				coleccionSentencias[i] = listaSujetosObjetos.getElementByPosition(index) +" "+  listaPropiedades.getElementByPosition(prov.arista) +" "+ listaSujetosObjetos.getElementByPosition(prov.verticeObjetivo)+ "  .\n";				
 			}
 		}
-		return null;
+		return coleccionSentencias;
 	}
 	
 	/**
@@ -169,15 +170,19 @@ public class Almacen {
 	 * @return
 	 */
 	public String[] sentenciasDistintasPorSujeto( String Sujeto, BufferedWriter out ) throws IOException {
+		String[] coleccionSentencias= new String[200000];
+		int i=0;
 		int index = arbolSujetosObjetos.obtenerValor(Sujeto);
 		Arista prov;
 		ListaEnlazada.Iterador<Arista> it = new ListaEnlazada.Iterador<Arista>();
 		it.load(nodosSalientes.getElementByPosition(index));
 		while (it.hasNext()){
 			prov= it.next();
-			out.write( listaSujetosObjetos.getElementByPosition(index)+" "+ listaPropiedades.getElementByPosition(prov.arista)+" "+listaSujetosObjetos.getElementByPosition(prov.verticeObjetivo)+" .\n");
+			coleccionSentencias[i] = listaSujetosObjetos.getElementByPosition(index) +" "+  listaPropiedades.getElementByPosition(prov.arista) +" "+ listaSujetosObjetos.getElementByPosition(prov.verticeObjetivo)+ "  .\n";
+			
+			i++;
 		}
-		return null;
+		return coleccionSentencias;
 	}
 	
 	/**
@@ -185,10 +190,11 @@ public class Almacen {
 	 * @return
 	 */
 	public String[] propiedadesDistintas(BufferedWriter out) throws IOException {
+		String[] coleccionSentencias= new String[200000];
 		for(int i=0;i<listaPropiedades.size();i++){
-			out.write(listaPropiedades.getElementByPosition(i)+"\n");
+			coleccionSentencias[i] = listaPropiedades.getElementByPosition(i)+"\n";
 		}
-		return null;
+		return coleccionSentencias;
 	}
 	
 	/**
@@ -198,12 +204,14 @@ public class Almacen {
 	 * @throws IOException 
 	 */
 	public String[] entidadesSujetoObjeto(BufferedWriter out) throws IOException {
+		String[] coleccionSentencias= new String[200000];
 		for(int i = 0; i<nodosSalientes.size();i++){
 			if(!nodosSalientes.getElementByPosition(i).isEmpty() && !nodosEntrantes.getElementByPosition(i).isEmpty()){
-				out.write(listaSujetosObjetos.getElementByPosition(i)+"\n");
+				coleccionSentencias[i] = listaSujetosObjetos.getElementByPosition(i)+"\n";
+				
 			}
 		}
-		return null;
+		return coleccionSentencias;
 	}
 	
 }
