@@ -1,5 +1,7 @@
 package estructurasDeDatos;
 
+import gestionDeSentencias.Fichero;
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.Iterator;
 
@@ -169,6 +171,24 @@ public class ListaEnlazada<T> {
 		return array;
 	}
 
+	/**
+	 * Escribe todos los elementos de la lista enlazada en un fichero de texto, uno por línea.
+	 * @param nombreDeArchivo - Archivo a escribir
+	 */
+	public void imprimirEnFichero(String nombreDeArchivo) {
+		try {
+			Fichero f = new Fichero(nombreDeArchivo, true);
+			NodoLista<T> current = first;
+			for( int i = 0; i < numNodos; ++i ) {
+				f.escribirSentencia(current.dato.toString());
+				current = current.siguiente;
+			}
+			f.cerrar();
+		} catch (IOException e) {
+			System.out.println("Error: Imposible acceder al fichero especificado.");
+		}
+	}
+	
 }
 
 

@@ -4,35 +4,33 @@ import java.io.*;
 
 /**
  * Gestión de ficheros:
- * Proporciona métodos estáticos para leer y escribir sentencias usando ficheros de texto.
+ * Proporciona métodos para leer y escribir sentencias usando ficheros de texto.
  * @author Daniel, Iván, Asier
  */
 public class Fichero {
 
 	// Atributo indicando si se abre el fichero para lectura (f) o para escritura (t)
-	private static boolean modoEscritura;
+	private final boolean modoEscritura;
 	// Atributos para lectura y escritura
-	private static BufferedReader lectura;
-	private static BufferedWriter escritura;
+	private final BufferedReader lectura;
+	private final BufferedWriter escritura;
 	
 	/**
-	 * Constructora
-	 */
-	private Fichero() {}
-	
-	
-	/**
+	 * Constructora:
 	 * Abre el fichero indicado para su posterior lectura/escritura.
 	 * @param Ruta del fichero a acceder
 	 * @param Escribir true si se quiere abrir en modo escritura
 	 * @throws IOException En caso de producirse un error de entrada/salida
 	 */
-	public static void abrir( String Ruta, boolean Escribir ) throws IOException {
-		modoEscritura = Escribir;
-		if( Escribir )
-			escritura = new BufferedWriter( new FileWriter(Ruta) );
-		else
-			lectura = new BufferedReader( new FileReader(Ruta) );
+	public Fichero( String fichero, boolean escribir ) throws IOException {
+		modoEscritura = escribir;
+		if( escribir ) {
+			lectura = null;
+			escritura = new BufferedWriter( new FileWriter(fichero) );
+		} else {
+			lectura = new BufferedReader( new FileReader(fichero) );
+			escritura = null;
+		}
 	}
 	
 	/**
@@ -41,11 +39,11 @@ public class Fichero {
 	 * @return Una línea del fichero, null si se ha alcanzado el final
 	 * @throws IOException En caso de producirse un error de entrada/salida
 	 */
-	public static String leerSentencia() throws IOException {
-		if( !modoEscritura )
-			return lectura.readLine();
-		else
+	public String leerSentencia() throws IOException {
+		if( modoEscritura )
 			return null;
+		else
+			return lectura.readLine();
 	}
 	
 	/**
@@ -54,7 +52,7 @@ public class Fichero {
 	 * @param Sentencia a escribir en una línea
 	 * @throws IOException En caso de producirse un error de entrada/salida
 	 */
-	public static void escribirSentencia( String Sentencia ) throws IOException {
+	public void escribirSentencia( String Sentencia ) throws IOException {
 		if( modoEscritura ) {
 			escritura.write(Sentencia);
 			escritura.newLine();
@@ -65,7 +63,7 @@ public class Fichero {
 	 * Cierra el fichero que se está utilizando.
 	 * @throws IOException En caso de producirse un error de entrada/salida
 	 */
-	public static void cerrar() throws IOException {
+	public void cerrar() throws IOException {
 		if( modoEscritura )
 			escritura.close();
 		else
