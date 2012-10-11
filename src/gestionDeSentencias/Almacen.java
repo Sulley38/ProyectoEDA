@@ -17,9 +17,10 @@ public class Almacen {
 	 */
 	private class Arista {
 		// Atributos
-		private int verticeObjetivo, arista, repeticiones;
+		private final int verticeObjetivo, arista;
+		private int repeticiones;
 		// Constructora
-		public Arista(int Objetivo, int Propiedad) {
+		public Arista(final int Objetivo, final int Propiedad) {
 			verticeObjetivo = Objetivo;
 			arista = Propiedad;
 			repeticiones = 1;
@@ -28,7 +29,7 @@ public class Almacen {
 	
 	/// ATRIBUTOS DE LA CLASE
 	// Dos listas de adyacencia para representar el grafo.
-	private ListaArray<ListaEnlazada<Arista>> nodosEntrantes, nodosSalientes;
+	private ListaArray< ListaEnlazada<Arista> > nodosEntrantes, nodosSalientes;
 	// Número de nodos (sujetos+objetos) y de aristas (propiedades); la suma de los tres es el número de entidades
 	private int sujetos, objetos, propiedades;
 	// Relaciones entre entidad e índice correspondiente (Trie), y viceversa (array)
@@ -42,14 +43,15 @@ public class Almacen {
 	 * @param nombreDeArchivo de texto desde el que leer las entidades
 	 */
 	public Almacen( String nombreDeArchivo ) {
+		// Inicializa los atributos de la clase
+		nodosEntrantes = new ListaArray< ListaEnlazada<Arista> >(250000);
+		nodosSalientes = new ListaArray< ListaEnlazada<Arista> >(250000);
 		sujetos = objetos = propiedades = 0;
 		arbolSujetosObjetos = new Trie();
 		arbolPropiedades = new Trie();
-		//Listas enlazadas temporales antes de conocer el tamaño de los arrays definitivos
-		ListaArray<String> tempSujetosObjetos = new ListaArray<String>(250000);
-		ListaArray<String> tempPropiedades = new ListaArray<String>(100);
-		ListaArray< ListaEnlazada<Arista> > tempNodosEntrantes = new ListaArray< ListaEnlazada<Arista> >(250000);
-		ListaArray< ListaEnlazada<Arista> > tempNodosSalientes = new ListaArray< ListaEnlazada<Arista> >(250000);
+		listaSujetosObjetos = new ListaArray<String>(250000);
+		listaPropiedades = new ListaArray<String>(100);
+		// Estructuras temporales para insertar las sentencias
 		ListaEnlazada.Iterador<Arista> iterador = new ListaEnlazada.Iterador<Arista>();
 		ListaEnlazada<Arista> tempLista;
 		Arista tempArista;
@@ -70,10 +72,10 @@ public class Almacen {
 				idSujeto = arbolSujetosObjetos.insertar(sujeto, sujetos+objetos);
 				if( idSujeto == sujetos+objetos ) {
 					// Agregar al array de int -> String
-					tempSujetosObjetos.insertLast(sujeto);					
+					listaSujetosObjetos.insertLast(sujeto);
 					// Añadir su hueco en la lista de nodos entrantes y salientes
-					tempNodosEntrantes.insertLast( new ListaEnlazada<Arista>() );
-					tempNodosSalientes.insertLast( new ListaEnlazada<Arista>() );
+					nodosEntrantes.insertLast( new ListaEnlazada<Arista>() );
+					nodosSalientes.insertLast( new ListaEnlazada<Arista>() );
 					// Incrementar contador
 					sujetos++;
 				}
@@ -81,7 +83,7 @@ public class Almacen {
 				idPropiedad = arbolPropiedades.insertar(propiedad, propiedades);
 				if( idPropiedad == propiedades ) {
 					// Agregar al array de int -> String
-					tempPropiedades.insertLast(propiedad);
+					listaPropiedades.insertLast(propiedad);
 					// Incrementar contador
 					propiedades++;
 				}
@@ -89,43 +91,41 @@ public class Almacen {
 				idObjeto = arbolSujetosObjetos.insertar(objeto, sujetos+objetos);
 				if( idObjeto == sujetos+objetos ) {
 					// Agregar al array de int -> String
-					tempSujetosObjetos.insertLast(objeto);
+					listaSujetosObjetos.insertLast(objeto);
 					// Añadir su hueco en la lista de nodos entrantes y salientes
-					tempNodosEntrantes.insertLast( new ListaEnlazada<Arista>() );
-					tempNodosSalientes.insertLast( new ListaEnlazada<Arista>() );
+					nodosEntrantes.insertLast( new ListaEnlazada<Arista>() );
+					nodosSalientes.insertLast( new ListaEnlazada<Arista>() );
 					// Incrementar contador
 					objetos++;
 				}
 				
-				// Añadir la relación a la lista de adyacencia
+				// Buscar la arista en la primera lista de adyacencia
 				encontrado = false;
-				tempLista = tempNodosSalientes.getElementByPosition(idSujeto);
+				tempLista = nodosSalientes.getElementByPosition(idSujeto);
 				iterador.load(tempLista);
-				while( iterador.hasNext() ) {
+				while( !encontrado && iterador.hasNext() ) {
 					tempArista = iterador.next();
 					if( tempArista.verticeObjetivo == idObjeto && tempArista.arista == idPropiedad ) {
 						tempArista.repeticiones++;
 						encontrado = true;
-						break;
 					}
 				}
-				//si no lo ha encontrado crea la arista
+				// Si no se encuentra, añadirla
 				if( !encontrado )
 					tempLista.insertLast(new Arista(idObjeto,idPropiedad));
 				
-				// Lo mismo con la otra lista de adyacencia
+				// Buscar la arista en la segunda lista de adyacencia
 				encontrado = false;
-				tempLista = tempNodosEntrantes.getElementByPosition(idObjeto);
+				tempLista = nodosEntrantes.getElementByPosition(idObjeto);
 				iterador.load(tempLista);
-				while( iterador.hasNext() ) {
+				while( !encontrado && iterador.hasNext() ) {
 					tempArista = iterador.next();
 					if( tempArista.verticeObjetivo == idSujeto && tempArista.arista == idPropiedad ) {
 						tempArista.repeticiones++;
 						encontrado = true;
-						break;
 					}
 				}
-				//si no lo ha encontrado crea la arista
+				// Si no se encuentra, añadirla
 				if( !encontrado )
 					tempLista.insertLast(new Arista(idSujeto,idPropiedad));
 			}
@@ -135,11 +135,7 @@ public class Almacen {
 			System.err.println("Error: Imposible acceder al fichero especificado.");
 			return;
 		}
-		
-		nodosEntrantes = tempNodosEntrantes;
-		nodosSalientes = tempNodosSalientes;
-		listaSujetosObjetos = tempSujetosObjetos;
-		listaPropiedades = tempPropiedades;
+
 	}
 	
 	/**

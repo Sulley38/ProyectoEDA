@@ -19,7 +19,7 @@ public class ListaEnlazada<T> {
 		private final T dato;
 		private NodoLista<T> siguiente;
 		// Constructora
-		public NodoLista(T elemento)
+		public NodoLista(final T elemento)
 			{ dato = elemento; siguiente = null; }
 	}
 
@@ -33,14 +33,14 @@ public class ListaEnlazada<T> {
 		// Constructora
 		public Iterador() {}
 		// Métodos
-		public void load( ListaEnlazada<T> list )
+		public void load( final ListaEnlazada<T> list )
 			{ actual = list.first; }
 		public boolean hasNext()
 			{ return (actual != null); }
 		public T next() {
 			if( !hasNext() ) 
 				return null;
-			T result = actual.dato;
+			final T result = actual.dato;
 			actual = actual.siguiente;
 			return result;
 		}
@@ -82,8 +82,8 @@ public class ListaEnlazada<T> {
 	 * Inserta un elemento en la lista en primera posición.
 	 * @param elemento a insertar
 	 */
-	public void insertFirst(T elemento) {
-		NodoLista<T> newLink = new NodoLista<T>(elemento);
+	public void insertFirst(final T elemento) {
+		final NodoLista<T> newLink = new NodoLista<T>(elemento);
 		if( isEmpty() )
 			last = newLink;
 		else
@@ -96,8 +96,8 @@ public class ListaEnlazada<T> {
 	 * Inserta un elemento en la lista en última posición.
 	 * @param elemento a insertar
 	 */
-	public void insertLast(T elemento) {
-		NodoLista<T> newLink = new NodoLista<T>(elemento);
+	public void insertLast(final T elemento) {
+		final NodoLista<T> newLink = new NodoLista<T>(elemento);
 		if( isEmpty() )
 			first = newLink;
 		else
@@ -148,7 +148,7 @@ public class ListaEnlazada<T> {
 	 * @param index - la posición del valor que se busca, empezando a contar desde cero
 	 * @return el valor del elemento en la posición index
 	 */
-	public T getElementByPosition(int index) {
+	public T getElementByPosition(final int index) {
 		NodoLista<T> current = first;
 		for( int i = 0; i < index; ++i )
 			if( current != null ) current = current.siguiente;
@@ -161,7 +161,7 @@ public class ListaEnlazada<T> {
 	 * @return un array cuyos elementos son los valores de la lista
 	 */
 	@SuppressWarnings("unchecked")
-	public T[] toArray(Class<T> c) {
+	public T[] toArray(final Class<T> c) {
 		T[] array = (T[]) Array.newInstance(c, numNodos);
 		NodoLista<T> current = first;
 		for( int i = 0; i < numNodos; ++i ) {
@@ -175,7 +175,7 @@ public class ListaEnlazada<T> {
 	 * Escribe todos los elementos de la lista enlazada en un fichero de texto, uno por línea.
 	 * @param nombreDeArchivo - Archivo a escribir
 	 */
-	public void imprimirEnFichero(String nombreDeArchivo) {
+	public void imprimirEnFichero(final String nombreDeArchivo) {
 		try {
 			Fichero f = new Fichero(nombreDeArchivo, true);
 			NodoLista<T> current = first;
