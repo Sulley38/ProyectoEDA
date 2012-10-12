@@ -83,7 +83,7 @@ public class ListaEnlazada<T> {
 	 * @param elemento a insertar
 	 */
 	public void insertFirst(final T elemento) {
-		final NodoLista<T> newLink = new NodoLista<T>(elemento);
+		NodoLista<T> newLink = new NodoLista<T>(elemento);
 		if( isEmpty() )
 			last = newLink;
 		else
@@ -97,7 +97,7 @@ public class ListaEnlazada<T> {
 	 * @param elemento a insertar
 	 */
 	public void insertLast(final T elemento) {
-		final NodoLista<T> newLink = new NodoLista<T>(elemento);
+		NodoLista<T> newLink = new NodoLista<T>(elemento);
 		if( isEmpty() )
 			first = newLink;
 		else
@@ -177,13 +177,13 @@ public class ListaEnlazada<T> {
 	 */
 	public void imprimirEnFichero(final String nombreDeArchivo) {
 		try {
-			Fichero f = new Fichero(nombreDeArchivo, true);
+			Fichero.abrir(nombreDeArchivo, true);
 			NodoLista<T> current = first;
 			for( int i = 0; i < numNodos; ++i ) {
-				f.escribirSentencia(current.dato.toString());
+				Fichero.escribirSentencia(current.dato.toString());
 				current = current.siguiente;
 			}
-			f.cerrar();
+			Fichero.cerrar();
 		} catch (IOException e) {
 			System.out.println("Error: Imposible acceder al fichero especificado.");
 		}

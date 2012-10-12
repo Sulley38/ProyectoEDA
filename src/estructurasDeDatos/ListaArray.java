@@ -48,10 +48,10 @@ public class ListaArray<T>{
 	
 	public void imprimirEnFichero(String nombreDeArchivo) {
 		try {
-			Fichero f = new Fichero(nombreDeArchivo, true);
+			Fichero.abrir(nombreDeArchivo, true);
 			for( int i = 0; i < longitud; ++i )
-				f.escribirSentencia(laLista[i].toString());
-			f.cerrar();
+				Fichero.escribirSentencia(laLista[i].toString());
+			Fichero.cerrar();
 		} catch (IOException e) {
 			System.out.println("Error: Imposible acceder al fichero especificado.");
 		}

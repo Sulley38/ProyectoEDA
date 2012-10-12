@@ -12,16 +12,16 @@ public class Trie {
 	private class NodoTrie {
 		// Atributos
 		private int valor;
-		private NodoTrie[] ramas;
+		private final NodoTrie[] ramas;
 		// Constructora
-		public NodoTrie(int valorInicial) {
+		public NodoTrie(final int valorInicial) {
 			valor = valorInicial;
 			ramas = new NodoTrie[128];
 		}
 	}
 	
 	// ATRIBUTOS DE LA CLASE
-	private NodoTrie inicio;
+	private final NodoTrie inicio;
 	private int numElementos;
 	
 	
@@ -46,7 +46,7 @@ public class Trie {
 	 * @param s - String a codificar
 	 * @return el entero asignado al string s
 	 */
-	public int obtenerValor( String s ) {
+	public int obtenerValor( final String s ) {
 		NodoTrie puntero = inicio;
 		for( int i = 0; i < s.length(); i++ ) {
 			if( puntero == null )
@@ -81,7 +81,7 @@ public class Trie {
 	 * @param valor - Entero que se le asignará 
 	 * @return el valor correspondiente al String s
 	 */
-	public int insertar( String s, int valor ) {
+	public int insertar( final String s, final int valor ) {
 		boolean insertado = false;
 		NodoTrie puntero = inicio;
 		for( int i = 0; i < s.length(); i++ ) {

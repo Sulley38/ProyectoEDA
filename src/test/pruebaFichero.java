@@ -12,14 +12,14 @@ public class pruebaFichero {
 		try {
 			
 			// Escribir en el fichero
-			Fichero f1 = new Fichero("data/pruebaFichero.txt",true);
-			f1.escribirSentencia("Dani no mola mazo, Mati sí.");
-			f1.cerrar();
+			Fichero.abrir("data/pruebaFichero.txt",true);
+			Fichero.escribirSentencia("Dani no mola mazo, Mati sí.");
+			Fichero.cerrar();
 			
 			// Escribir en la consola la sentencia que se ha guardado previamente en el fichero
-			Fichero f2 = new Fichero("data/pruebaFichero.txt",false);
-			System.out.println(f2.leerSentencia());
-			f2.cerrar();
+			Fichero.abrir("data/pruebaFichero.txt",false);
+			System.out.println(Fichero.leerSentencia());
+			Fichero.cerrar();
 			
 		} catch (IOException e) {
 			System.out.println("Error al acceder al fichero especificado.");

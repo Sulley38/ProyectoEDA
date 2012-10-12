@@ -58,28 +58,28 @@ public class Almacen {
 		boolean encontrado;
 		// Lee las sentencias desde el fichero y las añade al trie y a la lista de nodos del grafo
 		try {
-			Fichero f = new Fichero(nombreDeArchivo,false);
+			Fichero.abrir(nombreDeArchivo,false);
 			String sentencia, sujeto, propiedad, objeto;
 			int idSujeto, idPropiedad, idObjeto;
 			StringTokenizer tokenizador;
-			while( (sentencia = f.leerSentencia()) != null ) {
+			while( (sentencia = Fichero.leerSentencia()) != null ) {
 				tokenizador = new StringTokenizer(sentencia);
 				sujeto = tokenizador.nextToken();
 				propiedad = tokenizador.nextToken();
 				objeto = tokenizador.nextToken();
 				
-				// Insertar sujeto
+				// Insertar sujeto en el trie
 				idSujeto = arbolSujetosObjetos.insertar(sujeto, sujetos+objetos);
 				if( idSujeto == sujetos+objetos ) {
 					// Agregar al array de int -> String
 					listaSujetosObjetos.insertLast(sujeto);
-					// Añadir su hueco en la lista de nodos entrantes y salientes
+					// Añadir su hueco en las listas de adyacencia
 					nodosEntrantes.insertLast( new ListaEnlazada<Arista>() );
 					nodosSalientes.insertLast( new ListaEnlazada<Arista>() );
 					// Incrementar contador
 					sujetos++;
 				}
-				// Insertar propiedad
+				// Insertar propiedad en el trie
 				idPropiedad = arbolPropiedades.insertar(propiedad, propiedades);
 				if( idPropiedad == propiedades ) {
 					// Agregar al array de int -> String
@@ -87,12 +87,12 @@ public class Almacen {
 					// Incrementar contador
 					propiedades++;
 				}
-				// Insertar objeto
+				// Insertar objeto en el trie
 				idObjeto = arbolSujetosObjetos.insertar(objeto, sujetos+objetos);
 				if( idObjeto == sujetos+objetos ) {
 					// Agregar al array de int -> String
 					listaSujetosObjetos.insertLast(objeto);
-					// Añadir su hueco en la lista de nodos entrantes y salientes
+					// Añadir su hueco en las listas de adyacencia
 					nodosEntrantes.insertLast( new ListaEnlazada<Arista>() );
 					nodosSalientes.insertLast( new ListaEnlazada<Arista>() );
 					// Incrementar contador
@@ -130,7 +130,7 @@ public class Almacen {
 					tempLista.insertLast(new Arista(idSujeto,idPropiedad));
 			}
 	
-			f.cerrar();
+			Fichero.cerrar();
 		} catch (IOException e) {
 			System.err.println("Error: Imposible acceder al fichero especificado.");
 			return;
@@ -140,12 +140,12 @@ public class Almacen {
 	
 	/**
 	 * 1) Colección de sentencias del almacén que tienen un sujeto determinado.
-	 * @param Sujeto - sujeto cuyas sentencias han de devolverse
+	 * @param sujeto - sujeto cuyas sentencias han de devolverse
 	 * @return Una lista enlazada de sentencias que tienen Sujeto como sujeto
 	 */
-	public ListaEnlazada<String> sentenciasPorSujeto( String Sujeto ) {	
+	public ListaEnlazada<String> sentenciasPorSujeto( String sujeto ) {	
 		ListaEnlazada<String> coleccionSentencias = new ListaEnlazada<String>();
-		int index = arbolSujetosObjetos.obtenerValor(Sujeto);
+		int index = arbolSujetosObjetos.obtenerValor(sujeto);
 		if( index != -1 ) {
 			// Si el sujeto no existe, devuelve una lista vacía
 			ListaEnlazada.Iterador<Arista> it = new ListaEnlazada.Iterador<Arista>();
@@ -162,12 +162,12 @@ public class Almacen {
 	
 	/**
 	 * 2) Colección de sentencias distintas del almacén que tienen un sujeto determinado.
-	 * @param Sujeto - sujeto cuyas sentencias han de devolverse
+	 * @param sujeto - sujeto cuyas sentencias han de devolverse
 	 * @return Una lista enlazada de sentencias sin repeticiones que tienen Sujeto como sujeto
 	 */
-	public ListaEnlazada<String> sentenciasDistintasPorSujeto( String Sujeto ) {
+	public ListaEnlazada<String> sentenciasDistintasPorSujeto( String sujeto ) {
 		ListaEnlazada<String> coleccionSentencias = new ListaEnlazada<String>();
-		int index = arbolSujetosObjetos.obtenerValor(Sujeto);
+		int index = arbolSujetosObjetos.obtenerValor(sujeto);
 		if( index != -1 ) {
 			// Si el sujeto no existe, devuelve una lista vacía
 			ListaEnlazada.Iterador<Arista> it = new ListaEnlazada.Iterador<Arista>();
