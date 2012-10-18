@@ -15,7 +15,7 @@ public class Main {
 		file += in.next();
 			
 		// Cargar el almacén
-		System.out.println("Cargando el fichero \"" + file + "\"");
+		System.out.println("Cargando el fichero \"" + file + "\".");
 		long t;				
 		t = System.currentTimeMillis();
 		m = new Almacen(file);
@@ -29,12 +29,13 @@ public class Main {
 		ListaArray<String> la;
 		while (respuesta > 0) {
 
-			System.out.println("Escriba el numero de la prueba a realizar:");
+			System.out.print("Introduzca un número del 1 al 4 para ejecutar las pruebas, o 0 para salir: ");
 			respuesta = in.nextInt();
+			System.out.println();
 			switch (respuesta) {
 			case 1:
 				// Prueba 1
-				System.out.println("Escribiendo sentencias que tienen el sujeto " + sujeto);
+				System.out.println("Escribiendo sentencias que tienen el sujeto " + sujeto + " ...");
 				t = System.nanoTime();
 				le = m.sentenciasPorSujeto(sujeto);
 				t = System.nanoTime() - t;
@@ -42,11 +43,12 @@ public class Main {
 				System.out.print("Escrito en ");
 				System.out.print(t / 1e6);
 				System.out.println(" ms");
+				System.out.println();
 				break;
 				
 			case 2:
 				// Prueba 2
-				System.out.println("Escribiendo sentencias distintas que tienen el sujeto " + sujeto);
+				System.out.println("Escribiendo sentencias distintas que tienen el sujeto " + sujeto + " ...");
 				t = System.nanoTime();
 				le = m.sentenciasDistintasPorSujeto(sujeto);
 				t = System.nanoTime() - t;
@@ -54,11 +56,12 @@ public class Main {
 				System.out.print("Escrito en ");
 				System.out.print(t / 1e6);
 				System.out.println(" ms");
+				System.out.println();
 				break;
 
 			case 3:
 				// Prueba 3
-				System.out.println("Escribiendo propiedades distintas que aparecen en el almacén");
+				System.out.println("Escribiendo propiedades distintas que aparecen en el almacén...");
 				t = System.nanoTime();
 				la = m.propiedadesDistintas();
 				t = System.nanoTime() - t;
@@ -66,11 +69,12 @@ public class Main {
 				System.out.print("Escrito en ");
 				System.out.print(t / 1e6);
 				System.out.println(" ms");
+				System.out.println();
 				break;
 
 			case 4:
 				// Prueba 4
-				System.out.println("Escribiendo entidades distintas que son sujeto y también objeto de alguna sentencia");
+				System.out.println("Escribiendo entidades distintas que son sujeto y también objeto de alguna sentencia...");
 				t = System.nanoTime();
 				le = m.entidadesSujetoObjeto();
 				t = System.nanoTime() - t;
@@ -78,15 +82,16 @@ public class Main {
 				System.out.print("Escrito en ");
 				System.out.print(t / 1e6);
 				System.out.println(" ms");
+				System.out.println();
 				break;
 
 			case 0:
 				// Salir
-				System.out.println("Fin del programa de pruebas");
+				System.out.println("Fin del programa de pruebas.");
 				break;
 				
 			default:
-				System.out.println("Escriba un número del 1 al 4 para ejecutar las pruebas, o 0 para salir");
+				System.out.println("No es una opción válida.");
 				break;
 			}
 		}
