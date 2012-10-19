@@ -14,29 +14,40 @@ public class pruebaListaEnlazada {
 		ListaEnlazada.Iterador<Integer> it = new ListaEnlazada.Iterador<Integer>();
 
 		// Inserción por delante
-		System.out.println("Insertar elementos al principio: 1, 5, 17");
-		lista.insertFirst(1);
+		System.out.println("Insertar elementos al principio: 7, 5, 1");
+		lista.insertFirst(7);
 		lista.insertFirst(5);
-		lista.insertFirst(17);
+		lista.insertFirst(1);
 		System.out.print("La lista queda así: ");
 		it.load(lista);
 		while( it.hasNext() ) System.out.print(it.next() + " ");
 		System.out.println(); System.out.println();
 		
 		// Inserción por detrás
-		System.out.println("Insertar elementos al final: 3, 9, 6");
-		lista.insertLast(3);
+		System.out.println("Insertar elementos al final: 9, 13, 16");
 		lista.insertLast(9);
-		lista.insertLast(6);
+		lista.insertLast(13);
+		lista.insertLast(16);
 		System.out.print("La lista queda así: ");
 		it.load(lista);
 		while( it.hasNext() ) System.out.print(it.next() + " ");
 		System.out.println(); System.out.println();
 
+		// Inserción en orden creciente
+		System.out.println("Insertar elementos en orden creciente: 0, 4, 10, 18");
+		lista.insertOrdered(0);
+		lista.insertOrdered(4);
+		lista.insertOrdered(10);
+		lista.insertOrdered(18);
+		System.out.print("La lista queda así: ");
+		it.load(lista);
+		while( it.hasNext() ) System.out.print(it.next() + " ");
+		System.out.println(); System.out.println();
+		
 		// Obtención de elementos
 		System.out.println("Primer elemento: " + lista.getFirstElement());
 		System.out.println("Último elemento: " + lista.getLastElement());
-		System.out.println("Cuarto elemento: " + lista.getElementByPosition(3));
+		System.out.println("Quinto elemento: " + lista.getElementByPosition(4));
 		System.out.println(); 
 		
 		// Convertir en array

@@ -8,8 +8,9 @@ import java.util.Iterator;
 /**
  * Estructura de lista enlazada:
  * Contiene referencias al primer y al último elemento, permitiendo insertar en ambas posiciones en tiempo constante.
+ * Puede insertar mantiendo un orden ascendente de sus elementos.
  */
-public class ListaEnlazada<T> {
+public class ListaEnlazada<T extends Comparable<T>> {
 
 	/**
 	 * Clase interna: nodo de la lista, con dato del tipo T y puntero al elemento siguiente.
@@ -27,7 +28,7 @@ public class ListaEnlazada<T> {
 	 * Clase interna: iterador de la lista, se construye apuntando al primer elemento y avanza
 	 * devolviendo el siguiente elemento.
 	 */
-	public static class Iterador<T> implements Iterator<T> {
+	public static class Iterador<T extends Comparable<T>> implements Iterator<T> {
 		// Atributos
 		private NodoLista<T> actual;
 		// Constructora
@@ -80,7 +81,7 @@ public class ListaEnlazada<T> {
 	
 	/**
 	 * Inserta un elemento en la lista en primera posición.
-	 * @param elemento a insertar
+	 * @param elemento - Dato a insertar
 	 */
 	public void insertFirst(final T elemento) {
 		NodoLista<T> newLink = new NodoLista<T>(elemento);
@@ -94,7 +95,7 @@ public class ListaEnlazada<T> {
 	
 	/**
 	 * Inserta un elemento en la lista en última posición.
-	 * @param elemento a insertar
+	 * @param elemento - Dato a insertar
 	 */
 	public void insertLast(final T elemento) {
 		NodoLista<T> newLink = new NodoLista<T>(elemento);
@@ -104,6 +105,35 @@ public class ListaEnlazada<T> {
 			last.siguiente = newLink;
 		last = newLink;
 		numNodos++;
+	}
+	
+	/**
+	 * Inserta un elemento en su posición siguiendo un orden creciente de elementos.
+	 * @param elemento - Dato a insertar
+	 */
+	public void insertOrdered(final T elemento) {
+		if( isEmpty() ) {
+			insertFirst(elemento);
+		} else {
+			NodoLista<T> newLink = new NodoLista<T>(elemento);
+			// Inserción en primera posición
+			if( first.dato.compareTo(elemento) >= 0 ) {
+				newLink.siguiente = first;
+				first = newLink;
+			} else {
+				NodoLista<T> current = first;
+				// Ir hasta la posición a insertar
+				while( current.siguiente != null && current.siguiente.dato.compareTo(elemento) < 0 )
+					current = current.siguiente;
+				// Inserción en última posición
+				if( current.siguiente == null )
+					last = newLink;
+				// Actualizar los punteros
+				newLink.siguiente = current.siguiente;
+				current.siguiente = newLink;
+			}
+			numNodos++;
+		}
 	}
 	
 	/**

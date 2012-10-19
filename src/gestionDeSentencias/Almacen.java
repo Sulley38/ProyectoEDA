@@ -15,7 +15,7 @@ public class Almacen {
 	 * Estructura de arista del grafo.
 	 * Indica el vértice ligado, su peso (la propiedad) y el número de veces que aparece repetida.
 	 */
-	private class Arista {
+	private class Arista implements Comparable<Arista> {
 		// Atributos
 		private final int verticeObjetivo, arista;
 		private int repeticiones;
@@ -24,6 +24,14 @@ public class Almacen {
 			verticeObjetivo = Objetivo;
 			arista = Propiedad;
 			repeticiones = 1;
+		}
+		// Comparadora en orden lexicográfico según propiedades y objetos
+		@Override
+		public int compareTo(Arista a) {
+			if( this.arista == a.arista )
+				return listaSujetosObjetos.getElementByPosition(this.verticeObjetivo).compareTo(listaSujetosObjetos.getElementByPosition(a.verticeObjetivo));
+			else
+				return listaPropiedades.getElementByPosition(this.arista).compareTo(listaPropiedades.getElementByPosition(a.arista));
 		}
 	}
 	
