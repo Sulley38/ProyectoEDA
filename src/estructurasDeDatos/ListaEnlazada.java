@@ -187,6 +187,21 @@ public class ListaEnlazada<T extends Comparable<T>> {
 	}
 	
 	/**
+	 * Devuelve el valor del elemento primer elemento igual a T.
+	 * @param T - parametro a buscar en la lista
+	 * @return elemento encontrado o null si no se ha encontrado
+	 */
+	public T getElementByCompare(final T element) {
+		NodoLista<T> current = first;
+		while (current!=null){
+			if( element.compareTo(current.dato)==0 )
+				return current.dato;
+			current = current.siguiente;
+			}
+		return null;
+	}
+	
+	/**
 	 * Devuelve un array a partir de la lista enlazada.
 	 * @return un array cuyos elementos son los valores de la lista
 	 */

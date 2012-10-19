@@ -48,6 +48,7 @@ public class pruebaListaEnlazada {
 		System.out.println("Primer elemento: " + lista.getFirstElement());
 		System.out.println("Último elemento: " + lista.getLastElement());
 		System.out.println("Quinto elemento: " + lista.getElementByPosition(4));
+		System.out.println("Se obtiene el valor 5 de la lista: " + lista.getElementByCompare(5));
 		System.out.println(); 
 		
 		// Convertir en array
