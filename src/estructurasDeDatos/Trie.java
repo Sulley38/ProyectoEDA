@@ -23,6 +23,9 @@ public class Trie {
 		public char getLetra(){
 			return letra;
 		}
+		public void setLetra(char x){
+			letra = x;
+		}
 		
 		
 		public int compareTo(NodoTrie arg0) {
@@ -99,7 +102,7 @@ public class Trie {
 			if( puntero.ramas.getElementByPosition(i) == null ) {
 				// Si el nodo no existe, la palabra no existe y se inserta el nodo hijo necesario
 				NodoTrie nuevo = new NodoTrie(-1);
-				nuevo.letra = s.charAt(i);
+				nuevo.setLetra(s.charAt(i));
 				puntero.ramas.insertOrdered(nuevo);				
 				insertado = true;
 			}
