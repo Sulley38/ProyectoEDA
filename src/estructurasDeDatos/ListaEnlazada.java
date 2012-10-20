@@ -172,17 +172,6 @@ public class ListaEnlazada<T extends Comparable<T>> {
 	public T getLastElement() {
 		return last.dato;
 	}
-	 
-	public boolean esta(T elemento){
-		NodoLista<T> current = first;		
-		while(current != null){
-			if (current.dato.compareTo(elemento) == 0){
-				return true;
-			}
-			current = current.siguiente;
-		}
-		return false;
-	}
 	
 	/**
 	 * Devuelve el valor del elemento en la posición indicada.

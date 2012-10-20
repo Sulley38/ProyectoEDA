@@ -73,15 +73,18 @@ public class Trie {
 	 */
 	public int insertar( final String s, final int valor ) {
 		boolean insertado = false;
-		NodoTrie puntero = inicio;
+		NodoTrie puntero = inicio, buscar;
 		for( int i = 0; i < s.length(); i++ ) {
-			NodoTrie nuevo = new NodoTrie(valor,s.charAt(i));
-			if(!puntero.ramas.esta(nuevo)){
+			buscar = puntero.ramas.getElementByValue( new NodoTrie(-1,s.charAt(i)) );
+			if( buscar == null ) {
 				// Si el nodo no existe, la palabra no existe y se inserta el nodo hijo necesario
-				puntero.ramas.insertOrdered(nuevo);				
+				NodoTrie nuevo = new NodoTrie(-1,s.charAt(i));
+				puntero.ramas.insertOrdered(nuevo);
+				puntero = nuevo;
 				insertado = true;
+			} else {
+				puntero = buscar;
 			}
-			puntero = puntero.ramas.getElementByValue( new NodoTrie(-1,s.charAt(i)) );
 		}
 		if( insertado ) {
 			puntero.valor = valor;
