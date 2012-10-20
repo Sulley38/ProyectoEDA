@@ -118,9 +118,9 @@ public class Almacen {
 						encontrado = true;
 					}
 				}
-				// Si no se encuentra, añadirla
+				// Si no se encuentra, añadirla en orden
 				if( !encontrado )
-					tempLista.insertLast(new Arista(idObjeto,idPropiedad));
+					tempLista.insertOrdered(new Arista(idObjeto,idPropiedad));
 				
 				// Buscar la arista en la segunda lista de adyacencia
 				encontrado = false;
@@ -133,9 +133,9 @@ public class Almacen {
 						encontrado = true;
 					}
 				}
-				// Si no se encuentra, añadirla
+				// Si no se encuentra, añadirla en orden
 				if( !encontrado )
-					tempLista.insertLast(new Arista(idSujeto,idPropiedad));
+					tempLista.insertOrdered(new Arista(idSujeto,idPropiedad));
 			}
 	
 			Fichero.cerrar();
