@@ -15,7 +15,7 @@ public class ListaEnlazada<T extends Comparable<T>> {
 	/**
 	 * Clase interna: nodo de la lista, con dato del tipo T y puntero al elemento siguiente.
 	 */
-	private static class NodoLista<T> {
+	public static class NodoLista<T> {
 		// Atributos
 		private final T dato;
 		private NodoLista<T> siguiente;
@@ -184,21 +184,6 @@ public class ListaEnlazada<T extends Comparable<T>> {
 			if( current != null ) current = current.siguiente;
 		if( current == null ) return null;
 		return current.dato;
-	}
-	
-	/**
-	 * Devuelve el valor del elemento primer elemento igual a T.
-	 * @param T - parametro a buscar en la lista
-	 * @return elemento encontrado o null si no se ha encontrado
-	 */
-	public T getElementByCompare(final T element) {
-		NodoLista<T> current = first;
-		while (current!=null){
-			if( element.compareTo(current.dato)==0 )
-				return current.dato;
-			current = current.siguiente;
-			}
-		return null;
 	}
 	
 	/**

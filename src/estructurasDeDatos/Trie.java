@@ -9,14 +9,25 @@ public class Trie {
 	/**
 	 * Clase interna: nodo del árbol, contiene un valor númerico y un array de punteros a nodos hijos.
 	 */
-	private class NodoTrie {
+	private class NodoTrie implements Comparable<NodoTrie>{
 		// Atributos
 		private int valor;
-		private final NodoTrie[] ramas;
+		private char letra;
+		private ListaEnlazada<NodoTrie> ramas;
 		// Constructora
 		public NodoTrie(final int valorInicial) {
 			valor = valorInicial;
-			ramas = new NodoTrie[128];
+			ramas = new ListaEnlazada<NodoTrie>();
+		}	
+		
+		public char getLetra(){
+			return letra;
+		}
+		
+		
+		public int compareTo(NodoTrie arg0) {
+			
+			return (letra - arg0.getLetra());
 		}
 	}
 	
@@ -47,12 +58,12 @@ public class Trie {
 	 * @return el entero asignado al string s
 	 */
 	public int obtenerValor( final String s ) {
-		NodoTrie puntero = inicio;
+		NodoTrie puntero = inicio;		
 		for( int i = 0; i < s.length(); i++ ) {
 			if( puntero == null )
 				return -1;
-			else
-				puntero = puntero.ramas[((int)s.charAt(i))];
+			else										
+				puntero = puntero.ramas.getElementByPosition(s.charAt(i));							
 		}
 		if( puntero == null ) return -1;
 		return puntero.valor;
@@ -85,12 +96,14 @@ public class Trie {
 		boolean insertado = false;
 		NodoTrie puntero = inicio;
 		for( int i = 0; i < s.length(); i++ ) {
-			if( puntero.ramas[((int)s.charAt(i))] == null ) {
+			if( puntero.ramas.getElementByPosition(i) == null ) {
 				// Si el nodo no existe, la palabra no existe y se inserta el nodo hijo necesario
-				puntero.ramas[((int)s.charAt(i))] = new NodoTrie(-1);
+				NodoTrie nuevo = new NodoTrie(-1);
+				nuevo.letra = s.charAt(i);
+				puntero.ramas.insertOrdered(nuevo);				
 				insertado = true;
 			}
-			puntero = puntero.ramas[((int)s.charAt(i))];
+			puntero = puntero.ramas.getElementByPosition(i);
 		}
 		if( insertado ) {
 			puntero.valor = valor;
