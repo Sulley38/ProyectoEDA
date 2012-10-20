@@ -7,7 +7,7 @@ package estructurasDeDatos;
 public class Trie {	
 
 	/**
-	 * Clase interna: nodo del árbol, contiene un valor númerico y un array de punteros a nodos hijos.
+	 * Clase interna: nodo del árbol, contiene un valor númerico y un array de punteros a nodos hijos ordenados.
 	 */
 	private class NodoTrie implements Comparable<NodoTrie> {
 		// Atributos
@@ -97,6 +97,34 @@ public class Trie {
 			numElementos++;
 		}
 		return puntero.valor;
+	}
+	
+	/**
+	 * Recorre el árbol y devuelve una lista con los enteros acorde al orden lexicográfico de sus correspondientes strings.
+	 * @return un array de enteros según el orden de los strings que representan
+	 */
+	public ListaArray<Integer> recorrerEnProfundidad() {
+		ListaArray<Integer> recorrido = new ListaArray<Integer>(numElementos);
+		DFS(inicio, recorrido);
+		return recorrido;
+	}
+	
+	/**
+	 * Función recursiva que recorre el árbol.
+	 * @param n - Nodo del árbol desde el que recorrer
+	 * @param lista - Array en el que guardar el resultado del recorrido
+	 */
+	private void DFS( final NodoTrie n, final ListaArray<Integer> lista ) {
+		if( n.ramas.isEmpty() ) {
+			lista.insertLast(n.valor);
+		} else {
+			if( n.valor != -1 )
+				lista.insertLast(n.valor);
+			ListaEnlazada.Iterador<NodoTrie> it = new ListaEnlazada.Iterador<NodoTrie>();
+			it.load(n.ramas);
+			while( it.hasNext() )
+				DFS( it.next(), lista );
+		}
 	}
 	
 }
