@@ -75,13 +75,13 @@ public class Trie {
 		boolean insertado = false;
 		NodoTrie puntero = inicio;
 		for( int i = 0; i < s.length(); i++ ) {
-			puntero = puntero.ramas.getElementByValue( new NodoTrie(-1,s.charAt(i)) );
-			if( puntero == null ) {
+			NodoTrie nuevo = new NodoTrie(valor,s.charAt(i));
+			if(!puntero.ramas.esta(nuevo)){
 				// Si el nodo no existe, la palabra no existe y se inserta el nodo hijo necesario
-				NodoTrie nuevo = new NodoTrie(-1,s.charAt(i));
 				puntero.ramas.insertOrdered(nuevo);				
 				insertado = true;
 			}
+			puntero = puntero.ramas.getElementByValue( new NodoTrie(-1,s.charAt(i)) );
 		}
 		if( insertado ) {
 			puntero.valor = valor;

@@ -21,7 +21,7 @@ public class pruebaTrie {
 		System.out.println("Valor del string holi: " + prueba.obtenerValor("holi"));
 		System.out.println("Valor del string hola: " + prueba.obtenerValor("hola"));
 		System.out.println("Valor del string holu: " + prueba.obtenerValor("holu"));
-		System.out.println("Valor del string holu: " + prueba.obtenerValor("hole"));
+		System.out.println("Valor del string hole: " + prueba.obtenerValor("hole"));
 		System.out.println();
 
 	}
