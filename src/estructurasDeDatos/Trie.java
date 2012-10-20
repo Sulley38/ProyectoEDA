@@ -12,17 +12,23 @@ public class Trie {
 	private class NodoTrie implements Comparable<NodoTrie> {
 		// Atributos
 		private int valor;
-		private char letra;
-		private ListaEnlazada<NodoTrie> ramas;
+		private final char letra;
+		private final ListaEnlazada<NodoTrie> ramas;
 		// Constructora
 		public NodoTrie(final int valorInicial, final char valorCaracter) {
 			valor = valorInicial;
 			letra = valorCaracter;
 			ramas = new ListaEnlazada<NodoTrie>();
 		}
-		// Comparadora
-		public int compareTo(NodoTrie a) {
+		// Comparadora de orden
+		@Override
+		public int compareTo(final NodoTrie a) {
 			return (letra - a.letra);
+		}
+		// Comparadora de igualdad
+		@Override
+		public boolean equals(final Object a) {
+			return letra == ((NodoTrie)a).letra;
 		}
 	}
 	

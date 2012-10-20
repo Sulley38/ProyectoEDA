@@ -29,8 +29,7 @@ public class medirTiempos {
 			ListaArray<String> la;
 
 			// Prueba 1
-			System.out.println("Escribiendo sentencias que tienen el sujeto "
-					+ sujeto);
+			System.out.println("Escribiendo sentencias que tienen el sujeto " + sujeto);
 			suma = 0;
 			for (int i = 0; i < 10; ++i) {
 				t = System.nanoTime();
@@ -43,9 +42,7 @@ public class medirTiempos {
 			System.out.println(" ms");
 
 			// Prueba 2
-			System.out
-					.println("Escribiendo sentencias distintas que tienen el sujeto "
-							+ sujeto);
+			System.out.println("Escribiendo sentencias distintas que tienen el sujeto " + sujeto);
 			suma = 0;
 			for (int i = 0; i < 10; ++i) {
 				t = System.nanoTime();
@@ -58,8 +55,7 @@ public class medirTiempos {
 			System.out.println(" ms");
 
 			// Prueba 3
-			System.out
-					.println("Escribiendo propiedades distintas que aparecen en el almacén");
+			System.out.println("Escribiendo propiedades distintas que aparecen en el almacén");
 			suma = 0;
 			for (int i = 0; i < 10; ++i) {
 				t = System.nanoTime();
@@ -72,8 +68,7 @@ public class medirTiempos {
 			System.out.println(" ms");
 
 			// Prueba 4
-			System.out
-					.println("Escribiendo entidades distintas que son sujeto y también objeto de alguna sentencia");
+			System.out.println("Escribiendo entidades distintas que son sujeto y también objeto de alguna sentencia");
 			suma = 0;
 			for (int i = 0; i < 10; ++i) {
 				t = System.nanoTime();

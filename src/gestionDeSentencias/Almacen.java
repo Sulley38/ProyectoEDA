@@ -27,11 +27,16 @@ public class Almacen {
 		}
 		// Comparadora en orden lexicográfico según propiedades y objetos
 		@Override
-		public int compareTo(Arista a) {
+		public int compareTo(final Arista a) {
 			if( this.arista == a.arista )
 				return listaSujetosObjetos.getElementByPosition(this.verticeObjetivo).compareTo(listaSujetosObjetos.getElementByPosition(a.verticeObjetivo));
 			else
 				return listaPropiedades.getElementByPosition(this.arista).compareTo(listaPropiedades.getElementByPosition(a.arista));
+		}
+		// Comparadora de los valores de la arista
+		@Override
+		public boolean equals(final Object a) {
+			return (verticeObjetivo == ((Arista)a).verticeObjetivo) && (arista == ((Arista)a).arista);
 		}
 	}
 	
@@ -59,11 +64,8 @@ public class Almacen {
 		arbolPropiedades = new Trie();
 		listaSujetosObjetos = new ListaArray<String>(250000);
 		listaPropiedades = new ListaArray<String>(100);
-		// Estructuras temporales para insertar las sentencias
-		ListaEnlazada.Iterador<Arista> iterador = new ListaEnlazada.Iterador<Arista>();
-		ListaEnlazada<Arista> tempLista;
+		// Estructura temporal para insertar las sentencias
 		Arista tempArista;
-		boolean encontrado;
 		// Lee las sentencias desde el fichero y las añade al trie y a la lista de nodos del grafo
 		try {
 			Fichero.abrir(nombreDeArchivo,false);
@@ -107,35 +109,19 @@ public class Almacen {
 					objetos++;
 				}
 				
-				// Buscar la arista en la primera lista de adyacencia
-				encontrado = false;
-				tempLista = nodosSalientes.getElementByPosition(idSujeto);
-				iterador.load(tempLista);
-				while( !encontrado && iterador.hasNext() ) {
-					tempArista = iterador.next();
-					if( tempArista.verticeObjetivo == idObjeto && tempArista.arista == idPropiedad ) {
-						tempArista.repeticiones++;
-						encontrado = true;
-					}
-				}
-				// Si no se encuentra, añadirla en orden
-				if( !encontrado )
-					tempLista.insertOrdered(new Arista(idObjeto,idPropiedad));
+				// Inserta la arista en la primera lista de adyacencia, o añade una repetición
+				tempArista = nodosSalientes.getElementByPosition(idSujeto).getElementByValue( new Arista(idObjeto,idPropiedad) );
+				if( tempArista == null )
+					nodosSalientes.getElementByPosition(idSujeto).insertOrdered( new Arista(idObjeto,idPropiedad) );
+				else
+					tempArista.repeticiones++;
 				
-				// Buscar la arista en la segunda lista de adyacencia
-				encontrado = false;
-				tempLista = nodosEntrantes.getElementByPosition(idObjeto);
-				iterador.load(tempLista);
-				while( !encontrado && iterador.hasNext() ) {
-					tempArista = iterador.next();
-					if( tempArista.verticeObjetivo == idSujeto && tempArista.arista == idPropiedad ) {
-						tempArista.repeticiones++;
-						encontrado = true;
-					}
-				}
-				// Si no se encuentra, añadirla en orden
-				if( !encontrado )
-					tempLista.insertOrdered(new Arista(idSujeto,idPropiedad));
+				// Inserta la arista en la segunda lista de adyacencia, o añade una repetición
+				tempArista = nodosEntrantes.getElementByPosition(idObjeto).getElementByValue( new Arista(idSujeto,idPropiedad) );
+				if( tempArista == null )
+					nodosEntrantes.getElementByPosition(idObjeto).insertOrdered( new Arista(idSujeto,idPropiedad) );
+				else
+					tempArista.repeticiones++;
 			}
 	
 			Fichero.cerrar();

@@ -194,7 +194,7 @@ public class ListaEnlazada<T extends Comparable<T>> {
 	public T getElementByValue(final T elemento) {
 		NodoLista<T> current = first;
 		while( current != null ) {
-			if( elemento.compareTo(current.dato) == 0 ) return current.dato;
+			if( elemento.equals(current.dato) ) return current.dato;
 			current = current.siguiente;
 		}
 		return null;
