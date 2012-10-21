@@ -74,9 +74,10 @@ public class ListaArray<T extends Comparable<T>> implements Comparable<ListaArra
 		if( longitud == capacidad )
 			expandir();
 		int posicion = busquedaBinaria(elemento);
-		for( int i = longitud+1; i > posicion; --i )
+		for( int i = longitud; i > posicion; --i )
 			datos[i] = datos[i-1];
 		datos[posicion] = elemento;
+		longitud++;
 	}
 
 	public T removeLast() {
