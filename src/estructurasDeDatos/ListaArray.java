@@ -3,58 +3,77 @@ package estructurasDeDatos;
 import gestionDeSentencias.Fichero;
 import java.io.IOException;
 
-public class ListaArray<T>{
-	private int maxSize;  // tamaño del array
-	private T[] laLista;
-	private int longitud; // índice de la primera celda libre y 
-			              // número de elementos de la lista
-	//----------------------------------------------------------
-	public ListaArray(int longitudMax){
-		maxSize = longitudMax;             
-	    laLista = (T[])(new Object[maxSize]); 
-	    longitud = 0;
-	}
-	//----------------------------------------------------------
-	public T first (){   // primero de la lista
-		return laLista[0];   
-	}
-	//----------------------------------------------------------
-	public T last () {   // último de la lista
-		return laLista[longitud-1]; 
-	}
-	//----------------------------------------------------------
-	public T removeLast () {   // retira el último de la lista
-		T temp = laLista[--longitud]; // el último de la lista
-		laLista[longitud] = null;  // anula la referencia 
-		return temp;   
-	}
-	//----------------------------------------------------------
-	public boolean isEmpty () { // Determina si la lista está vacía
-		return (longitud == 0); 
+/**
+ * Estructura de vector:
+ * Representación como array estático. Se redimensiona automáticamente en caso de necesitar más espacio.
+ * Puede insertar mantiendo un orden ascendente de sus elementos.
+ * @param <T> - Parámetro genérico
+ */
+public class ListaArray<T> {
+	
+	private final static int defaultSize = 100;
+	private final static int resizeFactor = 2;
+	
+	private Object[] datos;
+	private int capacidad;
+	private int longitud;
+
+	
+	public ListaArray() {
+		this(defaultSize);
 	}
 	
-	public void insertLast(T elemento){
-		laLista[longitud]=elemento;
-		longitud++;
+	public ListaArray(int maxSize) {
+		capacidad = maxSize;
+		datos = new Object[capacidad];
+		longitud = 0;
 	}
 
-	public T getElementByPosition(int posicion) {
-		return laLista[posicion];
+	
+	public boolean isEmpty() {
+		return (longitud == 0);
 	}
 	
-	public int size(){
+	public int size() {
 		return longitud;
 	}
 	
-	public void imprimirEnFichero(String nombreDeArchivo) {
+	public T first() {
+		return accesoDatos(0);
+	}
+
+	public T last() {
+		return accesoDatos(longitud - 1);
+	}
+
+	public T elementAt(int posicion) {
+		return accesoDatos(posicion);
+	}
+
+	public void insertLast(T elemento) {
+		datos[longitud] = elemento;
+		longitud++;
+	}
+	
+	public T removeLast() {
+		return accesoDatos(--longitud);
+	}
+
+	public void printToFile(String filename) {
 		try {
-			Fichero.abrir(nombreDeArchivo, true);
-			for( int i = 0; i < longitud; ++i )
-				Fichero.escribirSentencia(laLista[i].toString());
+			Fichero.abrir(filename, true);
+			for (int i = 0; i < longitud; ++i)
+				Fichero.escribirSentencia(accesoDatos(i).toString());
 			Fichero.cerrar();
 		} catch (IOException e) {
 			System.out.println("Error: Imposible acceder al fichero especificado.");
 		}
 	}
 	
+
+	@SuppressWarnings("unchecked")
+	private T accesoDatos(int index) {
+		return (T) datos[index];
+	}
+
 }

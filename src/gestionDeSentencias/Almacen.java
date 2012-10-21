@@ -29,9 +29,9 @@ public class Almacen {
 		@Override
 		public int compareTo(final Arista a) {
 			if( this.arista == a.arista )
-				return listaSujetosObjetos.getElementByPosition(this.verticeObjetivo).compareTo(listaSujetosObjetos.getElementByPosition(a.verticeObjetivo));
+				return listaSujetosObjetos.elementAt(this.verticeObjetivo).compareTo(listaSujetosObjetos.elementAt(a.verticeObjetivo));
 			else
-				return listaPropiedades.getElementByPosition(this.arista).compareTo(listaPropiedades.getElementByPosition(a.arista));
+				return listaPropiedades.elementAt(this.arista).compareTo(listaPropiedades.elementAt(a.arista));
 		}
 		// Comparadora de los valores de la arista
 		@Override
@@ -111,16 +111,16 @@ public class Almacen {
 				}
 				
 				// Inserta la arista en la primera lista de adyacencia, o añade una repetición
-				tempArista = nodosSalientes.getElementByPosition(idSujeto).getElementByValue( new Arista(idObjeto,idPropiedad) );
+				tempArista = nodosSalientes.elementAt(idSujeto).elementMatch( new Arista(idObjeto,idPropiedad) );
 				if( tempArista == null )
-					nodosSalientes.getElementByPosition(idSujeto).insertOrdered( new Arista(idObjeto,idPropiedad) );
+					nodosSalientes.elementAt(idSujeto).insertOrdered( new Arista(idObjeto,idPropiedad) );
 				else
 					tempArista.repeticiones++;
 				
 				// Inserta la arista en la segunda lista de adyacencia, o añade una repetición
-				tempArista = nodosEntrantes.getElementByPosition(idObjeto).getElementByValue( new Arista(idSujeto,idPropiedad) );
+				tempArista = nodosEntrantes.elementAt(idObjeto).elementMatch( new Arista(idSujeto,idPropiedad) );
 				if( tempArista == null )
-					nodosEntrantes.getElementByPosition(idObjeto).insertOrdered( new Arista(idSujeto,idPropiedad) );
+					nodosEntrantes.elementAt(idObjeto).insertOrdered( new Arista(idSujeto,idPropiedad) );
 				else
 					tempArista.repeticiones++;
 			}
@@ -144,12 +144,12 @@ public class Almacen {
 		if( index != -1 ) {
 			// Si el sujeto no existe, devuelve una lista vacía
 			ListaEnlazada.Iterador<Arista> it = new ListaEnlazada.Iterador<Arista>();
-			it.load( nodosSalientes.getElementByPosition(index) );
+			it.load( nodosSalientes.elementAt(index) );
 			Arista prov;
 			while( it.hasNext() ) {
 				prov = it.next();
 				for( int i = 0; i < prov.repeticiones; i++ )
-					coleccionSentencias.insertLast( listaSujetosObjetos.getElementByPosition(index) + " " +  listaPropiedades.getElementByPosition(prov.arista) + " " + listaSujetosObjetos.getElementByPosition(prov.verticeObjetivo) + " ." );				
+					coleccionSentencias.insertLast( listaSujetosObjetos.elementAt(index) + " " +  listaPropiedades.elementAt(prov.arista) + " " + listaSujetosObjetos.elementAt(prov.verticeObjetivo) + " ." );				
 			}
 		}
 		return coleccionSentencias;
@@ -166,11 +166,11 @@ public class Almacen {
 		if( index != -1 ) {
 			// Si el sujeto no existe, devuelve una lista vacía
 			ListaEnlazada.Iterador<Arista> it = new ListaEnlazada.Iterador<Arista>();
-			it.load( nodosSalientes.getElementByPosition(index) );
+			it.load( nodosSalientes.elementAt(index) );
 			Arista prov;
 			while( it.hasNext() ) {
 				prov = it.next();
-				coleccionSentencias.insertLast( listaSujetosObjetos.getElementByPosition(index) + " " +  listaPropiedades.getElementByPosition(prov.arista) + " " + listaSujetosObjetos.getElementByPosition(prov.verticeObjetivo) + " ." );
+				coleccionSentencias.insertLast( listaSujetosObjetos.elementAt(index) + " " +  listaPropiedades.elementAt(prov.arista) + " " + listaSujetosObjetos.elementAt(prov.verticeObjetivo) + " ." );
 			}
 		}
 		return coleccionSentencias;
@@ -192,8 +192,8 @@ public class Almacen {
 	public ListaEnlazada<String> entidadesSujetoObjeto() {
 		ListaEnlazada<String> coleccionEntidades = new ListaEnlazada<String>();
 		for( int i = 0; i < nodosSalientes.size(); i++ )
-			if( !nodosSalientes.getElementByPosition(i).isEmpty() && !nodosEntrantes.getElementByPosition(i).isEmpty() )
-				coleccionEntidades.insertLast( listaSujetosObjetos.getElementByPosition(i) );
+			if( !nodosSalientes.elementAt(i).isEmpty() && !nodosEntrantes.elementAt(i).isEmpty() )
+				coleccionEntidades.insertLast( listaSujetosObjetos.elementAt(i) );
 		
 		return coleccionEntidades;
 	}
@@ -207,15 +207,13 @@ public class Almacen {
 		ListaArray<String> sentenciasEnOrden = new ListaArray<String>(sentencias);
 		ListaEnlazada.Iterador<Arista> it = new ListaEnlazada.Iterador<Arista>();
 		Arista a;
-		int index;
 		for( int i = 0; i < valores.size(); ++i ) {
-			index = valores.getElementByPosition(i);
-			if( !nodosSalientes.getElementByPosition(index).isEmpty() ) {
-				it.load( nodosSalientes.getElementByPosition(index) );
+			if( !nodosSalientes.elementAt( valores.elementAt(i) ).isEmpty() ) {
+				it.load( nodosSalientes.elementAt( valores.elementAt(i) ) );
 				while( it.hasNext() ) {
 					a = it.next();
 					for( int j = 0; j < a.repeticiones; ++j )
-						sentenciasEnOrden.insertLast( listaSujetosObjetos.getElementByPosition(index) + " " + listaPropiedades.getElementByPosition(a.arista) + " " + listaSujetosObjetos.getElementByPosition(a.verticeObjetivo) + " ." );
+						sentenciasEnOrden.insertLast( listaSujetosObjetos.elementAt( valores.elementAt(i) ) + " " + listaPropiedades.elementAt(a.arista) + " " + listaSujetosObjetos.elementAt(a.verticeObjetivo) + " ." );
 				}
 			}
 		}

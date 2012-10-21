@@ -2,13 +2,13 @@ package estructurasDeDatos;
 
 import gestionDeSentencias.Fichero;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.Iterator;
 
 /**
  * Estructura de lista enlazada:
  * Contiene referencias al primer y al último elemento, permitiendo insertar en ambas posiciones en tiempo constante.
  * Puede insertar mantiendo un orden ascendente de sus elementos.
+ * @param <T> - Parámetro genérico que implemente la interfaz Comparable<T>
  */
 public class ListaEnlazada<T extends Comparable<T>> {
 
@@ -77,6 +77,49 @@ public class ListaEnlazada<T extends Comparable<T>> {
 	 */
 	public int size() {
 		return numNodos;
+	}
+
+	/**
+	 * Devuelve el valor del primer elemento de la lista.
+	 * @return primer valor de la lista
+	 */
+	public T first() {
+		return first.dato;
+	}
+	
+	/**
+	 * Devuelve el valor del último elemento de la lista.
+	 * @return último valor de la lista
+	 */
+	public T last() {
+		return last.dato;
+	}
+	
+	/**
+	 * Devuelve el valor del elemento en la posición indicada.
+	 * @param index - la posición del valor que se busca, empezando a contar desde cero
+	 * @return el valor del elemento en la posición index
+	 */
+	public T elementAt(final int index) {
+		NodoLista<T> current = first;
+		for( int i = 0; i < index; ++i )
+			if( current != null ) current = current.siguiente;
+		if( current == null ) return null;
+		return current.dato;
+	}
+
+	/**
+	 * Devuelve el valor del primer elemento igual a T.
+	 * @param T - elemento a buscar en la lista
+	 * @return elemento encontrado, o null si no se ha encontrado
+	 */
+	public T elementMatch(final T elemento) {
+		NodoLista<T> current = first;
+		while( current != null ) {
+			if( elemento.equals(current.dato) ) return current.dato;
+			current = current.siguiente;
+		}
+		return null;
 	}
 	
 	/**
@@ -156,57 +199,13 @@ public class ListaEnlazada<T extends Comparable<T>> {
 		last = null;
 		numNodos = 0;
 	}
-
-	/**
-	 * Devuelve el valor del primer elemento de la lista.
-	 * @return primer valor de la lista
-	 */
-	public T getFirstElement() {
-		return first.dato;
-	}
-	
-	/**
-	 * Devuelve el valor del último elemento de la lista.
-	 * @return último valor de la lista
-	 */
-	public T getLastElement() {
-		return last.dato;
-	}
-	
-	/**
-	 * Devuelve el valor del elemento en la posición indicada.
-	 * @param index - la posición del valor que se busca, empezando a contar desde cero
-	 * @return el valor del elemento en la posición index
-	 */
-	public T getElementByPosition(final int index) {
-		NodoLista<T> current = first;
-		for( int i = 0; i < index; ++i )
-			if( current != null ) current = current.siguiente;
-		if( current == null ) return null;
-		return current.dato;
-	}
-
-	/**
-	 * Devuelve el valor del primer elemento igual a T.
-	 * @param T - elemento a buscar en la lista
-	 * @return elemento encontrado o null si no se ha encontrado
-	 */
-	public T getElementByValue(final T elemento) {
-		NodoLista<T> current = first;
-		while( current != null ) {
-			if( elemento.equals(current.dato) ) return current.dato;
-			current = current.siguiente;
-		}
-		return null;
-	}
 	
 	/**
 	 * Devuelve un array a partir de la lista enlazada.
 	 * @return un array cuyos elementos son los valores de la lista
 	 */
-	@SuppressWarnings("unchecked")
-	public T[] toArray(final Class<T> c) {
-		T[] array = (T[]) Array.newInstance(c, numNodos);
+	public Object[] toArray() {
+		Object[] array = new Object[numNodos];
 		NodoLista<T> current = first;
 		for( int i = 0; i < numNodos; ++i ) {
 			array[i] = current.dato;
@@ -217,11 +216,11 @@ public class ListaEnlazada<T extends Comparable<T>> {
 
 	/**
 	 * Escribe todos los elementos de la lista enlazada en un fichero de texto, uno por línea.
-	 * @param nombreDeArchivo - Archivo a escribir
+	 * @param filename - Archivo a escribir
 	 */
-	public void imprimirEnFichero(final String nombreDeArchivo) {
+	public void printToFile(final String filename) {
 		try {
-			Fichero.abrir(nombreDeArchivo, true);
+			Fichero.abrir(filename, true);
 			NodoLista<T> current = first;
 			for( int i = 0; i < numNodos; ++i ) {
 				Fichero.escribirSentencia(current.dato.toString());

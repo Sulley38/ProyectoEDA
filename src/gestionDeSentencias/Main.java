@@ -39,7 +39,7 @@ public class Main {
 				t = System.nanoTime();
 				le = m.sentenciasPorSujeto(sujeto);
 				t = System.nanoTime() - t;
-				le.imprimirEnFichero("data/out/B0.txt");
+				le.printToFile("data/out/B0.txt");
 				System.out.print("Escrito en ");
 				System.out.print(t / 1e6);
 				System.out.println(" ms");
@@ -52,7 +52,7 @@ public class Main {
 				t = System.nanoTime();
 				le = m.sentenciasDistintasPorSujeto(sujeto);
 				t = System.nanoTime() - t;
-				le.imprimirEnFichero("data/out/B1.txt");
+				le.printToFile("data/out/B1.txt");
 				System.out.print("Escrito en ");
 				System.out.print(t / 1e6);
 				System.out.println(" ms");
@@ -65,7 +65,7 @@ public class Main {
 				t = System.nanoTime();
 				la = m.propiedadesDistintas();
 				t = System.nanoTime() - t;
-				la.imprimirEnFichero("data/out/B2.txt");
+				la.printToFile("data/out/B2.txt");
 				System.out.print("Escrito en ");
 				System.out.print(t / 1e6);
 				System.out.println(" ms");
@@ -78,7 +78,7 @@ public class Main {
 				t = System.nanoTime();
 				le = m.entidadesSujetoObjeto();
 				t = System.nanoTime() - t;
-				le.imprimirEnFichero("data/out/B3.txt");
+				le.printToFile("data/out/B3.txt");
 				System.out.print("Escrito en ");
 				System.out.print(t / 1e6);
 				System.out.println(" ms");
@@ -91,7 +91,7 @@ public class Main {
 				t = System.nanoTime();
 				la = m.sentenciasOrdenadas();
 				t = System.nanoTime() - t;
-				la.imprimirEnFichero("data/out/B5.txt");
+				la.printToFile("data/out/B5.txt");
 				System.out.print("Escrito en ");
 				System.out.print(t / 1e6);
 				System.out.println(" ms");

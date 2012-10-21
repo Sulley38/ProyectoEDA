@@ -45,15 +45,15 @@ public class pruebaListaEnlazada {
 		System.out.println(); System.out.println();
 		
 		// Obtención de elementos
-		System.out.println("Primer elemento: " + lista.getFirstElement());
-		System.out.println("Último elemento: " + lista.getLastElement());
-		System.out.println("Quinto elemento: " + lista.getElementByPosition(4));
-		System.out.println("Se obtiene el valor 5 de la lista: " + lista.getElementByValue(5));
+		System.out.println("Primer elemento: " + lista.first());
+		System.out.println("Último elemento: " + lista.last());
+		System.out.println("Quinto elemento: " + lista.elementAt(4));
+		System.out.println("Se obtiene el valor 5 de la lista: " + lista.elementMatch(5));
 		System.out.println(); 
 		
 		// Convertir en array
 		System.out.print("Lista en forma de array: ");
-		Integer[] array = lista.toArray(Integer.class);
+		Object[] array = lista.toArray();
 		for( int i = 0; i < array.length; ++i )
 			System.out.print(array[i] + " ");
 		System.out.println(); System.out.println();

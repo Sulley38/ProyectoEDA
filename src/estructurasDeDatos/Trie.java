@@ -64,7 +64,7 @@ public class Trie {
 			if( puntero == null )
 				return -1;
 			else
-				puntero = puntero.ramas.getElementByValue( new NodoTrie(-1,s.charAt(i)) );							
+				puntero = puntero.ramas.elementMatch( new NodoTrie(-1,s.charAt(i)) );							
 		}
 		if( puntero == null ) return -1;
 		return puntero.valor;
@@ -81,7 +81,7 @@ public class Trie {
 		boolean insertado = false;
 		NodoTrie puntero = inicio, buscar;
 		for( int i = 0; i < s.length(); i++ ) {
-			buscar = puntero.ramas.getElementByValue( new NodoTrie(-1,s.charAt(i)) );
+			buscar = puntero.ramas.elementMatch( new NodoTrie(-1,s.charAt(i)) );
 			if( buscar == null ) {
 				// Si el nodo no existe, la palabra no existe y se inserta el nodo hijo necesario
 				NodoTrie nuevo = new NodoTrie(-1,s.charAt(i));
