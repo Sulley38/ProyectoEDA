@@ -28,7 +28,7 @@ public class Trie {
 		// Comparadora de igualdad
 		@Override
 		public boolean equals(final Object a) {
-			return letra == ((NodoTrie)a).letra;
+			return (letra == ((NodoTrie)a).letra);
 		}
 	}
 	

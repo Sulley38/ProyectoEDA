@@ -23,7 +23,7 @@ public class ListaArray<T extends Comparable<T>> implements Comparable<ListaArra
 		this(defaultSize);
 	}
 	
-	public ListaArray(int maxSize) {
+	public ListaArray(final int maxSize) {
 		capacidad = maxSize;
 		datos = new Object[capacidad];
 		longitud = 0;
@@ -46,31 +46,26 @@ public class ListaArray<T extends Comparable<T>> implements Comparable<ListaArra
 		return accesoDatos(longitud - 1);
 	}
 
-	public T elementAt(int posicion) {
+	public T elementAt(final int posicion) {
 		if (posicion < 0 || posicion >= longitud)
 			return null;
 		return accesoDatos(posicion);
 	}
 	
-	public T elementMatch(T elemento) {
+	public T elementMatch(final T elemento) {
 		for( int i = 0; i < longitud; ++i )
 			if( accesoDatos(i).equals(elemento) )
 				return accesoDatos(i);
 		return null;
 	}
-
-	public void insertFirst(final T elemento) {
-		throw new UnsupportedOperationException("Sin implementar");
-	}
 	
-	public void insertLast(T elemento) {
+	public void insertLast(final T elemento) {
 		if( longitud == capacidad )
 			expandir();
-		datos[longitud] = elemento;
-		longitud++;
+		datos[longitud++] = elemento;
 	}
 	
-	public void insertOrdered(T elemento) {
+	public void insertOrdered(final T elemento) {
 		if( longitud == capacidad )
 			expandir();
 		int posicion = busquedaBinaria(elemento);
@@ -86,11 +81,18 @@ public class ListaArray<T extends Comparable<T>> implements Comparable<ListaArra
 		return accesoDatos(--longitud);
 	}
 	
+	public void removeAll() {
+		longitud = 0;
+	}
+	
 	public Object[] toArray() {
-		return datos;
+		Object[] o = new Object[longitud];
+		for( int i = 0; i < longitud; ++i )
+			o[i] = accesoDatos(i);
+		return o;
 	}
 
-	public void printToFile(String filename) {
+	public void printToFile(final String filename) {
 		try {
 			Fichero.abrir(filename, true);
 			for (int i = 0; i < longitud; ++i)
@@ -103,7 +105,7 @@ public class ListaArray<T extends Comparable<T>> implements Comparable<ListaArra
 	
 
 	@SuppressWarnings("unchecked")
-	private T accesoDatos(int index) {
+	private T accesoDatos(final int index) {
 		return (T) datos[index];
 	}
 	
@@ -115,7 +117,7 @@ public class ListaArray<T extends Comparable<T>> implements Comparable<ListaArra
 		datos = nuevosDatos;
 	}
 	
-	private int busquedaBinaria(T elemento) {
+	private int busquedaBinaria(final T elemento) {
 		int menor = 0, mayor = longitud - 1, mitad, comp;
 		while( menor <= mayor ) {
 			mitad = (menor+mayor)/2;
@@ -132,7 +134,7 @@ public class ListaArray<T extends Comparable<T>> implements Comparable<ListaArra
 	}
 
 	@Override
-	public int compareTo(ListaArray<T> o) {
+	public int compareTo(final ListaArray<T> o) {
 		return (longitud - o.longitud);
 	}
 	
