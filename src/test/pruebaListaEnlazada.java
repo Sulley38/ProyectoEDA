@@ -61,7 +61,7 @@ public class pruebaListaEnlazada {
 		// Eliminar un elemento
 		System.out.println("Tamaño de la lista: " + lista.size());
 		System.out.println("Se elimina el primer elemento.");
-		lista.deleteFirst();
+		lista.removeFirst();
 		System.out.print("La lista queda así: ");
 		it.load(lista);
 		while( it.hasNext() ) System.out.print(it.next() + " ");
@@ -72,7 +72,7 @@ public class pruebaListaEnlazada {
 		// Eliminar todos los elementos
 		System.out.println("Tamaño de la lista: " + lista.size());
 		System.out.println("Se eliminan todos los elementos.");
-		lista.deleteAll();
+		lista.removeAll();
 		System.out.print("La lista queda así: ");
 		it.load(lista);
 		while( it.hasNext() ) System.out.print(it.next() + " ");

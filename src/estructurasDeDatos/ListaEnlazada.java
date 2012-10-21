@@ -98,7 +98,7 @@ public class ListaEnlazada<T extends Comparable<T>> {
 	/**
 	 * Devuelve el valor del elemento en la posición indicada.
 	 * @param index - la posición del valor que se busca, empezando a contar desde cero
-	 * @return el valor del elemento en la posición index
+	 * @return el valor del elemento en la posición index, o null si no existe
 	 */
 	public T elementAt(final int index) {
 		NodoLista<T> current = first;
@@ -182,7 +182,7 @@ public class ListaEnlazada<T extends Comparable<T>> {
 	/**
 	 * Elimina el primer elemento de la lista. Si la lista es vacía, no hace nada.
 	 */
-	public void deleteFirst() {
+	public void removeFirst() {
 		if( !isEmpty() ) {
 			if(first.siguiente == null)
 				last = null;
@@ -194,7 +194,7 @@ public class ListaEnlazada<T extends Comparable<T>> {
 	/**
 	 * Elimina todos los elementos de la lista.
 	 */
-	public void deleteAll() {
+	public void removeAll() {
 		first = null;                 
 		last = null;
 		numNodos = 0;

@@ -7,7 +7,7 @@ import java.io.*;
  * Proporciona métodos estáticos para leer y escribir sentencias usando ficheros de texto.
  * @author Daniel, Iván, Asier
  */
-public class Fichero {
+public final class Fichero {
 
 	// Indica si se ha abierto el fichero para lectura (f) o para escritura (t)
 	private static boolean modoEscritura;

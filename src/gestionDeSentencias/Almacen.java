@@ -42,7 +42,7 @@ public class Almacen {
 	
 	/// ATRIBUTOS DE LA CLASE
 	// Dos listas de adyacencia para representar el grafo.
-	private ListaArray< ListaEnlazada<Arista> > nodosEntrantes, nodosSalientes;
+	private ListaArray< ListaArray<Arista> > nodosEntrantes, nodosSalientes;
 	// Número de nodos (sujetos+objetos), de aristas (propiedades) y de sentencias; la suma de los tres primeros es el número de entidades
 	private int sujetos, objetos, propiedades, sentencias;
 	// Relaciones entre entidad e índice correspondiente (Trie), y viceversa (array)
@@ -57,13 +57,13 @@ public class Almacen {
 	 */
 	public Almacen( String nombreDeArchivo ) {
 		// Inicializa los atributos de la clase
-		nodosEntrantes = new ListaArray< ListaEnlazada<Arista> >(250000);
-		nodosSalientes = new ListaArray< ListaEnlazada<Arista> >(250000);
+		nodosEntrantes = new ListaArray< ListaArray<Arista> >();
+		nodosSalientes = new ListaArray< ListaArray<Arista> >();
 		sujetos = objetos = propiedades = sentencias = 0;
 		arbolSujetosObjetos = new Trie();
 		arbolPropiedades = new Trie();
-		listaSujetosObjetos = new ListaArray<String>(250000);
-		listaPropiedades = new ListaArray<String>(100);
+		listaSujetosObjetos = new ListaArray<String>();
+		listaPropiedades = new ListaArray<String>();
 		// Estructura temporal para insertar las sentencias
 		Arista tempArista;
 		// Lee las sentencias desde el fichero y las añade al trie y a la lista de nodos del grafo
@@ -85,8 +85,8 @@ public class Almacen {
 					// Agregar al array de int -> String
 					listaSujetosObjetos.insertLast(sujeto);
 					// Añadir su hueco en las listas de adyacencia
-					nodosEntrantes.insertLast( new ListaEnlazada<Arista>() );
-					nodosSalientes.insertLast( new ListaEnlazada<Arista>() );
+					nodosEntrantes.insertLast( new ListaArray<Arista>() );
+					nodosSalientes.insertLast( new ListaArray<Arista>() );
 					// Incrementar contador
 					sujetos++;
 				}
@@ -104,8 +104,8 @@ public class Almacen {
 					// Agregar al array de int -> String
 					listaSujetosObjetos.insertLast(objeto);
 					// Añadir su hueco en las listas de adyacencia
-					nodosEntrantes.insertLast( new ListaEnlazada<Arista>() );
-					nodosSalientes.insertLast( new ListaEnlazada<Arista>() );
+					nodosEntrantes.insertLast( new ListaArray<Arista>() );
+					nodosSalientes.insertLast( new ListaArray<Arista>() );
 					// Incrementar contador
 					objetos++;
 				}
@@ -143,12 +143,10 @@ public class Almacen {
 		int index = arbolSujetosObjetos.obtenerValor(sujeto);
 		if( index != -1 ) {
 			// Si el sujeto no existe, devuelve una lista vacía
-			ListaEnlazada.Iterador<Arista> it = new ListaEnlazada.Iterador<Arista>();
-			it.load( nodosSalientes.elementAt(index) );
 			Arista prov;
-			while( it.hasNext() ) {
-				prov = it.next();
-				for( int i = 0; i < prov.repeticiones; i++ )
+			for( int i = 0; i < nodosSalientes.elementAt(index).size(); ++i ) {
+				prov = nodosSalientes.elementAt(index).elementAt(i);
+				for( int j = 0; j < prov.repeticiones; j++ )
 					coleccionSentencias.insertLast( listaSujetosObjetos.elementAt(index) + " " +  listaPropiedades.elementAt(prov.arista) + " " + listaSujetosObjetos.elementAt(prov.verticeObjetivo) + " ." );				
 			}
 		}
@@ -165,11 +163,9 @@ public class Almacen {
 		int index = arbolSujetosObjetos.obtenerValor(sujeto);
 		if( index != -1 ) {
 			// Si el sujeto no existe, devuelve una lista vacía
-			ListaEnlazada.Iterador<Arista> it = new ListaEnlazada.Iterador<Arista>();
-			it.load( nodosSalientes.elementAt(index) );
 			Arista prov;
-			while( it.hasNext() ) {
-				prov = it.next();
+			for( int i = 0; i < nodosSalientes.elementAt(index).size(); ++i ) {
+				prov = nodosSalientes.elementAt(index).elementAt(i);
 				coleccionSentencias.insertLast( listaSujetosObjetos.elementAt(index) + " " +  listaPropiedades.elementAt(prov.arista) + " " + listaSujetosObjetos.elementAt(prov.verticeObjetivo) + " ." );
 			}
 		}
@@ -205,14 +201,12 @@ public class Almacen {
 	public ListaArray<String> sentenciasOrdenadas() {
 		ListaArray<Integer> valores = arbolSujetosObjetos.recorrerEnProfundidad();
 		ListaArray<String> sentenciasEnOrden = new ListaArray<String>(sentencias);
-		ListaEnlazada.Iterador<Arista> it = new ListaEnlazada.Iterador<Arista>();
 		Arista a;
 		for( int i = 0; i < valores.size(); ++i ) {
 			if( !nodosSalientes.elementAt( valores.elementAt(i) ).isEmpty() ) {
-				it.load( nodosSalientes.elementAt( valores.elementAt(i) ) );
-				while( it.hasNext() ) {
-					a = it.next();
-					for( int j = 0; j < a.repeticiones; ++j )
+				for( int j = 0; j < nodosSalientes.elementAt( valores.elementAt(i) ).size(); ++j ) {
+					a = nodosSalientes.elementAt( valores.elementAt(i) ).elementAt(j);
+					for( int k = 0; k < a.repeticiones; ++k )
 						sentenciasEnOrden.insertLast( listaSujetosObjetos.elementAt( valores.elementAt(i) ) + " " + listaPropiedades.elementAt(a.arista) + " " + listaSujetosObjetos.elementAt(a.verticeObjetivo) + " ." );
 				}
 			}
