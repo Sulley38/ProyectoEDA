@@ -84,6 +84,19 @@ public class Main {
 				System.out.println(" ms");
 				System.out.println();
 				break;
+				
+			case 6:
+				// Prueba 6
+				System.out.println("Escribiendo en orden las sentencias que aparecen en el almacén...");
+				t = System.nanoTime();
+				la = m.sentenciasOrdenadas();
+				t = System.nanoTime() - t;
+				la.imprimirEnFichero("data/out/B5.txt");
+				System.out.print("Escrito en ");
+				System.out.print(t / 1e6);
+				System.out.println(" ms");
+				System.out.println();
+				break;
 
 			case 0:
 				// Salir

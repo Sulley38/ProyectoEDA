@@ -79,7 +79,20 @@ public class medirTiempos {
 			System.out.print("Escrito en ");
 			System.out.print(suma / 1e6);
 			System.out.println(" ms");
-
+			
+			// Prueba 6
+			System.out.println("Escribiendo en orden las sentencias que aparecen en el almacén...");
+			suma = 0;
+			for (int i = 0; i < 10; ++i) {
+				t = System.nanoTime();
+				la = m.sentenciasOrdenadas();
+				suma += System.nanoTime() - t;
+			}
+			suma /= 10;
+			System.out.print("Escrito en ");
+			System.out.print(suma / 1e6);
+			System.out.println(" ms");
+			
 		}
 	}
 

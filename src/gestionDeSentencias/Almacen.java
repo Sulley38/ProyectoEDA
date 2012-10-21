@@ -43,8 +43,8 @@ public class Almacen {
 	/// ATRIBUTOS DE LA CLASE
 	// Dos listas de adyacencia para representar el grafo.
 	private ListaArray< ListaEnlazada<Arista> > nodosEntrantes, nodosSalientes;
-	// Número de nodos (sujetos+objetos) y de aristas (propiedades); la suma de los tres es el número de entidades
-	private int sujetos, objetos, propiedades;
+	// Número de nodos (sujetos+objetos), de aristas (propiedades) y de sentencias; la suma de los tres primeros es el número de entidades
+	private int sujetos, objetos, propiedades, sentencias;
 	// Relaciones entre entidad e índice correspondiente (Trie), y viceversa (array)
 	private Trie arbolSujetosObjetos, arbolPropiedades;
 	private ListaArray<String> listaSujetosObjetos, listaPropiedades;
@@ -59,7 +59,7 @@ public class Almacen {
 		// Inicializa los atributos de la clase
 		nodosEntrantes = new ListaArray< ListaEnlazada<Arista> >(250000);
 		nodosSalientes = new ListaArray< ListaEnlazada<Arista> >(250000);
-		sujetos = objetos = propiedades = 0;
+		sujetos = objetos = propiedades = sentencias = 0;
 		arbolSujetosObjetos = new Trie();
 		arbolPropiedades = new Trie();
 		listaSujetosObjetos = new ListaArray<String>(250000);
@@ -77,6 +77,7 @@ public class Almacen {
 				sujeto = tokenizador.nextToken();
 				propiedad = tokenizador.nextToken();
 				objeto = tokenizador.nextToken();
+				sentencias++;
 				
 				// Insertar sujeto en el trie
 				idSujeto = arbolSujetosObjetos.insertar(sujeto, sujetos+objetos);
@@ -195,6 +196,30 @@ public class Almacen {
 				coleccionEntidades.insertLast( listaSujetosObjetos.getElementByPosition(i) );
 		
 		return coleccionEntidades;
+	}
+	
+	/**
+	 * 6) Colección ordenada de todas las sentencias que aparecen en el almacén.
+	 * @return Un array con las sentencias del almacén según el orden descrito en el enunciado
+	 */
+	public ListaArray<String> sentenciasOrdenadas() {
+		ListaArray<Integer> valores = arbolSujetosObjetos.recorrerEnProfundidad();
+		ListaArray<String> sentenciasEnOrden = new ListaArray<String>(sentencias);
+		ListaEnlazada.Iterador<Arista> it = new ListaEnlazada.Iterador<Arista>();
+		Arista a;
+		int index;
+		for( int i = 0; i < valores.size(); ++i ) {
+			index = valores.getElementByPosition(i);
+			if( !nodosSalientes.getElementByPosition(index).isEmpty() ) {
+				it.load( nodosSalientes.getElementByPosition(index) );
+				while( it.hasNext() ) {
+					a = it.next();
+					for( int j = 0; j < a.repeticiones; ++j )
+						sentenciasEnOrden.insertLast( listaSujetosObjetos.getElementByPosition(index) + " " + listaPropiedades.getElementByPosition(a.arista) + " " + listaSujetosObjetos.getElementByPosition(a.verticeObjetivo) + " ." );
+				}
+			}
+		}
+		return sentenciasEnOrden;
 	}
 	
 }
