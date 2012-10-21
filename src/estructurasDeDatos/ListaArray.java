@@ -1,8 +1,5 @@
 package estructurasDeDatos;
 
-
-//probando
-
 import gestionDeSentencias.Fichero;
 import java.io.IOException;
 
