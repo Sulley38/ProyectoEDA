@@ -11,47 +11,81 @@ import java.io.IOException;
  */
 public class ListaArray<T extends Comparable<T>> implements Comparable<ListaArray<T>> {
 	
+	// Constantes del vector
 	private final static int defaultSize = 100;
 	private final static int resizeFactor = 2;
 	
+	// Atributos para representar el TAD
 	private Object[] datos;
 	private int capacidad;
 	private int longitud;
 
 	
+	/**
+	 * Construye un vector vacío del tamaño por defecto (100).
+	 */
 	public ListaArray() {
 		this(defaultSize);
 	}
 	
+	/**
+	 * Construye un vector vacío del tamaño especificado.
+	 * @param maxSize - Tamaño máximo del vector
+	 */
 	public ListaArray(final int maxSize) {
 		capacidad = maxSize;
 		datos = new Object[capacidad];
 		longitud = 0;
 	}
 
-	
+	/**
+	 * Comprueba si hay algún elemento en el vector.
+	 * @return true si el vector es vacío
+	 */
 	public boolean isEmpty() {
 		return (longitud == 0);
 	}
 
+	/**
+	 * Devuelve el tamaño del vector.
+	 * @return el número de elementos que componen el vector
+	 */
 	public int size() {
 		return longitud;
 	}
 
+	/**
+	 * Devuelve el valor del primer elemento del vector.
+	 * @return primer valor del vector
+	 */
 	public T first() {
 		return accesoDatos(0);
 	}
 
+	/**
+	 * Devuelve el valor del último elemento del vector.
+	 * @return último valor del vector
+	 */
 	public T last() {
 		return accesoDatos(longitud - 1);
 	}
 
+	/**
+	 * Devuelve el valor del elemento en la posición indicada.
+	 * @param posicion - la posición del valor que se busca, empezando a contar desde cero
+	 * @return el valor del elemento en la posición index, o null si no existe
+	 */
 	public T elementAt(final int posicion) {
 		if (posicion < 0 || posicion >= longitud)
 			return null;
 		return accesoDatos(posicion);
 	}
 	
+	/**
+	 * Devuelve el valor del primer elemento igual a T.
+	 * @param elemento - elemento a buscar en la lista
+	 * @return elemento encontrado, o null si no se ha encontrado
+	 */
 	public T elementMatch(final T elemento) {
 		for( int i = 0; i < longitud; ++i )
 			if( accesoDatos(i).equals(elemento) )
@@ -59,12 +93,20 @@ public class ListaArray<T extends Comparable<T>> implements Comparable<ListaArra
 		return null;
 	}
 	
+	/**
+	 * Inserta un elemento en el vector en última posición.
+	 * @param elemento - Dato a insertar
+	 */
 	public void insertLast(final T elemento) {
 		if( longitud == capacidad )
 			expandir();
 		datos[longitud++] = elemento;
 	}
 	
+	/**
+	 * Inserta un elemento en su posición siguiendo un orden creciente de elementos.
+	 * @param elemento - Dato a insertar
+	 */
 	public void insertOrdered(final T elemento) {
 		if( longitud == capacidad )
 			expandir();
@@ -75,16 +117,27 @@ public class ListaArray<T extends Comparable<T>> implements Comparable<ListaArra
 		longitud++;
 	}
 
+	/**
+	 * Elimina el último elemento del vector y lo devuelve. Si el vector es vacío, devuelve null.
+	 * @return elemento eliminado
+	 */
 	public T removeLast() {
 		if (longitud == 0)
 			return null;
 		return accesoDatos(--longitud);
 	}
 	
+	/**
+	 * Elimina todos los elementos del vector.
+	 */
 	public void removeAll() {
 		longitud = 0;
 	}
 	
+	/**
+	 * Devuelve un array a partir del vector.
+	 * @return un array cuyos elementos son los valores del vector
+	 */
 	public Object[] toArray() {
 		Object[] o = new Object[longitud];
 		for( int i = 0; i < longitud; ++i )
@@ -92,6 +145,10 @@ public class ListaArray<T extends Comparable<T>> implements Comparable<ListaArra
 		return o;
 	}
 
+	/**
+	 * Escribe todos los elementos del vector en un fichero de texto, uno por línea.
+	 * @param filename - Archivo a escribir
+	 */
 	public void printToFile(final String filename) {
 		try {
 			Fichero.abrir(filename, true);
@@ -104,11 +161,13 @@ public class ListaArray<T extends Comparable<T>> implements Comparable<ListaArra
 	}
 	
 
+	// Accede al array de elementos haciendo un casting al tipo de dato genérico
 	@SuppressWarnings("unchecked")
 	private T accesoDatos(final int index) {
 		return (T) datos[index];
 	}
 	
+	// Incrementa la capacidad del vector en base a la constante de redimensionamiento
 	private void expandir() {
 		capacidad *= resizeFactor;
 		Object[] nuevosDatos = new Object[capacidad];
@@ -117,6 +176,7 @@ public class ListaArray<T extends Comparable<T>> implements Comparable<ListaArra
 		datos = nuevosDatos;
 	}
 	
+	// Devuelve la posición en la que correspondería insertar el elemento en orden
 	private int busquedaBinaria(final T elemento) {
 		int menor = 0, mayor = longitud - 1, mitad, comp;
 		while( menor <= mayor ) {
@@ -133,6 +193,7 @@ public class ListaArray<T extends Comparable<T>> implements Comparable<ListaArra
 		return menor;
 	}
 
+	// Comparadora según la longitud del vector
 	@Override
 	public int compareTo(final ListaArray<T> o) {
 		return (longitud - o.longitud);

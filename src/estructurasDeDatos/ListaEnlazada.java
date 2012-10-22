@@ -28,14 +28,13 @@ public class ListaEnlazada<T extends Comparable<T>> {
 	 * Clase interna: iterador de la lista, se construye apuntando al primer elemento y avanza
 	 * devolviendo el siguiente elemento.
 	 */
-	public static class Iterador<T extends Comparable<T>> implements Iterator<T> {
+	private static class Iterador<T extends Comparable<T>> implements Iterator<T> {
 		// Atributos
 		private NodoLista<T> actual;
 		// Constructora
-		public Iterador() {}
+		public Iterador( NodoLista<T> inicio )
+			{ actual = inicio; }
 		// Métodos
-		public void load( final ListaEnlazada<T> list )
-			{ actual = list.first; }
 		public boolean hasNext()
 			{ return (actual != null); }
 		public T next() {
@@ -45,7 +44,8 @@ public class ListaEnlazada<T extends Comparable<T>> {
 			actual = actual.siguiente;
 			return result;
 		}
-		public void remove() {}
+		public void remove()
+			{ throw new UnsupportedOperationException(); }
 	}
 
 	// ATRIBUTOS DE LA CLASE
@@ -110,7 +110,7 @@ public class ListaEnlazada<T extends Comparable<T>> {
 
 	/**
 	 * Devuelve el valor del primer elemento igual a T.
-	 * @param T - elemento a buscar en la lista
+	 * @param elemento - elemento a buscar en la lista
 	 * @return elemento encontrado, o null si no se ha encontrado
 	 */
 	public T elementMatch(final T elemento) {
@@ -180,15 +180,18 @@ public class ListaEnlazada<T extends Comparable<T>> {
 	}
 	
 	/**
-	 * Elimina el primer elemento de la lista. Si la lista es vacía, no hace nada.
+	 * Elimina el primer elemento de la lista y lo devuelve. Si la lista es vacía, devuelve null.
+	 * @return elemento eliminado
 	 */
-	public void removeFirst() {
-		if( !isEmpty() ) {
-			if(first.siguiente == null)
-				last = null;
-			first = first.siguiente;
-			numNodos--;
-		}
+	public T removeFirst() {
+		if( isEmpty() )
+			return null;
+		T dato = first.dato;
+		if(first.siguiente == null)
+			last = null;
+		first = first.siguiente;
+		numNodos--;
+		return dato;
 	}
 	
 	/**
@@ -214,6 +217,14 @@ public class ListaEnlazada<T extends Comparable<T>> {
 		return array;
 	}
 
+	/**
+	 * Devuelve un iterador de la lista.
+	 * @return un iterador que apunta al primer elemento de la lista
+	 */
+	public Iterator<T> iterator() {
+		return new Iterador<T>(first);
+	}
+	
 	/**
 	 * Escribe todos los elementos de la lista enlazada en un fichero de texto, uno por línea.
 	 * @param filename - Archivo a escribir

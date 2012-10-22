@@ -1,5 +1,7 @@
 package estructurasDeDatos;
 
+import java.util.Iterator;
+
 /**
  * Estructura de árbol de prefijos:
  * Operaciones para codificar/descodificar Strings con enteros.
@@ -120,8 +122,7 @@ public class Trie {
 		} else {
 			if( n.valor != -1 )
 				lista.insertLast(n.valor);
-			ListaEnlazada.Iterador<NodoTrie> it = new ListaEnlazada.Iterador<NodoTrie>();
-			it.load(n.ramas);
+			Iterator<NodoTrie> it = n.ramas.iterator();
 			while( it.hasNext() )
 				DFS( it.next(), lista );
 		}

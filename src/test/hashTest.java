@@ -45,9 +45,9 @@ public class hashTest{
 				t = System.nanoTime();
 				le = m.sentenciasPorSujeto(sujeto);
 				t = System.nanoTime() - t;
-				le.printToFile("data/out/B0.txt");
+				le.printToFile("data/out/B1.txt");
 				
-				fis = new File("data/out/B0.txt");
+				fis = new File("data/out/B1.txt");
 				System.out.println(checksum(fis));
 				System.out.println();
 				break;
@@ -58,9 +58,9 @@ public class hashTest{
 				t = System.nanoTime();
 				le = m.sentenciasDistintasPorSujeto(sujeto);
 				t = System.nanoTime() - t;
-				le.printToFile("data/out/B1.txt");
+				le.printToFile("data/out/B2.txt");
 				
-				fis = new File("data/out/B1.txt");
+				fis = new File("data/out/B2.txt");
 				System.out.println(checksum(fis));
 				System.out.println();
 				break;
@@ -71,9 +71,9 @@ public class hashTest{
 				t = System.nanoTime();
 				la = m.propiedadesDistintas();
 				t = System.nanoTime() - t;
-				la.printToFile("data/out/B2.txt");
+				la.printToFile("data/out/B3.txt");
 				
-				fis = new File("data/out/B2.txt");
+				fis = new File("data/out/B3.txt");
 				System.out.println(checksum(fis));
 				System.out.println();
 				break;
@@ -84,8 +84,8 @@ public class hashTest{
 				t = System.nanoTime();
 				le = m.entidadesSujetoObjeto();
 				t = System.nanoTime() - t;
-				le.printToFile("data/out/B3.txt");
-				fis = new File("data/out/B3.txt");
+				le.printToFile("data/out/B4.txt");
+				fis = new File("data/out/B4.txt");
 				System.out.println(checksum(fis));
 				System.out.print("Escrito en ");
 				System.out.print(t / 1e6);
