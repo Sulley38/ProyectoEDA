@@ -10,15 +10,15 @@ import java.util.Iterator;
  * Puede insertar mantiendo un orden ascendente de sus elementos.
  * @param <T> - Parámetro genérico que implemente la interfaz Comparable<T>
  */
-public class ListaEnlazada<T extends Comparable<T>> {
+public class ListaEnlazada<T extends Comparable<T>> implements Iterable<T> {
 
 	/**
 	 * Clase interna: nodo de la lista, con dato del tipo T y puntero al elemento siguiente.
 	 */
-	private static class NodoLista<T> {
+	private class NodoLista {
 		// Atributos
 		private final T dato;
-		private NodoLista<T> siguiente;
+		private NodoLista siguiente;
 		// Constructora
 		public NodoLista(final T elemento)
 			{ dato = elemento; siguiente = null; }
@@ -28,11 +28,11 @@ public class ListaEnlazada<T extends Comparable<T>> {
 	 * Clase interna: iterador de la lista, se construye apuntando al primer elemento y avanza
 	 * devolviendo el siguiente elemento.
 	 */
-	private static class Iterador<T extends Comparable<T>> implements Iterator<T> {
+	private class Iterador implements Iterator<T> {
 		// Atributos
-		private NodoLista<T> actual;
+		private NodoLista actual;
 		// Constructora
-		public Iterador( NodoLista<T> inicio )
+		public Iterador( NodoLista inicio )
 			{ actual = inicio; }
 		// Métodos
 		public boolean hasNext()
@@ -49,8 +49,8 @@ public class ListaEnlazada<T extends Comparable<T>> {
 	}
 
 	// ATRIBUTOS DE LA CLASE
-	private NodoLista<T> first;
-	private NodoLista<T> last;
+	private NodoLista first;
+	private NodoLista last;
 	private int numNodos;
 	
 	
@@ -101,7 +101,7 @@ public class ListaEnlazada<T extends Comparable<T>> {
 	 * @return el valor del elemento en la posición index, o null si no existe
 	 */
 	public T elementAt(final int index) {
-		NodoLista<T> current = first;
+		NodoLista current = first;
 		for( int i = 0; i < index; ++i )
 			if( current != null ) current = current.siguiente;
 		if( current == null ) return null;
@@ -114,7 +114,7 @@ public class ListaEnlazada<T extends Comparable<T>> {
 	 * @return elemento encontrado, o null si no se ha encontrado
 	 */
 	public T elementMatch(final T elemento) {
-		NodoLista<T> current = first;
+		NodoLista current = first;
 		while( current != null ) {
 			if( elemento.equals(current.dato) ) return current.dato;
 			current = current.siguiente;
@@ -127,7 +127,7 @@ public class ListaEnlazada<T extends Comparable<T>> {
 	 * @param elemento - Dato a insertar
 	 */
 	public void insertFirst(final T elemento) {
-		NodoLista<T> newLink = new NodoLista<T>(elemento);
+		NodoLista newLink = new NodoLista(elemento);
 		if( isEmpty() )
 			last = newLink;
 		else
@@ -141,7 +141,7 @@ public class ListaEnlazada<T extends Comparable<T>> {
 	 * @param elemento - Dato a insertar
 	 */
 	public void insertLast(final T elemento) {
-		NodoLista<T> newLink = new NodoLista<T>(elemento);
+		NodoLista newLink = new NodoLista(elemento);
 		if( isEmpty() )
 			first = newLink;
 		else
@@ -158,13 +158,13 @@ public class ListaEnlazada<T extends Comparable<T>> {
 		if( isEmpty() ) {
 			insertFirst(elemento);
 		} else {
-			NodoLista<T> newLink = new NodoLista<T>(elemento);
+			NodoLista newLink = new NodoLista(elemento);
 			// Inserción en primera posición
 			if( first.dato.compareTo(elemento) >= 0 ) {
 				newLink.siguiente = first;
 				first = newLink;
 			} else {
-				NodoLista<T> current = first;
+				NodoLista current = first;
 				// Ir hasta la posición a insertar
 				while( current.siguiente != null && current.siguiente.dato.compareTo(elemento) < 0 )
 					current = current.siguiente;
@@ -209,7 +209,7 @@ public class ListaEnlazada<T extends Comparable<T>> {
 	 */
 	public Object[] toArray() {
 		Object[] array = new Object[numNodos];
-		NodoLista<T> current = first;
+		NodoLista current = first;
 		for( int i = 0; i < numNodos; ++i ) {
 			array[i] = current.dato;
 			current = current.siguiente;
@@ -222,7 +222,7 @@ public class ListaEnlazada<T extends Comparable<T>> {
 	 * @return un iterador que apunta al primer elemento de la lista
 	 */
 	public Iterator<T> iterator() {
-		return new Iterador<T>(first);
+		return new Iterador(first);
 	}
 	
 	/**
@@ -232,7 +232,7 @@ public class ListaEnlazada<T extends Comparable<T>> {
 	public void printToFile(final String filename) {
 		try {
 			Fichero.abrir(filename, true);
-			NodoLista<T> current = first;
+			NodoLista current = first;
 			for( int i = 0; i < numNodos; ++i ) {
 				Fichero.escribirSentencia(current.dato.toString());
 				current = current.siguiente;
