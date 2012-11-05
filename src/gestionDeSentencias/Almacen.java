@@ -195,6 +195,49 @@ public class Almacen {
 	}
 	
 	/**
+	 * 5) Colección de entidades que son sujeto en todos y cada uno de los almacenes.
+	 * @param Almacenes - Almacenes a intersectar
+	 * @return Una lista enlazada de entidades que son sujeto en todos y cada uno de los almacenes
+	 */
+	public ListaEnlazada<String> interseccion(Almacen[] almacenes){
+		ListaEnlazada<String> resultado= new ListaEnlazada<String>();
+		int minimo = this.objetos;
+		Almacen menor = this,swap;
+		boolean posible;
+		String sujeto;
+		int provisional;
+		
+		//Guardamos en minimo el almacen con menor numero de objetos, el resto los dejamos en almacenes. 
+		
+		for (int i=0;i<almacenes.length;i++){
+			if (almacenes[i].objetos<minimo){
+				swap = menor;
+				minimo = almacenes[i].objetos;
+				menor  = almacenes[i];
+				almacenes[i] = swap;
+			}
+		}		
+		
+		for( int i = 0; i < menor.nodosSalientes.size(); i++ ){			
+			if( !menor.nodosSalientes.elementAt(i).isEmpty()){		//Recorremos todos los sujetos
+				sujeto=menor.listaSujetosObjetos.elementAt(i);		//Obtenemos el string correspondiente
+				posible=true;
+				for (int n=0;n<almacenes.length && posible;n++){
+					provisional=almacenes[n].arbolSujetosObjetos.obtenerValor(sujeto);
+					if(provisional==-1 || almacenes[n].listaSujetosObjetos.elementAt(provisional).isEmpty()){
+						posible=false;
+					}
+				}
+				if (posible){
+					resultado.insertLast(sujeto);
+				}
+			}
+		}		
+				
+		return resultado;
+	}
+	
+	/**
 	 * 6) Colección ordenada de todas las sentencias que aparecen en el almacén.
 	 * @return Un array con las sentencias del almacén según el orden descrito en el enunciado
 	 */

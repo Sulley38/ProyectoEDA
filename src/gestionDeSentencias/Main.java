@@ -84,7 +84,22 @@ public class Main {
 				System.out.println(" ms");
 				System.out.println();
 				break;
-				
+			
+			case 5:
+				//Prueba 5
+				System.out.println("Escribiendo entidades que son sujeto en todos y cada uno de los almacenes");
+				Almacen almacenes[]=new Almacen[2];
+				almacenes[0]=new Almacen("data/in/A1.txt");
+				almacenes[1]=new Almacen("data/in/A2.txt");
+				t = System.nanoTime();
+				le = m.interseccion(almacenes);
+				t = System.nanoTime() - t;
+				le.printToFile("data/out/B5.txt");
+				System.out.print("Escrito en ");
+				System.out.print(t / 1e6);
+				System.out.println(" ms");
+				System.out.println();
+				break;
 			case 6:
 				// Prueba 6
 				System.out.println("Escribiendo en orden las sentencias que aparecen en el almacén...");
