@@ -87,7 +87,7 @@ public class Main {
 			
 			case 5:
 				//Prueba 5
-				System.out.println("Escribiendo entidades que son sujeto en todos y cada uno de los almacenes");
+				System.out.println("Escribiendo entidades que son sujeto en este almacen y en el 1 y el 2");
 				Almacen almacenes[]=new Almacen[2];
 				almacenes[0]=new Almacen("data/in/A1.txt");
 				almacenes[1]=new Almacen("data/in/A2.txt");
