@@ -1,0 +1,11 @@
+<http://swat.cse.lehigh.edu/onto/univ-bench.owl#AdministrativeStaff>
+<http://swat.cse.lehigh.edu/onto/univ-bench.owl#Article>
+<http://swat.cse.lehigh.edu/onto/univ-bench.owl#AssistantProfessor>
+<http://swat.cse.lehigh.edu/onto/univ-bench.owl#AssociateProfessor>
+<http://swat.cse.lehigh.edu/onto/univ-bench.owl#Book>
+<http://swat.cse.lehigh.edu/onto/univ-bench.owl#Chair>
+<http://swat.cse.lehigh.edu/onto/univ-bench.owl#FullProfessor>
+<http://swat.cse.lehigh.edu/onto/univ-bench.owl#GraduateCourse>
+<http://swat.cse.lehigh.edu/onto/univ-bench.owl#GraduateStudent>
+<http://swat.cse.lehigh.edu/onto/univ-bench.owl#teacherOf>
+<http://swat.cse.lehigh.edu/onto/univ-bench.owl#telephone>

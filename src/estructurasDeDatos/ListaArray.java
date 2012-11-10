@@ -21,6 +21,12 @@ public class ListaArray<T extends Comparable<T>> implements Comparable<ListaArra
 	private int longitud;
 
 	
+	// Comparadora según la longitud del vector
+	@Override
+	public int compareTo(final ListaArray<T> o) {
+		return (longitud - o.longitud);
+	}
+	
 	/**
 	 * Construye un vector vacío del tamaño por defecto (100).
 	 */
@@ -69,52 +75,60 @@ public class ListaArray<T extends Comparable<T>> implements Comparable<ListaArra
 	public T last() {
 		return accesoDatos(longitud - 1);
 	}
-
+	
+	/**
+	 * Devuelve la posición del primer elemento igual a T.
+	 * @param elemento - elemento a buscar en la lista
+	 * @return elemento encontrado, o -1 si no se ha encontrado
+	 */
+	public int find(final T elemento) {
+		for( int i = 0; i < longitud; ++i )
+			if( accesoDatos(i).equals(elemento) )
+				return i;
+		return -1;
+	}
+	
 	/**
 	 * Devuelve el valor del elemento en la posición indicada.
 	 * @param posicion - la posición del valor que se busca, empezando a contar desde cero
 	 * @return el valor del elemento en la posición index, o null si no existe
 	 */
-	public T elementAt(final int posicion) {
+	public T get(final int posicion) {
 		if (posicion < 0 || posicion >= longitud)
 			return null;
 		return accesoDatos(posicion);
 	}
 	
 	/**
-	 * Devuelve el valor del primer elemento igual a T.
-	 * @param elemento - elemento a buscar en la lista
-	 * @return elemento encontrado, o null si no se ha encontrado
+	 * Inserta un elemento en el vector en la posición indicada
+	 * @param index - la posición en la que insertar el dato
+	 * @param elemento - dato a insertar
 	 */
-	public T elementMatch(final T elemento) {
-		for( int i = 0; i < longitud; ++i )
-			if( accesoDatos(i).equals(elemento) )
-				return accesoDatos(i);
-		return null;
+	public void set(final int posicion, final T elemento) {
+		if( longitud == capacidad )
+			expandir();
+		for( int i = longitud; i > posicion; --i )
+			datos[i] = datos[i-1];
+		datos[posicion] = elemento;
+		longitud++;
 	}
 	
 	/**
 	 * Inserta un elemento en el vector en última posición.
-	 * @param elemento - Dato a insertar
+	 * @param elemento - dato a insertar
 	 */
 	public void insertLast(final T elemento) {
 		if( longitud == capacidad )
 			expandir();
 		datos[longitud++] = elemento;
 	}
-	
+
 	/**
 	 * Inserta un elemento en su posición siguiendo un orden creciente de elementos.
-	 * @param elemento - Dato a insertar
+	 * @param elemento - dato a insertar
 	 */
 	public void insertOrdered(final T elemento) {
-		if( longitud == capacidad )
-			expandir();
-		int posicion = busquedaBinaria(elemento);
-		for( int i = longitud; i > posicion; --i )
-			datos[i] = datos[i-1];
-		datos[posicion] = elemento;
-		longitud++;
+		set( busquedaBinaria(elemento), elemento );
 	}
 
 	/**
@@ -135,6 +149,22 @@ public class ListaArray<T extends Comparable<T>> implements Comparable<ListaArra
 	}
 	
 	/**
+	 * Ordenación de los elementos del array mediante ordenación por inserción
+	 * @return un array con los índices de los elementos del array original en orden creciente
+	 */
+	public ListaArray<Integer> sort() {
+		ListaArray<Integer> resultado = new ListaArray<Integer>();
+		int j;
+		for (int i = 0; i < longitud; i++) {
+			j = 0;
+			while (j < i && accesoDatos(i).compareTo( accesoDatos(resultado.get(j)) ) > 0)
+				j++;
+			resultado.set(j, i);
+		} 
+		return resultado;
+	}
+	
+	/**
 	 * Devuelve un array a partir del vector.
 	 * @return un array cuyos elementos son los valores del vector
 	 */
@@ -151,7 +181,7 @@ public class ListaArray<T extends Comparable<T>> implements Comparable<ListaArra
 	 */
 	public void printToFile(final String filename) {
 		try {
-			Fichero.abrir(filename, true);
+			Fichero.abrir(filename, true, false);
 			for (int i = 0; i < longitud; ++i)
 				Fichero.escribirSentencia(accesoDatos(i).toString());
 			Fichero.cerrar();
@@ -191,12 +221,6 @@ public class ListaArray<T extends Comparable<T>> implements Comparable<ListaArra
 			}
 		}
 		return menor;
-	}
-
-	// Comparadora según la longitud del vector
-	@Override
-	public int compareTo(final ListaArray<T> o) {
-		return (longitud - o.longitud);
 	}
 	
 }

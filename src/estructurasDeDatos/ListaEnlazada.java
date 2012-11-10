@@ -231,7 +231,7 @@ public class ListaEnlazada<T extends Comparable<T>> implements Iterable<T> {
 	 */
 	public void printToFile(final String filename) {
 		try {
-			Fichero.abrir(filename, true);
+			Fichero.abrir(filename, true, false);
 			NodoLista current = first;
 			for( int i = 0; i < numNodos; ++i ) {
 				Fichero.escribirSentencia(current.dato.toString());

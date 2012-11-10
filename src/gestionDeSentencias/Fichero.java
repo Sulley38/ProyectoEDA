@@ -26,12 +26,13 @@ public final class Fichero {
 	 * Si hay un fichero abierto que aún no se ha cerrado, no hace nada.
 	 * @param fichero - ruta del fichero a acceder
 	 * @param escribir - true si se quiere abrir en modo escritura
+	 * @param mantener - true si se desea mantener el contenido de un archivo ya existente (solo afecta si escribir = true)
 	 * @throws IOException En caso de producirse un error de entrada/salida
 	 */
-	public static void abrir( String fichero, boolean escribir ) throws IOException {
+	public static void abrir( String fichero, boolean escribir, boolean mantener ) throws IOException {
 		modoEscritura = escribir;
 		if( escribir )
-			escritura = new BufferedWriter( new FileWriter(fichero) );
+			escritura = new BufferedWriter( new FileWriter(fichero,mantener) );
 		else
 			lectura = new BufferedReader( new FileReader(fichero) );
 	}

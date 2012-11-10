@@ -12,12 +12,12 @@ public class pruebaFichero {
 		try {
 			
 			// Escribir en el fichero
-			Fichero.abrir("data/pruebaFichero.txt",true);
+			Fichero.abrir("data/pruebaFichero.txt",true,false);
 			Fichero.escribirSentencia("Dani no mola mazo, Mati sí.");
 			Fichero.cerrar();
 			
 			// Escribir en la consola la sentencia que se ha guardado previamente en el fichero
-			Fichero.abrir("data/pruebaFichero.txt",false);
+			Fichero.abrir("data/pruebaFichero.txt",false,false);
 			System.out.println(Fichero.leerSentencia());
 			Fichero.cerrar();
 			

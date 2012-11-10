@@ -29,7 +29,7 @@ public class Main {
 		ListaArray<String> la;
 		while (respuesta > 0) {
 
-			System.out.print("Introduzca un número del 1 al 4 para ejecutar las pruebas, o 0 para salir: ");
+			System.out.print("Introduzca un número del 1 al 6 para ejecutar las pruebas, o 0 para salir: ");
 			respuesta = in.nextInt();
 			System.out.println();
 			switch (respuesta) {
@@ -87,12 +87,12 @@ public class Main {
 			
 			case 5:
 				//Prueba 5
-				System.out.println("Escribiendo entidades que son sujeto en este almacen y en el 1 y el 2");
-				Almacen almacenes[]=new Almacen[2];
-				almacenes[0]=new Almacen("data/in/A1.txt");
-				almacenes[1]=new Almacen("data/in/A2.txt");
+				System.out.println("Escribiendo entidades que son sujeto y tienen en común este almacén, el A1 y el A2...");
+				Almacen almacenes[] = new Almacen[2];
+				almacenes[0] = new Almacen("data/in/A1.txt");
+				almacenes[1] = new Almacen("data/in/A2.txt");
 				t = System.nanoTime();
-				le = m.interseccion(almacenes);
+				le = m.sujetoEnTodos(almacenes);
 				t = System.nanoTime() - t;
 				le.printToFile("data/out/B5.txt");
 				System.out.print("Escrito en ");
@@ -100,6 +100,7 @@ public class Main {
 				System.out.println(" ms");
 				System.out.println();
 				break;
+				
 			case 6:
 				// Prueba 6
 				System.out.println("Escribiendo en orden las sentencias que aparecen en el almacén...");

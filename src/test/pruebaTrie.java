@@ -31,7 +31,7 @@ public class pruebaTrie {
 		ListaArray<Integer> listaOrdenada = prueba.recorrerEnProfundidad();
 		System.out.print("Valores del trie por orden alfabético de sus strings: ");
 		for( int i = 0; i < listaOrdenada.size(); ++i )
-			System.out.print( listaOrdenada.elementAt(i) + " " );
+			System.out.print( listaOrdenada.get(i) + " " );
 		System.out.println();
 	}
 
