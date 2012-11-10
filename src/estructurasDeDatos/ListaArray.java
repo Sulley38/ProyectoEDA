@@ -12,7 +12,7 @@ import java.io.IOException;
 public class ListaArray<T extends Comparable<T>> implements Comparable<ListaArray<T>> {
 	
 	// Constantes del vector
-	private final static int defaultSize = 100;
+	private final static int defaultSize = 25;
 	private final static int resizeFactor = 2;
 	
 	// Atributos para representar el TAD

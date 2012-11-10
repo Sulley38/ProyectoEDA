@@ -203,44 +203,43 @@ public class Almacen {
 	
 	/**
 	 * 5) Colección de entidades que son sujeto en todos y cada uno de los almacenes.
-	 * @param Almacenes - Almacenes a intersectar
+	 * @param coleccionAlmacenes - almacenes a intersectar
 	 * @return Una lista enlazada de entidades que son sujeto en todos y cada uno de los almacenes
 	 */
-	public ListaEnlazada<String> sujetoEnTodos(Almacen[] almacenes){
-		ListaEnlazada<String> resultado= new ListaEnlazada<String>();
-		int minimo = this.objetos;
-		Almacen menor = this,swap;
-		boolean posible;
+	public static ListaEnlazada<String> entidadesSujetoEnTodos(Almacen[] coleccionAlmacenes) {
+		ListaEnlazada<String> resultado = new ListaEnlazada<String>();
+		int menor = 0, i, j, valor;
+		boolean posibleSujetoComun;
 		String sujeto;
-		int provisional;
-		
-		//Guardamos en minimo el almacen con menor numero de objetos, el resto los dejamos en almacenes. 
-		
-		for (int i=0;i<almacenes.length;i++){
-			if (almacenes[i].objetos<minimo){
-				swap = menor;
-				minimo = almacenes[i].objetos;
-				menor  = almacenes[i];
-				almacenes[i] = swap;
-			}
-		}		
-		
-		for( int i = 0; i < menor.nodosSalientes.size(); i++ ){			
-			if( !menor.nodosSalientes.get(i).isEmpty()){		//Recorremos todos los sujetos
-				sujeto=menor.listaSujetosObjetos.get(i);		//Obtenemos el string correspondiente
-				posible=true;
-				for (int n=0;n<almacenes.length && posible;n++){
-					provisional=almacenes[n].arbolSujetosObjetos.obtenerValor(sujeto);
-					if(provisional==-1 || almacenes[n].listaSujetosObjetos.get(provisional).isEmpty()){
-						posible=false;
+
+		// Se busca el índice del almacén que tiene menor número de sujetos
+		for (i = 0; i < coleccionAlmacenes.length; i++)
+			if (coleccionAlmacenes[i].sujetos < coleccionAlmacenes[menor].sujetos)
+				menor = i;
+
+		for (i = 0; i < coleccionAlmacenes[menor].nodosSalientes.size(); i++) {
+			// Recorrer todas las entidades del almacén
+			if (!coleccionAlmacenes[menor].nodosSalientes.get(i).isEmpty()) {
+				// En caso de ser un sujeto, se busca en el resto de los almacenes
+				sujeto = coleccionAlmacenes[menor].listaSujetosObjetos.get(i);
+				posibleSujetoComun = true;
+				j = 0;
+				while (j < coleccionAlmacenes.length && posibleSujetoComun) {
+					valor = coleccionAlmacenes[j].arbolSujetosObjetos.obtenerValor(sujeto);
+					if (valor == -1 || coleccionAlmacenes[j].nodosSalientes.get(valor).isEmpty()) {
+						// No existe o no es sujeto en el almacén j -> se deja de buscar
+						posibleSujetoComun = false;
 					}
+					j++;
 				}
-				if (posible){
+
+				if (posibleSujetoComun) {
+					// Es sujeto en todos los almacenes
 					resultado.insertLast(sujeto);
 				}
 			}
-		}		
-				
+		}
+
 		return resultado;
 	}
 	
@@ -264,4 +263,34 @@ public class Almacen {
 		return sentenciasEnOrden;
 	}
 	
+	/**
+	 * 9a) Cargar sentencias en un almacén, tomadas de archivos de texto de nuestro directorio.
+	 * @param nombreDeArchivo - fichero del que se toman las sentencias para el almacén
+	 * @return un almacén de sentencias a partir del contenido del fichero
+	 */
+	public static Almacen cargar(String nombreDeArchivo) {
+		return new Almacen(nombreDeArchivo);
+	}
+	
+	/**
+	 * 9b) Descargar las sentencias de un almacén en un archivo de texto de nuestro directorio.
+	 * @param nombreDeArchivo - fichero en el que se van a escribir las sentencias del almacén
+	 */
+	public void descargar(String nombreDeArchivo) {
+		try {
+			Arista arista;
+			Fichero.abrir(nombreDeArchivo, true, false);
+			for (int i = 0; i < nodosSalientes.size(); ++i) {
+				for (int j = 0; j < nodosSalientes.get(i).size(); ++j) {
+					arista = nodosSalientes.get(i).get(j);
+					for (int k = 0; k < arista.repeticiones; ++k)
+						Fichero.escribirSentencia( listaSujetosObjetos.get(i) + " " + listaPropiedades.get(arista.propiedad) + " " + listaSujetosObjetos.get(arista.verticeObjetivo) + " ." );
+				}
+			}
+			Fichero.cerrar();
+		} catch (IOException e) {
+			System.err.println("Error: Imposible acceder al fichero especificado.");
+			return;
+		}
+	}
 }

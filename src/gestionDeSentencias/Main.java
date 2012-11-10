@@ -5,20 +5,19 @@ import java.util.Scanner;
 
 public class Main {
 
-	public static void main (String[] args) {	
-		Almacen m;
+	public static void main (String[] args) {
 		Scanner in = new Scanner(System.in);
 		String sujeto = "<http://swat.cse.lehigh.edu/onto/univ-bench.owl#AdministrativeStaff>";
 		String file = "data/in/";
 		
-		System.out.println("Escriba el nombre del fichero a cargar:");
+		System.out.println("Escriba el nombre del fichero a cargar para las pruebas sobre almacén:");
 		file += in.next();
 			
 		// Cargar el almacén
 		System.out.println("Cargando el fichero \"" + file + "\".");
 		long t;				
 		t = System.currentTimeMillis();
-		m = new Almacen(file);
+		Almacen m = Almacen.cargar(file);
 		t = System.currentTimeMillis() - t;
 		System.out.print("Sentencias leídas en ");
 		System.out.print(t);
@@ -86,13 +85,14 @@ public class Main {
 				break;
 			
 			case 5:
-				//Prueba 5
-				System.out.println("Escribiendo entidades que son sujeto y tienen en común este almacén, el A1 y el A2...");
-				Almacen almacenes[] = new Almacen[2];
-				almacenes[0] = new Almacen("data/in/A1.txt");
-				almacenes[1] = new Almacen("data/in/A2.txt");
+				// Prueba 5
+				System.out.println("Escribiendo entidades que son sujeto común al almacén cargado, A1 y A2...");
+				Almacen almacenes[] = new Almacen[3];
+				almacenes[0] = m;
+				almacenes[1] = new Almacen("data/in/A1.txt");
+				almacenes[2] = new Almacen("data/in/A2.txt");
 				t = System.nanoTime();
-				le = m.sujetoEnTodos(almacenes);
+				le = Almacen.entidadesSujetoEnTodos(almacenes);
 				t = System.nanoTime() - t;
 				le.printToFile("data/out/B5.txt");
 				System.out.print("Escrito en ");
@@ -114,6 +114,18 @@ public class Main {
 				System.out.println();
 				break;
 
+			case 9:
+				// Prueba 9
+				System.out.println("Descargando las sentencias del almacén en el fichero B9.txt ...");
+				t = System.nanoTime();
+				m.descargar("data/out/B9.txt");
+				t = System.nanoTime() - t;
+				System.out.print("Escrito en ");
+				System.out.print(t / 1e6);
+				System.out.println(" ms");
+				System.out.println();
+				break;
+				
 			case 0:
 				// Salir
 				System.out.println("Fin del programa de pruebas.");

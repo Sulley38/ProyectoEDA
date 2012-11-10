@@ -13,7 +13,9 @@ public class medirTiempos {
 	@SuppressWarnings("unused")
 	public static void main(String[] args) {
 		try {
-			Almacen m;
+			Almacen m, almacenes[] = new Almacen[3];
+			almacenes[1] = new Almacen("data/in/A1.txt");
+			almacenes[2] = new Almacen("data/in/A2.txt");
 			String sujeto = "<http://swat.cse.lehigh.edu/onto/univ-bench.owl#AdministrativeStaff>";
 			// Vacíar fichero
 			Fichero.abrir("data/tiempos.txt", true, false);
@@ -94,14 +96,12 @@ public class medirTiempos {
 				Fichero.escribirSentencia(Double.toString(suma / 1e6));
 				
 				//Prueba 5
-				System.out.println("Escribiendo entidades que son sujeto y tienen en común este almacén, el A1 y el A2...");
-				Almacen almacenes[] = new Almacen[2];
-				almacenes[0] = new Almacen("data/in/A1.txt");
-				almacenes[1] = new Almacen("data/in/A2.txt");
+				System.out.println("Escribiendo entidades que son sujeto común al almacén cargado, A1 y A2...");
+				almacenes[0] = m;
 				suma = 0;
 				for (int i = 0; i < 10; ++i) {
 					t = System.nanoTime();
-					le = m.sujetoEnTodos(almacenes);
+					le = Almacen.entidadesSujetoEnTodos(almacenes);
 					suma += System.nanoTime() - t;
 				}
 				suma /= 10;
@@ -116,6 +116,20 @@ public class medirTiempos {
 				for (int i = 0; i < 10; ++i) {
 					t = System.nanoTime();
 					la = m.sentenciasOrdenadas();
+					suma += System.nanoTime() - t;
+				}
+				suma /= 10;
+				System.out.print("Escrito en ");
+				System.out.print(suma / 1e6);
+				System.out.println(" ms");
+				Fichero.escribirSentencia(Double.toString(suma / 1e6));
+				
+				// Prueba 9
+				System.out.println("Descargando las sentencias del almacén en el fichero B9.txt ...");
+				suma = 0;
+				for (int i = 0; i < 10; ++i) {
+					t = System.nanoTime();
+					m.descargar("data/out/B9.txt");
 					suma += System.nanoTime() - t;
 				}
 				suma /= 10;
