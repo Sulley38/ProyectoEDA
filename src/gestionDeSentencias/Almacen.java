@@ -40,6 +40,10 @@ public class Almacen {
 		}
 	}
 	
+	/// CONSTANTES
+	private static final String propiedadEs = "<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>";
+	private static final String propiedadSubClaseDe = "<http://www.w3.org/2000/01/rdf-schema#subClassOf>";
+	
 	/// ATRIBUTOS DE LA CLASE
 	// Dos listas de adyacencia para representar el grafo.
 	private ListaArray< ListaArray<Arista> > nodosEntrantes, nodosSalientes;
@@ -50,8 +54,12 @@ public class Almacen {
 	// Relaciones entre entidad e índice correspondiente (Trie), y viceversa (array)
 	private Trie arbolSujetosObjetos, arbolPropiedades;
 	private ListaArray<String> listaSujetosObjetos, listaPropiedades;
+	// Representación de clases y subclases
+	// TODO: pensar esto un poco más
+	//private ListaArray< ListaArray<Integer> > clases, entidadesMiembro;
+	//private Arbol relacionEntreClases;
 	
-	
+
 	/**
 	 * Constructora
 	 * Carga las sentencias en el almacén desde el fichero especificado.
