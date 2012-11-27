@@ -21,3 +21,29 @@ SOBRESALIENTE (PERO FALTA QUE PRESENTEIS MEJOR LA MEMORIA).
 (DANIEL: NO QUIERO PONERME PESADO, PERO ME IMAGINO QUE ERES CONSCIENTE DE QUE PARA 
 CALIFICARTE CON SOBRESALIENTE NECESITO VER MÁS TRABAJO TÉCNICO DE TU PARTE. 
 APROVECHA QUE TIENES ESE PAR DE COMPAÑEROS Y SÁCALES TODO EL JUGO QUE PUEDAS)
+
+
+(27-noviembre-2012) SEGUNDA EVALUACIÓN DE LA PRÁCTICA.
+El trabajo de programación que estais realizando es muy bueno y los análisis de los algoritmos son 
+correctos.
+
+Aunque reconozco el trabajo de redacción que habeis realizado, creo que el resultado final mejoraría 
+si recibierais algunos consejos de compañeros para hacer más completas las explicaciones. Por ejemplo, 
+sugiero  que se lo deis a leer a Daniel Franco y a Asier Aguado para que os hagan de revisores y os 
+indiquen cosas que conviene añadir o aclarar para que resulte un documento accesible a todos los 
+estudiantes de segundo curso. Sería razonable que, a su vez, Daniel y Asier os cobren el trabajo 
+solicitando que leyerais sus memorias para sugerirles mejoras en la explicación/presentación. 
+¿Qué os parece?
+
+Los tiempos de ejecución de los métodos están bien reflejados en las tablas. Aunque faltan los de la 
+última implementación.
+
+
+La calificación de vuestro trabajo práctico es de sobresaliente 9,5 (dejadme que guarde la máxima 
+calificación para el final ¿vale?). No tengo duda de que el resto del trabajo mantendrá la línea 
+seguida hasta ahora. 
+
+Con respecto a la posible ampliación del alcance del proyecto, que os comenté en la entrevista, 
+dejadme un poco de tiempo para madurarla. En cualquier caso, no sería necesario presentar esa 
+ampliación en la fecha 21 de diciembre (que será la fecha final para todos), sino que podría 
+daros plazo hasta alguna fecha de enero que acordáramos. Dejamos esto pendiente.

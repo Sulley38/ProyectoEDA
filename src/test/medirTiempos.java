@@ -123,6 +123,7 @@ public class medirTiempos {
 				System.out.print(suma / 1e6);
 				System.out.println(" ms");
 				Fichero.escribirSentencia(Double.toString(suma / 1e6));
+				Fichero.cerrar();
 				
 				// Prueba 9
 				System.out.println("Descargando las sentencias del almacén en el fichero B9.txt ...");
@@ -136,6 +137,7 @@ public class medirTiempos {
 				System.out.print("Escrito en ");
 				System.out.print(suma / 1e6);
 				System.out.println(" ms");
+				Fichero.abrir("data/tiempos.txt", true, true);
 				Fichero.escribirSentencia(Double.toString(suma / 1e6));
 				
 				Fichero.escribirSentencia("-------------------------");
