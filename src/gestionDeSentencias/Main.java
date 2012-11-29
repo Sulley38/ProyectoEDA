@@ -28,7 +28,7 @@ public class Main {
 		ListaArray<String> la;
 		while (respuesta > 0) {
 
-			System.out.print("Introduzca un número del 1 al 6 para ejecutar las pruebas, o 0 para salir: ");
+			System.out.print("Introduzca un número del 1 al 7 para ejecutar las pruebas, o 0 para salir: ");
 			respuesta = in.nextInt();
 			System.out.println();
 			switch (respuesta) {
@@ -108,6 +108,19 @@ public class Main {
 				la = m.sentenciasOrdenadas();
 				t = System.nanoTime() - t;
 				la.printToFile("data/out/B6.txt");
+				System.out.print("Escrito en ");
+				System.out.print(t / 1e6);
+				System.out.println(" ms");
+				System.out.println();
+				break;
+				
+			case 7:
+				// Prueba 7
+				System.out.println("Escribiendo las clases de " + sujeto + "...");
+				t = System.nanoTime();
+				le = m.clasesDe(sujeto);
+				t = System.nanoTime() - t;
+				le.printToFile("data/out/B7.txt");
 				System.out.print("Escrito en ");
 				System.out.print(t / 1e6);
 				System.out.println(" ms");

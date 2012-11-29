@@ -54,10 +54,8 @@ public class Almacen {
 	// Relaciones entre entidad e índice correspondiente (Trie), y viceversa (array)
 	private Trie arbolSujetosObjetos, arbolPropiedades;
 	private ListaArray<String> listaSujetosObjetos, listaPropiedades;
-	// Representación de clases y subclases
-	// TODO: pensar esto un poco más
-	//private ListaArray< ListaArray<Integer> > clases, entidadesMiembro;
-	//private Arbol relacionEntreClases;
+	// Propiedades para trabajar con las clases/subclases/superclases
+	private int identificadorPropiedadEs, identificadorPropiedadSubClaseDe;
 	
 
 	/**
@@ -105,6 +103,11 @@ public class Almacen {
 				if( idPropiedad == propiedades ) {
 					// Agregar al array de int -> String
 					listaPropiedades.insertLast(propiedad);
+					// En caso de ser una propiedad especial, guardar su entero
+					if( propiedad.equals(propiedadEs) )
+						identificadorPropiedadEs = idPropiedad;
+					else if( propiedad.equals(propiedadSubClaseDe) )
+						identificadorPropiedadSubClaseDe = idPropiedad;
 					// Incrementar contador
 					propiedades++;
 				}
@@ -197,7 +200,7 @@ public class Almacen {
 	
 	/**
 	 * 4) Colección de entidades distintas que son sujeto de alguna sentencia y también
-	 * 	  son objeto de alguna sentencia de ese almacén.
+	 * 	  son objeto de alguna sentencia del almacén.
 	 * @return Una lista enlazada de strings sin repeticiones que son sujeto y a la vez objeto en el almacén
 	 */
 	public ListaEnlazada<String> entidadesSujetoObjeto() {
@@ -272,6 +275,22 @@ public class Almacen {
 	}
 	
 	/**
+	 * 7a) Colección de las clases de un sujeto, dado como parámetro.
+	 * @param sujeto - sujeto del que se buscan las clases
+	 * @return una lista enlazada de las clases de entidad que es sujeto
+	 */
+	public ListaEnlazada<String> clasesDe(String sujeto) {
+		ListaEnlazada<String> resultado = new ListaEnlazada<String>();
+		int idSujeto = arbolSujetosObjetos.obtenerValor(sujeto);
+		boolean recorridos[] = new boolean[sujetos+objetos];
+		for( int i = 0; i < sujetos+objetos; ++i )
+			recorridos[i] = false;
+		// Búsqueda en profundidad
+		DFS( idSujeto, identificadorPropiedadEs, recorridos, resultado );
+		return resultado;
+	}
+	
+	/**
 	 * 9a) Cargar sentencias en un almacén, tomadas de archivos de texto de nuestro directorio.
 	 * @param nombreDeArchivo - fichero del que se toman las sentencias para el almacén
 	 * @return un almacén de sentencias a partir del contenido del fichero
@@ -299,6 +318,20 @@ public class Almacen {
 		} catch (IOException e) {
 			System.err.println("Error: Imposible acceder al fichero especificado.");
 			return;
+		}
+	}
+	
+	// Búsqueda en profundidad desde "nodo" recorriendo solo las aristas de peso "propiedad"
+	// Los nodos que se recorren se guardan en "resultado"
+	private void DFS( int nodo, int propiedad, boolean[] recorridos, ListaEnlazada<String> resultado ) {
+		Arista a;
+		for( int i = 0; i < nodosSalientes.get(nodo).size(); ++i ) {
+			a = nodosSalientes.get(nodo).get(i);
+			if( a.propiedad == propiedad && !recorridos[a.verticeObjetivo] ) {
+				resultado.insertLast( listaSujetosObjetos.get(a.verticeObjetivo) );
+				recorridos[a.verticeObjetivo] = true;
+				DFS( a.verticeObjetivo, identificadorPropiedadSubClaseDe, recorridos, resultado );
+			}
 		}
 	}
 }
