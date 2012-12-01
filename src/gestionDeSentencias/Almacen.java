@@ -33,7 +33,7 @@ public class Almacen {
 			else
 				return listaPropiedades.get(this.propiedad).compareTo(listaPropiedades.get(a.propiedad));
 		}
-		// Comparadora de los valores de la arista
+		// Comparadora de igualdad de la arista
 		@Override
 		public boolean equals(final Object a) {
 			return (verticeObjetivo == ((Arista)a).verticeObjetivo) && (propiedad == ((Arista)a).propiedad);
@@ -63,7 +63,7 @@ public class Almacen {
 	 * Carga las sentencias en el almacén desde el fichero especificado.
 	 * @param nombreDeArchivo de texto desde el que leer las entidades
 	 */
-	public Almacen( String nombreDeArchivo ) {
+	public Almacen( String nombreDeArchivo ) throws IOException {
 		// Inicializa los atributos de la clase
 		nodosEntrantes = new ListaArray< ListaArray<Arista> >();
 		nodosSalientes = new ListaArray< ListaArray<Arista> >();
@@ -75,80 +75,74 @@ public class Almacen {
 		// Variable temporal para insertar las sentencias
 		int tempArista;
 		// Lee las sentencias desde el fichero y las añade al trie y a la lista de nodos del grafo
-		try {
-			Fichero.abrir(nombreDeArchivo,false,false);
-			String sentencia, sujeto, propiedad, objeto;
-			int idSujeto, idPropiedad, idObjeto;
-			StringTokenizer tokenizador;
-			while( (sentencia = Fichero.leerSentencia()) != null ) {
-				tokenizador = new StringTokenizer(sentencia);
-				sujeto = tokenizador.nextToken();
-				propiedad = tokenizador.nextToken();
-				objeto = tokenizador.nextToken();
-				sentencias++;
-				
-				// Insertar sujeto en el trie
-				idSujeto = arbolSujetosObjetos.insertar(sujeto, sujetos+objetos);
-				if( idSujeto == sujetos+objetos ) {
-					// Agregar al array de int -> String
-					listaSujetosObjetos.insertLast(sujeto);
-					// Añadir su hueco en las listas de adyacencia
-					nodosEntrantes.insertLast( new ListaArray<Arista>() );
-					nodosSalientes.insertLast( new ListaArray<Arista>() );
-					// Incrementar contador
-					sujetos++;
-				}
-				// Insertar propiedad en el trie
-				idPropiedad = arbolPropiedades.insertar(propiedad, propiedades);
-				if( idPropiedad == propiedades ) {
-					// Agregar al array de int -> String
-					listaPropiedades.insertLast(propiedad);
-					// En caso de ser una propiedad especial, guardar su entero
-					if( propiedad.equals(propiedadEs) )
-						identificadorPropiedadEs = idPropiedad;
-					else if( propiedad.equals(propiedadSubClaseDe) )
-						identificadorPropiedadSubClaseDe = idPropiedad;
-					// Incrementar contador
-					propiedades++;
-				}
-				// Insertar objeto en el trie
-				idObjeto = arbolSujetosObjetos.insertar(objeto, sujetos+objetos);
-				if( idObjeto == sujetos+objetos ) {
-					// Agregar al array de int -> String
-					listaSujetosObjetos.insertLast(objeto);
-					// Añadir su hueco en las listas de adyacencia
-					nodosEntrantes.insertLast( new ListaArray<Arista>() );
-					nodosSalientes.insertLast( new ListaArray<Arista>() );
-					// Incrementar contador
-					objetos++;
-				}
-				
-				// Inserta la arista en la primera lista de adyacencia, o añade una repetición
-				tempArista = nodosSalientes.get(idSujeto).find( new Arista(idObjeto,idPropiedad) );
-				if( tempArista == -1 )
-					nodosSalientes.get(idSujeto).insertLast( new Arista(idObjeto,idPropiedad) );
-				else
-					nodosSalientes.get(idSujeto).get(tempArista).repeticiones++;
-				
-				// Inserta la arista en la segunda lista de adyacencia, o añade una repetición
-				tempArista = nodosEntrantes.get(idObjeto).find( new Arista(idSujeto,idPropiedad) );
-				if( tempArista == -1 )
-					nodosEntrantes.get(idObjeto).insertLast( new Arista(idSujeto,idPropiedad) );
-				else
-					nodosEntrantes.get(idObjeto).get(tempArista).repeticiones++;
+		Fichero.abrir(nombreDeArchivo,false,false);
+		String sentencia, sujeto, propiedad, objeto;
+		int idSujeto, idPropiedad, idObjeto;
+		StringTokenizer tokenizador;
+		while( (sentencia = Fichero.leerSentencia()) != null ) {
+			tokenizador = new StringTokenizer(sentencia);
+			sujeto = tokenizador.nextToken();
+			propiedad = tokenizador.nextToken();
+			objeto = tokenizador.nextToken();
+			sentencias++;
+			
+			// Insertar sujeto en el trie
+			idSujeto = arbolSujetosObjetos.insertar(sujeto, sujetos+objetos);
+			if( idSujeto == sujetos+objetos ) {
+				// Agregar al array de int -> String
+				listaSujetosObjetos.insertLast(sujeto);
+				// Añadir su hueco en las listas de adyacencia
+				nodosEntrantes.insertLast( new ListaArray<Arista>() );
+				nodosSalientes.insertLast( new ListaArray<Arista>() );
+				// Incrementar contador
+				sujetos++;
+			}
+			// Insertar propiedad en el trie
+			idPropiedad = arbolPropiedades.insertar(propiedad, propiedades);
+			if( idPropiedad == propiedades ) {
+				// Agregar al array de int -> String
+				listaPropiedades.insertLast(propiedad);
+				// En caso de ser una propiedad especial, guardar su entero
+				if( propiedad.equals(propiedadEs) )
+					identificadorPropiedadEs = idPropiedad;
+				else if( propiedad.equals(propiedadSubClaseDe) )
+					identificadorPropiedadSubClaseDe = idPropiedad;
+				// Incrementar contador
+				propiedades++;
+			}
+			// Insertar objeto en el trie
+			idObjeto = arbolSujetosObjetos.insertar(objeto, sujetos+objetos);
+			if( idObjeto == sujetos+objetos ) {
+				// Agregar al array de int -> String
+				listaSujetosObjetos.insertLast(objeto);
+				// Añadir su hueco en las listas de adyacencia
+				nodosEntrantes.insertLast( new ListaArray<Arista>() );
+				nodosSalientes.insertLast( new ListaArray<Arista>() );
+				// Incrementar contador
+				objetos++;
 			}
 			
-			// Ordenar las aristas salientes de cada nodo
-			nodosSalientesOrdenados = new ListaArray< ListaArray<Integer> >(nodosSalientes.size());
-			for( int i = 0; i < nodosSalientes.size(); ++i )
-				nodosSalientesOrdenados.set( i, nodosSalientes.get(i).sort() );
-	
-			Fichero.cerrar();
-		} catch (IOException e) {
-			System.err.println("Error: Imposible acceder al fichero especificado.");
-			return;
+			// Inserta la arista en la primera lista de adyacencia, o añade una repetición
+			tempArista = nodosSalientes.get(idSujeto).find( new Arista(idObjeto,idPropiedad) );
+			if( tempArista == -1 )
+				nodosSalientes.get(idSujeto).insertLast( new Arista(idObjeto,idPropiedad) );
+			else
+				nodosSalientes.get(idSujeto).get(tempArista).repeticiones++;
+			
+			// Inserta la arista en la segunda lista de adyacencia, o añade una repetición
+			tempArista = nodosEntrantes.get(idObjeto).find( new Arista(idSujeto,idPropiedad) );
+			if( tempArista == -1 )
+				nodosEntrantes.get(idObjeto).insertLast( new Arista(idSujeto,idPropiedad) );
+			else
+				nodosEntrantes.get(idObjeto).get(tempArista).repeticiones++;
 		}
+		
+		// Ordenar las aristas salientes de cada nodo
+		nodosSalientesOrdenados = new ListaArray< ListaArray<Integer> >(nodosSalientes.size());
+		for( int i = 0; i < nodosSalientes.size(); ++i )
+			nodosSalientesOrdenados.set( i, nodosSalientes.get(i).sort() );
 
+		Fichero.cerrar();
 	}
 	
 	/**
@@ -277,16 +271,54 @@ public class Almacen {
 	/**
 	 * 7a) Colección de las clases de un sujeto, dado como parámetro.
 	 * @param sujeto - sujeto del que se buscan las clases
-	 * @return una lista enlazada de las clases de entidad que es sujeto
+	 * @return una lista enlazada de las clases del parámetro sujeto
 	 */
 	public ListaEnlazada<String> clasesDe(String sujeto) {
 		ListaEnlazada<String> resultado = new ListaEnlazada<String>();
 		int idSujeto = arbolSujetosObjetos.obtenerValor(sujeto);
-		boolean recorridos[] = new boolean[sujetos+objetos];
-		for( int i = 0; i < sujetos+objetos; ++i )
-			recorridos[i] = false;
-		// Búsqueda en profundidad
-		DFS( idSujeto, identificadorPropiedadEs, recorridos, resultado );
+		if (idSujeto != -1) {
+			boolean recorridos[] = new boolean[sujetos+objetos];
+			for( int i = 0; i < sujetos+objetos; ++i )
+				recorridos[i] = false;
+			// Búsqueda en profundidad
+			DFS( idSujeto, identificadorPropiedadEs, recorridos, resultado );
+		}
+		return resultado;
+	}
+	
+	/**
+	 * 7b) Colección de las clases que son superclase de una clase, dada como parámetro.
+	 * @param clase - clase de la que se buscan las superclases
+	 * @return una lista enlazada de las superclases del parámetro clase
+	 */
+	public ListaEnlazada<String> superClasesDe(String clase) {
+		ListaEnlazada<String> resultado = new ListaEnlazada<String>();
+		int idClase = arbolSujetosObjetos.obtenerValor(clase);
+		if (idClase != -1) {
+			boolean recorridos[] = new boolean[sujetos+objetos];
+			for( int i = 0; i < sujetos+objetos; ++i )
+				recorridos[i] = false;
+			// Búsqueda en profundidad
+			DFS( idClase, identificadorPropiedadSubClaseDe, recorridos, resultado );
+		}
+		return resultado;
+	}
+	
+	/**
+	 * 8) Colección de entidades que son de una determinada clase, dada como parámetro.
+	 * @param clase - clase de la que se buscan las entidades
+	 * @return una lista enlazada de las entidades que son del parámetro clase
+	 */
+	public ListaEnlazada<String> entidadesDeClase(String clase) {
+		ListaEnlazada<String> resultado = new ListaEnlazada<String>();
+		int idClase = arbolSujetosObjetos.obtenerValor(clase);
+		if (idClase != -1) {
+			boolean recorridos[] = new boolean[sujetos+objetos];
+			for( int i = 0; i < sujetos+objetos; ++i )
+				recorridos[i] = false;
+			// Búsqueda en profundidad hacia atrás
+			DFSinversa( idClase, recorridos, resultado );
+		}
 		return resultado;
 	}
 	
@@ -296,7 +328,12 @@ public class Almacen {
 	 * @return un almacén de sentencias a partir del contenido del fichero
 	 */
 	public static Almacen cargar(String nombreDeArchivo) {
-		return new Almacen(nombreDeArchivo);
+		try {
+			return new Almacen(nombreDeArchivo);
+		} catch (IOException e) {
+			System.err.println("Error: Imposible acceder al fichero especificado.");
+			return null;
+		}
 	}
 	
 	/**
@@ -321,17 +358,36 @@ public class Almacen {
 		}
 	}
 	
+	
 	// Búsqueda en profundidad desde "nodo" recorriendo solo las aristas de peso "propiedad"
 	// Los nodos que se recorren se guardan en "resultado"
 	private void DFS( int nodo, int propiedad, boolean[] recorridos, ListaEnlazada<String> resultado ) {
 		Arista a;
-		for( int i = 0; i < nodosSalientes.get(nodo).size(); ++i ) {
+		for (int i = 0; i < nodosSalientes.get(nodo).size(); ++i) {
 			a = nodosSalientes.get(nodo).get(i);
-			if( a.propiedad == propiedad && !recorridos[a.verticeObjetivo] ) {
-				resultado.insertLast( listaSujetosObjetos.get(a.verticeObjetivo) );
+			if (a.propiedad == propiedad && !recorridos[a.verticeObjetivo]) {
 				recorridos[a.verticeObjetivo] = true;
-				DFS( a.verticeObjetivo, identificadorPropiedadSubClaseDe, recorridos, resultado );
+				resultado.insertLast(listaSujetosObjetos.get(a.verticeObjetivo));
+				DFS(a.verticeObjetivo, identificadorPropiedadSubClaseDe, recorridos, resultado);
 			}
 		}
 	}
+	
+	// Búsqueda en profundidad hacia atrás desde "nodo", recorriendo por nodosEntrantes
+	// Se lanza la búsqueda otra vez si el peso de la arista es 'subClaseDe', o se añade
+	// el nodo al resultado si el peso es 'es'
+	private void DFSinversa( int nodo, boolean[] recorridos, ListaEnlazada<String> resultado ) {
+		Arista a;
+		for (int i = 0; i < nodosEntrantes.get(nodo).size(); ++i) {
+			a = nodosEntrantes.get(nodo).get(i);
+			if (a.propiedad == identificadorPropiedadEs && !recorridos[a.verticeObjetivo]) {
+				recorridos[a.verticeObjetivo] = true;
+				resultado.insertLast(listaSujetosObjetos.get(a.verticeObjetivo));
+			} else if (a.propiedad == identificadorPropiedadSubClaseDe && !recorridos[a.verticeObjetivo]) {
+				recorridos[a.verticeObjetivo] = true;
+				DFSinversa(a.verticeObjetivo, recorridos, resultado);
+			}
+		}
+	}
+	
 }

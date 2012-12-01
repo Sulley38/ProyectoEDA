@@ -24,7 +24,7 @@ public class hashTest{
 		System.out.println("Cargando el fichero \"" + file + "\".");
 		long t;				
 		t = System.currentTimeMillis();
-		m = new Almacen(file);
+		m = Almacen.cargar(file);
 		t = System.currentTimeMillis() - t;
 		System.out.print("Sentencias leídas en ");
 		System.out.print(t);
