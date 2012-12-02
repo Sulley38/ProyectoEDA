@@ -41,8 +41,12 @@ public class Almacen {
 	}
 	
 	/// CONSTANTES
-	private static final String propiedadEs = "<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>";
-	private static final String propiedadSubClaseDe = "<http://www.w3.org/2000/01/rdf-schema#subClassOf>";
+	private static final String propiedadEs = "<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>",
+			propiedadSubClaseDe = "<http://www.w3.org/2000/01/rdf-schema#subClassOf>",
+			propiedadCursa = "<http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#takesCourse>",
+			propiedadEncargadoDe = "<http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#teacherOf>",
+			propiedadDepartamentoDe = "<http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#subOrganizationOf>",
+			propiedadTrabajaPara = "<http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#worksFor>";
 	
 	/// ATRIBUTOS DE LA CLASE
 	// Dos listas de adyacencia para representar el grafo.
@@ -55,7 +59,7 @@ public class Almacen {
 	private Trie arbolSujetosObjetos, arbolPropiedades;
 	private ListaArray<String> listaSujetosObjetos, listaPropiedades;
 	// Propiedades para trabajar con las clases/subclases/superclases
-	private int identificadorPropiedadEs, identificadorPropiedadSubClaseDe;
+	private int idPropiedadEs, idPropiedadSubClaseDe, idPropiedadCursa, idPropiedadEncargadoDe, idPropiedadDepartamentoDe, idPropiedadTrabajaPara;
 	
 
 	/**
@@ -63,7 +67,7 @@ public class Almacen {
 	 * Carga las sentencias en el almacén desde el fichero especificado.
 	 * @param nombreDeArchivo de texto desde el que leer las entidades
 	 */
-	public Almacen( String nombreDeArchivo ) throws IOException {
+	private Almacen( String nombreDeArchivo ) throws IOException {
 		// Inicializa los atributos de la clase
 		nodosEntrantes = new ListaArray< ListaArray<Arista> >();
 		nodosSalientes = new ListaArray< ListaArray<Arista> >();
@@ -102,11 +106,19 @@ public class Almacen {
 			if( idPropiedad == propiedades ) {
 				// Agregar al array de int -> String
 				listaPropiedades.insertLast(propiedad);
-				// En caso de ser una propiedad especial, guardar su entero
+				// En caso de ser una propiedad especial, guardar su valor entero
 				if( propiedad.equals(propiedadEs) )
-					identificadorPropiedadEs = idPropiedad;
+					idPropiedadEs = idPropiedad;
 				else if( propiedad.equals(propiedadSubClaseDe) )
-					identificadorPropiedadSubClaseDe = idPropiedad;
+					idPropiedadSubClaseDe = idPropiedad;
+				else if( propiedad.equals(propiedadCursa) )
+					idPropiedadCursa = idPropiedad;
+				else if( propiedad.equals(propiedadEncargadoDe) )
+					idPropiedadEncargadoDe = idPropiedad;
+				else if( propiedad.equals(propiedadDepartamentoDe) )
+					idPropiedadDepartamentoDe = idPropiedad;
+				else if( propiedad.equals(propiedadTrabajaPara) )
+					idPropiedadTrabajaPara = idPropiedad;
 				// Incrementar contador
 				propiedades++;
 			}
@@ -281,7 +293,7 @@ public class Almacen {
 			for( int i = 0; i < sujetos+objetos; ++i )
 				recorridos[i] = false;
 			// Búsqueda en profundidad
-			DFS( idSujeto, identificadorPropiedadEs, recorridos, resultado );
+			DFS( idSujeto, idPropiedadEs, recorridos, resultado );
 		}
 		return resultado;
 	}
@@ -299,7 +311,7 @@ public class Almacen {
 			for( int i = 0; i < sujetos+objetos; ++i )
 				recorridos[i] = false;
 			// Búsqueda en profundidad
-			DFS( idClase, identificadorPropiedadSubClaseDe, recorridos, resultado );
+			DFS( idClase, idPropiedadSubClaseDe, recorridos, resultado );
 		}
 		return resultado;
 	}
@@ -358,6 +370,39 @@ public class Almacen {
 		}
 	}
 	
+	/**
+	 * 10) Colección de estudiantes distintos que cursan alguna asignatura de la que es encargado un determinado profesor.
+	 * @param profesor - profesor encargado de las asignaturas de las que se buscan los estudiantes
+	 * @return una lista enlazada de las entidades que son estudiantes de asignaturas que imparte el parámetro profesor
+	 */
+	public ListaEnlazada<String> estudiantesDelProfesor(String profesor) {
+		ListaEnlazada<String> resultado = new ListaEnlazada<String>();
+		int idProfesor = arbolSujetosObjetos.obtenerValor(profesor);
+		if( idProfesor != -1 ) {
+			Arista a;
+			int nodoAsignatura;
+			boolean recorridos[] = new boolean[sujetos+objetos];
+			for (int i = 0; i < sujetos+objetos; ++i)
+				recorridos[i] = false;
+			// Búsqueda las aristas salientes de idProfesor con peso 'encargadoDe'
+			for (int i = 0; i < nodosSalientes.get(idProfesor).size(); ++i) {
+				a = nodosSalientes.get(idProfesor).get(i);
+				if( a.propiedad == idPropiedadEncargadoDe && !recorridos[a.verticeObjetivo]) {
+					nodoAsignatura = a.verticeObjetivo;
+					recorridos[nodoAsignatura] = true;
+					// El nodo es una asignatura, buscar las aristas entrantes con peso 'cursa'
+					for (int j = 0; j < nodosEntrantes.get(nodoAsignatura).size(); ++j) {
+						a = nodosEntrantes.get(nodoAsignatura).get(j);
+						if (a.propiedad == idPropiedadCursa && !recorridos[a.verticeObjetivo]) {
+							recorridos[a.verticeObjetivo] = true;
+							resultado.insertLast( listaSujetosObjetos.get(a.verticeObjetivo) );
+						}
+					}
+				}
+			}
+		}
+		return resultado;
+	}
 	
 	// Búsqueda en profundidad desde "nodo" recorriendo solo las aristas de peso "propiedad"
 	// Los nodos que se recorren se guardan en "resultado"
@@ -368,7 +413,7 @@ public class Almacen {
 			if (a.propiedad == propiedad && !recorridos[a.verticeObjetivo]) {
 				recorridos[a.verticeObjetivo] = true;
 				resultado.insertLast(listaSujetosObjetos.get(a.verticeObjetivo));
-				DFS(a.verticeObjetivo, identificadorPropiedadSubClaseDe, recorridos, resultado);
+				DFS(a.verticeObjetivo, idPropiedadSubClaseDe, recorridos, resultado);
 			}
 		}
 	}
@@ -380,10 +425,10 @@ public class Almacen {
 		Arista a;
 		for (int i = 0; i < nodosEntrantes.get(nodo).size(); ++i) {
 			a = nodosEntrantes.get(nodo).get(i);
-			if (a.propiedad == identificadorPropiedadEs && !recorridos[a.verticeObjetivo]) {
+			if (a.propiedad == idPropiedadEs && !recorridos[a.verticeObjetivo]) {
 				recorridos[a.verticeObjetivo] = true;
 				resultado.insertLast(listaSujetosObjetos.get(a.verticeObjetivo));
-			} else if (a.propiedad == identificadorPropiedadSubClaseDe && !recorridos[a.verticeObjetivo]) {
+			} else if (a.propiedad == idPropiedadSubClaseDe && !recorridos[a.verticeObjetivo]) {
 				recorridos[a.verticeObjetivo] = true;
 				DFSinversa(a.verticeObjetivo, recorridos, resultado);
 			}

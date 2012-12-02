@@ -17,7 +17,8 @@ public class medirTiempos {
 			almacenes[1] = Almacen.cargar("data/in/A1.txt");
 			almacenes[2] = Almacen.cargar("data/in/A2.txt");
 			String sujeto = "<http://swat.cse.lehigh.edu/onto/univ-bench.owl#AdministrativeStaff>",
-					clase = "<http://www.w3.org/2002/07/owl#ObjectProperty>";
+					clase = "<http://www.w3.org/2002/07/owl#ObjectProperty>",
+					profesor = "<http://www.Department0.University0.edu/FullProfessor0>";
 			// Vacíar fichero
 			Fichero.abrir("data/tiempos.txt", true, false);
 			Fichero.cerrar();
@@ -181,6 +182,20 @@ public class medirTiempos {
 				System.out.print(suma / 1e6);
 				System.out.println(" ms");
 				Fichero.abrir("data/tiempos.txt", true, true);
+				Fichero.escribirSentencia(Double.toString(suma / 1e6));
+				
+				// Prueba 10
+				System.out.println("Escribiendo los estudiantes distintos de alguna asignatura del profesor " + profesor + "...");
+				suma = 0;
+				for (int i = 0; i < 10; ++i) {
+					t = System.nanoTime();
+					le = m.estudiantesDelProfesor(profesor);
+					suma += System.nanoTime() - t;
+				}
+				suma /= 10;
+				System.out.print("Escrito en ");
+				System.out.print(t / 1e6);
+				System.out.println(" ms");
 				Fichero.escribirSentencia(Double.toString(suma / 1e6));
 				
 				Fichero.escribirSentencia("-------------------------");
