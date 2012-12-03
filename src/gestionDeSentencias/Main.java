@@ -9,7 +9,8 @@ public class Main {
 		Scanner in = new Scanner(System.in);
 		String sujeto = "<http://swat.cse.lehigh.edu/onto/univ-bench.owl#AdministrativeStaff>",
 				clase = "<http://www.w3.org/2002/07/owl#ObjectProperty>",
-				profesor = "<http://www.Department0.University0.edu/FullProfessor0>";
+				profesor = "<http://www.Department0.University0.edu/FullProfessor0>",
+				universidad = "<http://www.Univ3.edu>";
 		String input = "data/in/";
 		
 		System.out.println("Escriba el nombre del fichero a cargar para las pruebas sobre almacén:");
@@ -31,7 +32,7 @@ public class Main {
 		ListaArray<String> la;
 		while (!input.equals("0")) {
 
-			System.out.println("Opciones de prueba válidas: [1, 2, 3, 4, 5, 6, 7a, 7b, 8, 9, 10, 0 = Salir]");
+			System.out.println("Opciones de prueba válidas: [1, 2, 3, 4, 5, 6, 7a, 7b, 8, 9, 10, 11, 0 = Salir]");
 			System.out.print("Introduzca la opción deseada: ");
 			input = in.next();
 			System.out.println();
@@ -176,6 +177,19 @@ public class Main {
 				le = m.estudiantesDelProfesor(profesor);
 				t = System.nanoTime() - t;
 				le.printToFile("data/out/B10.txt");
+				System.out.print("Escrito en ");
+				System.out.print(t / 1e6);
+				System.out.println(" ms");
+				System.out.println();
+				break;
+			
+			case "11":
+				// Prueba 11
+				System.out.println("Escribiendo los profesores distintos que trabajan para algún departamento de la universidad " + universidad + "...");
+				t = System.nanoTime();
+				le = m.profesoresDeUniversidad(universidad);
+				t = System.nanoTime() - t;
+				le.printToFile("data/out/B11.txt");
 				System.out.print("Escrito en ");
 				System.out.print(t / 1e6);
 				System.out.println(" ms");

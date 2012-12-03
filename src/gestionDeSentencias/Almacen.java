@@ -78,12 +78,14 @@ public class Almacen {
 		listaPropiedades = new ListaArray<String>();
 		// Variable temporal para insertar las sentencias
 		int tempArista;
+		
 		// Lee las sentencias desde el fichero y las añade al trie y a la lista de nodos del grafo
 		Fichero.abrir(nombreDeArchivo,false,false);
 		String sentencia, sujeto, propiedad, objeto;
 		int idSujeto, idPropiedad, idObjeto;
 		StringTokenizer tokenizador;
-		while( (sentencia = Fichero.leerSentencia()) != null ) {
+		sentencia = Fichero.leerSentencia();
+		while( sentencia != null ) {
 			tokenizador = new StringTokenizer(sentencia);
 			sujeto = tokenizador.nextToken();
 			propiedad = tokenizador.nextToken();
@@ -147,14 +149,17 @@ public class Almacen {
 				nodosEntrantes.get(idObjeto).insertLast( new Arista(idSujeto,idPropiedad) );
 			else
 				nodosEntrantes.get(idObjeto).get(tempArista).repeticiones++;
+			
+			// Lee la siguiente sentencia
+			sentencia = Fichero.leerSentencia();
 		}
+		
+		Fichero.cerrar();
 		
 		// Ordenar las aristas salientes de cada nodo
 		nodosSalientesOrdenados = new ListaArray< ListaArray<Integer> >(nodosSalientes.size());
 		for( int i = 0; i < nodosSalientes.size(); ++i )
 			nodosSalientesOrdenados.set( i, nodosSalientes.get(i).sort() );
-
-		Fichero.cerrar();
 	}
 	
 	/**
@@ -281,7 +286,7 @@ public class Almacen {
 	}
 	
 	/**
-	 * 7a) Colección de las clases de un sujeto, dado como parámetro.
+	 * 7a) Colección de las clases de un sujeto.
 	 * @param sujeto - sujeto del que se buscan las clases
 	 * @return una lista enlazada de las clases del parámetro sujeto
 	 */
@@ -299,7 +304,7 @@ public class Almacen {
 	}
 	
 	/**
-	 * 7b) Colección de las clases que son superclase de una clase, dada como parámetro.
+	 * 7b) Colección de las clases que son superclase de una clase.
 	 * @param clase - clase de la que se buscan las superclases
 	 * @return una lista enlazada de las superclases del parámetro clase
 	 */
@@ -317,7 +322,7 @@ public class Almacen {
 	}
 	
 	/**
-	 * 8) Colección de entidades que son de una determinada clase, dada como parámetro.
+	 * 8) Colección de entidades que son de una determinada clase.
 	 * @param clase - clase de la que se buscan las entidades
 	 * @return una lista enlazada de las entidades que son del parámetro clase
 	 */
@@ -403,6 +408,18 @@ public class Almacen {
 		}
 		return resultado;
 	}
+	
+	/**
+	 * 11) Colección de profesores distintos que trabajan para algún departamento de una universidad.
+	 * @param universidad - universidad de la que buscar profesores que trabajan para algún departamento suyo
+	 * @return una lista enlazada de las entidades que son profesores que trabajan en algún departamento del parámetro universidad
+	 */
+	public ListaEnlazada<String> profesoresDeUniversidad(String universidad) {
+		ListaEnlazada<String> resultado = new ListaEnlazada<String>();
+		// TODO: Implementar
+		return resultado;
+	}
+	
 	
 	// Búsqueda en profundidad desde "nodo" recorriendo solo las aristas de peso "propiedad"
 	// Los nodos que se recorren se guardan en "resultado"
