@@ -392,7 +392,7 @@ public class Almacen {
 			// Búsqueda las aristas salientes de idProfesor con peso 'encargadoDe'
 			for (int i = 0; i < nodosSalientes.get(idProfesor).size(); ++i) {
 				a = nodosSalientes.get(idProfesor).get(i);
-				if( a.propiedad == idPropiedadEncargadoDe && !recorridos[a.verticeObjetivo]) {
+				if (a.propiedad == idPropiedadEncargadoDe && !recorridos[a.verticeObjetivo]) {
 					nodoAsignatura = a.verticeObjetivo;
 					recorridos[nodoAsignatura] = true;
 					// El nodo es una asignatura, buscar las aristas entrantes con peso 'cursa'
@@ -416,18 +416,30 @@ public class Almacen {
 	 */
 	public ListaEnlazada<String> profesoresDeUniversidad(String universidad) {
 		ListaEnlazada<String> resultado = new ListaEnlazada<String>();
-		int trabajaPara = arbolPropiedades.obtenerValor(propiedadTrabajaPara);
-		int departamentoDe = arbolPropiedades.obtenerValor(propiedadDepartamentoDe);
-		int uni = arbolSujetosObjetos.obtenerValor(universidad);
-		
-		for (int i=0;i<nodosEntrantes.get(uni).size();i++)
-			if (nodosEntrantes.get(uni).get(i).propiedad==departamentoDe){
-				int dep = nodosEntrantes.get(uni).get(i).verticeObjetivo;
-				for (int j=0;j<nodosEntrantes.get(dep).size();j++)
-					if (nodosEntrantes.get(dep).get(j).propiedad==trabajaPara)
-						resultado.insertLast(listaSujetosObjetos.get(nodosEntrantes.get(dep).get(j).verticeObjetivo));
+		int idUniversidad = arbolSujetosObjetos.obtenerValor(universidad);
+		if (idUniversidad != -1) {
+			Arista a;
+			int nodoDepartamento;
+			boolean recorridos[] = new boolean[sujetos+objetos];
+			for (int i = 0; i < sujetos+objetos; ++i)
+				recorridos[i] = false;
+			// Búsqueda las aristas entrantes de idUniversidad con peso 'departamentoDe'
+			for (int i = 0; i < nodosEntrantes.get(idUniversidad).size(); i++) {
+				a = nodosEntrantes.get(idUniversidad).get(i);
+				if (a.propiedad == idPropiedadDepartamentoDe && !recorridos[a.verticeObjetivo]) {
+					nodoDepartamento = a.verticeObjetivo;
+					recorridos[nodoDepartamento] = true;
+					// El nodo es un departamento, buscar las aristas entrantes con peso 'trabajaPara'
+					for (int j = 0; j < nodosEntrantes.get(nodoDepartamento).size(); j++) {
+						a = nodosEntrantes.get(nodoDepartamento).get(j);
+						if (a.propiedad == idPropiedadTrabajaPara && !recorridos[a.verticeObjetivo]) {
+							recorridos[a.verticeObjetivo] = true;
+							resultado.insertLast(listaSujetosObjetos.get(a.verticeObjetivo));
+						}
+					}
+				}
 			}
-		
+		}
 		return resultado;
 	}
 	
