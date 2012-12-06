@@ -416,7 +416,18 @@ public class Almacen {
 	 */
 	public ListaEnlazada<String> profesoresDeUniversidad(String universidad) {
 		ListaEnlazada<String> resultado = new ListaEnlazada<String>();
-		// TODO: Implementar
+		int trabajaPara = arbolPropiedades.obtenerValor(propiedadTrabajaPara);
+		int departamentoDe = arbolPropiedades.obtenerValor(propiedadDepartamentoDe);
+		int uni = arbolSujetosObjetos.obtenerValor(universidad);
+		
+		for (int i=0;i<nodosEntrantes.get(uni).size();i++)
+			if (nodosEntrantes.get(uni).get(i).propiedad==departamentoDe){
+				int dep = nodosEntrantes.get(uni).get(i).verticeObjetivo;
+				for (int j=0;j<nodosEntrantes.get(dep).size();j++)
+					if (nodosEntrantes.get(dep).get(j).propiedad==trabajaPara)
+						resultado.insertLast(listaSujetosObjetos.get(nodosEntrantes.get(dep).get(j).verticeObjetivo));
+			}
+		
 		return resultado;
 	}
 	

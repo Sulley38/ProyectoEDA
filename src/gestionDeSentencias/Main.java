@@ -10,7 +10,7 @@ public class Main {
 		String sujeto = "<http://swat.cse.lehigh.edu/onto/univ-bench.owl#AdministrativeStaff>",
 				clase = "<http://www.w3.org/2002/07/owl#ObjectProperty>",
 				profesor = "<http://www.Department0.University0.edu/FullProfessor0>",
-				universidad = "<http://www.Univ3.edu>";
+				universidad = "<http://www.University0.edu>";
 		String input = "data/in/";
 		
 		System.out.println("Escriba el nombre del fichero a cargar para las pruebas sobre almacén:");
