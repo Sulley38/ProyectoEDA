@@ -25,6 +25,14 @@ public class Almacen {
 			propiedad = Propiedad;
 			repeticiones = 1;
 		}
+		//Contrusctora
+		// Constructora
+		public Arista(final int Objetivo, final int Propiedad, final int Repeticiones) {
+			verticeObjetivo = Objetivo;
+			propiedad = Propiedad;
+			repeticiones = Repeticiones;
+		}
+		
 		// Comparadora en orden lexicográfico según propiedades y objetos
 		@Override
 		public int compareTo(final Arista a) {
@@ -76,8 +84,9 @@ public class Almacen {
 		arbolPropiedades = new Trie();
 		listaSujetosObjetos = new ListaArray<String>();
 		listaPropiedades = new ListaArray<String>();
-		// Variable temporal para insertar las sentencias
+		// Variables auxiliares
 		int tempArista;
+		Arista a;
 		
 		// Lee las sentencias desde el fichero y las añade al trie y a la lista de nodos del grafo
 		Fichero.abrir(nombreDeArchivo,false,false);
@@ -143,17 +152,18 @@ public class Almacen {
 			else
 				nodosSalientes.get(idSujeto).get(tempArista).repeticiones++;
 			
-			// Inserta la arista en la segunda lista de adyacencia, o añade una repetición
-			tempArista = nodosEntrantes.get(idObjeto).find( new Arista(idSujeto,idPropiedad) );
-			if( tempArista == -1 )
-				nodosEntrantes.get(idObjeto).insertLast( new Arista(idSujeto,idPropiedad) );
-			else
-				nodosEntrantes.get(idObjeto).get(tempArista).repeticiones++;
 			
 			// Lee la siguiente sentencia
 			sentencia = Fichero.leerSentencia();
 		}
 		
+		// Crea la segunda lista de adyacencia a partir de la primera
+		for (int i = 0; i < nodosSalientes.size(); i++){		
+			for (int j = 0; j < nodosSalientes.get(i).size(); j++){				
+				a=nodosSalientes.get(i).get(j);
+				nodosEntrantes.get(a.verticeObjetivo).insertLast(new Arista(i,a.propiedad,a.repeticiones));
+			}
+		}
 		Fichero.cerrar();
 		
 		// Ordenar las aristas salientes de cada nodo
