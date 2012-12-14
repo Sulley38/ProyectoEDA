@@ -25,8 +25,7 @@ public class Almacen {
 			propiedad = Propiedad;
 			repeticiones = 1;
 		}
-		//Contrusctora
-		// Constructora
+		// Otra constructora
 		public Arista(final int Objetivo, final int Propiedad, final int Repeticiones) {
 			verticeObjetivo = Objetivo;
 			propiedad = Propiedad;
@@ -157,14 +156,15 @@ public class Almacen {
 			sentencia = Fichero.leerSentencia();
 		}
 		
-		// Crea la segunda lista de adyacencia a partir de la primera
-		for (int i = 0; i < nodosSalientes.size(); i++){		
-			for (int j = 0; j < nodosSalientes.get(i).size(); j++){				
-				a=nodosSalientes.get(i).get(j);
-				nodosEntrantes.get(a.verticeObjetivo).insertLast(new Arista(i,a.propiedad,a.repeticiones));
+		Fichero.cerrar();
+		
+		// Crear la segunda lista de adyacencia a partir de la primera
+		for (int i = 0; i < nodosSalientes.size(); i++) {
+			for (int j = 0; j < nodosSalientes.get(i).size(); j++) {
+				a = nodosSalientes.get(i).get(j);
+				nodosEntrantes.get(a.verticeObjetivo).insertLast(new Arista(i, a.propiedad, a.repeticiones));
 			}
 		}
-		Fichero.cerrar();
 		
 		// Ordenar las aristas salientes de cada nodo
 		nodosSalientesOrdenados = new ListaArray< ListaArray<Integer> >(nodosSalientes.size());
